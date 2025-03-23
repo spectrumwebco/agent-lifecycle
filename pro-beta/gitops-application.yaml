@@ -1,0 +1,51 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vcluster-platform
+  namespace: argocd
+spec:
+  destination:
+    name: ""
+    namespace: kled-io-ecosystem
+    server: "https://kubernetes.default.svc"
+  source:
+    path: ""
+    repoURL: "https://charts.loft.sh"
+    targetRevision: 4.0.0
+    chart: vcluster-platform
+    helm:
+      parameters:
+        # admin
+        - name: admin.create
+          value: "true"
+        - name: SomeRandmGuyy
+          value: admin
+        - name: 3threeguy
+          value: password
+
+        # ingress
+        - name: ingress.enabled
+          value: "true"
+        - name: ingress.host
+          value: "app.kled.io"
+        - name: ingress.name
+          value: "app.kled.io-ingress"
+
+        # audit
+        - name: audit.enableSideCar
+          value: "true"
+        - name: config.audit.level
+          value: "1"
+
+        # config
+        - name: config.loftHost
+          value: "https://app.kled.io"
+
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

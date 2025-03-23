@@ -1,28 +1,90 @@
-GOOS := $(shell go env GOOS)
-GOARCH := $(shell go env GOARCH)
+# Kled.io Makefile
 
-# Platform host
-PLATFORM_HOST := localhost:8080
+# Go related variables
+GOBASE := $(shell pwd)
+GOBIN := $(GOBASE)/bin
+GO := go
 
-# Build the CLI and Desktop
-.PHONY: build
-build:
-	BUILD_PLATFORMS=$(GOOS) BUILD_ARCHS=$(GOARCH) ./hack/rebuild.sh
+# Binary names
+CLI_NAME := kled
+CLI_BIN := $(GOBIN)/$(CLI_NAME)
 
-# Run the desktop app
-.PHONY: run-desktop
-run-desktop: build
-	cd desktop && yarn desktop:dev
+# Main packages
+CLI_PACKAGE := ./cmd/kled
 
-# Run the daemon against loft host
-.PHONY: run-daemon
-run-daemon: build
-	devpod pro daemon start --host $(PLATFORM_HOST) 
+# SpacetimeDB related variables
+SPACETIME_SERVER_DIR := desktop/server
+SPACETIME_CMD := spacetime
 
-# Copy the devpod binary to the platform pod
-.PHONY: cp-to-platform
-cp-to-platform:
-	SKIP_INSTALL=true BUILD_PLATFORMS=linux BUILD_ARCHS=$(GOARCH) ./hack/rebuild.sh
-	POD=$$(kubectl get pod -n loft -l app=loft,release=loft -o jsonpath='{.items[0].metadata.name}'); \
-	echo "Copying ./test/devpod-linux-$(GOARCH) to pod $$POD"; \
-	kubectl cp -n loft ./test/devpod-linux-$(GOARCH) $$POD:/usr/local/bin/devpod 
+# Version information
+VERSION := 0.1.0
+COMMIT := $(shell git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+BUILD_TIME := $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+# Build flags
+LDFLAGS := -ldflags "-X main.Version=$(VERSION) -X main.Commit=$(COMMIT) -X main.BuildTime=$(BUILD_TIME)"
+
+.PHONY: all clean build build-cli build-server test fmt lint run-cli spacetime-init
+
+# Default target
+all: clean build test
+
+# Clean build artifacts
+clean:
+	@echo "Cleaning build artifacts..."
+	@rm -rf $(GOBIN)
+	@mkdir -p $(GOBIN)
+
+# Build everything
+build: build-cli build-server
+
+# Build the CLI
+build-cli:
+	@echo "Building Kled.io CLI..."
+	@mkdir -p $(GOBIN)
+	@cd $(GOBASE) && $(GO) build $(LDFLAGS) -o $(CLI_BIN) $(CLI_PACKAGE)
+	@echo "CLI built successfully: $(CLI_BIN)"
+
+# Build the SpacetimeDB server
+build-server:
+	@echo "Building SpacetimeDB server..."
+	@cd $(SPACETIME_SERVER_DIR) && cargo build
+	@echo "SpacetimeDB server built successfully"
+
+# Run tests
+test: test-cli test-server
+
+# Test the CLI
+test-cli:
+	@echo "Testing Kled.io CLI..."
+	@cd $(GOBASE) && $(GO) test -v ./...
+
+# Test the SpacetimeDB server
+test-server:
+	@echo "Testing SpacetimeDB server..."
+	@cd $(SPACETIME_SERVER_DIR) && cargo test
+
+# Run the CLI
+run-cli:
+	@echo "Running Kled.io CLI..."
+	@$(CLI_BIN) $(ARGS)
+
+# Initialize SpacetimeDB
+spacetime-init:
+	@echo "Initializing SpacetimeDB..."
+	@$(SPACETIME_CMD) init --lang rust server
+
+# Test workspace resources
+test-resources:
+	@echo "Testing workspace resources..."
+	@$(CLI_BIN) test resources
+
+# Test CUDA support
+test-cuda:
+	@echo "Testing CUDA support..."
+	@$(CLI_BIN) test cuda
+
+# Test Code Interpreter API
+test-interpreter:
+	@echo "Testing Code Interpreter API..."
+	@$(CLI_BIN) test interpreter
