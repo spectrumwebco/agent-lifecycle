@@ -294,7 +294,7 @@ func runCommand(ctx context.Context, name string, command types.StrArray, enviro
 
 	// set debug level
 	if log.GetLevel() == logrus.DebugLevel {
-		environ = append(environ, DevPodDebug+"=true")
+		environ = append(environ, KledDebug+"=true")
 	}
 
 	// run the command
@@ -302,7 +302,7 @@ func runCommand(ctx context.Context, name string, command types.StrArray, enviro
 }
 
 func printStillRunningLogMessagePeriodically(log log.Logger) chan struct{} {
-	return printLogMessagePeriodically("Please hang on, DevPod is still running, this might take a while...", log)
+	return printLogMessagePeriodically("Please hang on, Kled is still running, this might take a while...", log)
 }
 
 func printLogMessagePeriodically(message string, log log.Logger) chan struct{} {

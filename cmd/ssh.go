@@ -116,7 +116,7 @@ func (cmd *SSHCmd) Run(
 	log log.Logger) error {
 	// add ssh keys to agent
 	if devPodConfig.ContextOption(config.ContextOptionSSHAgentForwarding) == "true" && devPodConfig.ContextOption(config.ContextOptionSSHAddPrivateKeys) == "true" {
-		log.Debug("Adding ssh keys to agent, disable via 'devpod context set-options -o SSH_ADD_PRIVATE_KEYS=false'")
+		log.Debug("Adding ssh keys to agent, disable via 'kled context set-options -o SSH_ADD_PRIVATE_KEYS=false'")
 		err := devssh.AddPrivateKeysToAgent(ctx, log)
 		if err != nil {
 			log.Debugf("Error adding private keys to ssh-agent: %v", err)
@@ -278,7 +278,7 @@ func startWait(
 					return errors.Wrap(err, "start workspace")
 				}
 			} else {
-				return fmt.Errorf("DevPod workspace is stopped")
+				return fmt.Errorf("Kled workspace is stopped")
 			}
 		} else if instanceStatus == client2.StatusNotFound {
 			if create {
@@ -288,7 +288,7 @@ func startWait(
 					return err
 				}
 			} else {
-				return fmt.Errorf("DevPod workspace wasn't found")
+				return fmt.Errorf("Kled workspace wasn't found")
 			}
 		}
 

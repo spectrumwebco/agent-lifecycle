@@ -23,14 +23,14 @@ import (
 )
 
 var (
-	DevPodDebug = "DEVPOD_DEBUG"
+	KledDebug = "KLED_DEBUG"
 
-	DevPodPlatformOptions = "DEVPOD_PLATFORM_OPTIONS"
+	KledPlatformOptions = "KLED_PLATFORM_OPTIONS"
 
-	DevPodFlagsUp     = "DEVPOD_FLAGS_UP"
-	DevPodFlagsSsh    = "DEVPOD_FLAGS_SSH"
-	DevPodFlagsDelete = "DEVPOD_FLAGS_DELETE"
-	DevPodFlagsStatus = "DEVPOD_FLAGS_STATUS"
+	KledFlagsUp     = "KLED_FLAGS_UP"
+	KledFlagsSsh    = "KLED_FLAGS_SSH"
+	KledFlagsDelete = "KLED_FLAGS_DELETE"
+	KledFlagsStatus = "KLED_FLAGS_STATUS"
 )
 
 func NewProxyClient(devPodConfig *config.Config, prov *provider.ProviderConfig, workspace *provider.Workspace, log log.Logger) (client.ProxyClient, error) {
@@ -192,7 +192,7 @@ func (s *proxyClient) Up(ctx context.Context, opt client.UpOptions) error {
 	writer, _ := devpodlog.PipeJSONStream(s.log.ErrorStreamOnly())
 	defer writer.Close()
 
-	opts := EncodeOptions(opt.CLIOptions, DevPodFlagsUp)
+	opts := EncodeOptions(opt.CLIOptions, KledFlagsUp)
 	if opt.Debug {
 		opts["DEBUG"] = "true"
 	}
@@ -232,7 +232,7 @@ func (s *proxyClient) Ssh(ctx context.Context, opt client.SshOptions) error {
 		nil,
 		s.devPodConfig.ProviderOptions(s.config.Name),
 		s.config,
-		EncodeOptions(opt, DevPodFlagsSsh),
+		EncodeOptions(opt, KledFlagsSsh),
 		opt.Stdin,
 		opt.Stdout,
 		writer,
@@ -276,7 +276,7 @@ func (s *proxyClient) Delete(ctx context.Context, opt client.DeleteOptions) erro
 		nil,
 		s.devPodConfig.ProviderOptions(s.config.Name),
 		s.config,
-		EncodeOptions(opt, DevPodFlagsDelete),
+		EncodeOptions(opt, KledFlagsDelete),
 		nil,
 		writer,
 		writer,
@@ -337,7 +337,7 @@ func (s *proxyClient) Status(ctx context.Context, options client.StatusOptions) 
 		nil,
 		s.devPodConfig.ProviderOptions(s.config.Name),
 		s.config,
-		EncodeOptions(options, DevPodFlagsStatus),
+		EncodeOptions(options, KledFlagsStatus),
 		nil,
 		io.MultiWriter(stdout, buf),
 		buf,
@@ -398,7 +398,7 @@ func DecodeOptionsFromEnv(name string, into any) (bool, error) {
 }
 
 func DecodePlatformOptionsFromEnv(into *devpod.PlatformOptions) error {
-	raw := os.Getenv(DevPodPlatformOptions)
+	raw := os.Getenv(KledPlatformOptions)
 	if raw == "" {
 		return nil
 	}

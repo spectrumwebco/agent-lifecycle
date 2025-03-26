@@ -38,7 +38,7 @@ type streams struct {
 // NewUpCmd creates a new command
 func NewUpCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 	logLevel := logrus.InfoLevel
-	if os.Getenv(clientimplementation.DevPodDebug) == "true" || globalFlags.Debug {
+	if os.Getenv(clientimplementation.KledDebug) == "true" || globalFlags.Debug {
 		logLevel = logrus.DebugLevel
 	}
 

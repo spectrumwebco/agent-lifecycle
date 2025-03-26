@@ -19,9 +19,9 @@ import (
 )
 
 var (
-	DevPodSSHHostKeyFile    = "id_devpod_rsa_host"
-	DevPodSSHPrivateKeyFile = "id_devpod_rsa"
-	DevPodSSHPublicKeyFile  = "id_devpod_rsa.pub"
+	KledSSHHostKeyFile    = "id_kled_rsa_host"
+	KledSSHPrivateKeyFile = "id_kled_rsa"
+	KledSSHPublicKeyFile  = "id_kled_rsa.pub"
 )
 
 var keyLock sync.Mutex
@@ -79,10 +79,10 @@ func GetPrivateKeyRaw(context, workspaceID string) ([]byte, error) {
 	return GetPrivateKeyRawBase(workspaceDir)
 }
 
-func GetDevPodKeysDir() string {
+func GetKledKeysDir() string {
 	dir, err := util.UserHomeDir()
 	if err == nil {
-		tempDir := filepath.Join(dir, ".devpod", "keys")
+		tempDir := filepath.Join(dir, ".kled", "keys")
 		err = os.MkdirAll(tempDir, 0755)
 		if err == nil {
 			return tempDir
@@ -90,21 +90,21 @@ func GetDevPodKeysDir() string {
 	}
 
 	tempDir := os.TempDir()
-	return filepath.Join(tempDir, "devpod-ssh")
+	return filepath.Join(tempDir, "kled-ssh")
 }
 
-func GetDevPodHostKey() (string, error) {
-	tempDir := GetDevPodKeysDir()
+func GetKledHostKey() (string, error) {
+	tempDir := GetKledKeysDir()
 	return GetHostKeyBase(tempDir)
 }
 
-func GetDevPodPublicKey() (string, error) {
-	tempDir := GetDevPodKeysDir()
+func GetKledPublicKey() (string, error) {
+	tempDir := GetKledKeysDir()
 	return GetPublicKeyBase(tempDir)
 }
 
-func GetDevPodPrivateKeyRaw() ([]byte, error) {
-	tempDir := GetDevPodKeysDir()
+func GetKledPrivateKeyRaw() ([]byte, error) {
+	tempDir := GetKledKeysDir()
 	return GetPrivateKeyRawBase(tempDir)
 }
 
@@ -127,8 +127,8 @@ func GetPrivateKeyRawBase(dir string) ([]byte, error) {
 	}
 
 	// check if key pair exists
-	privateKeyFile := filepath.Join(dir, DevPodSSHPrivateKeyFile)
-	publicKeyFile := filepath.Join(dir, DevPodSSHPublicKeyFile)
+	privateKeyFile := filepath.Join(dir, KledSSHPrivateKeyFile)
+	publicKeyFile := filepath.Join(dir, KledSSHPublicKeyFile)
 	_, err = os.Stat(privateKeyFile)
 	if err != nil {
 		pubKey, privateKey, err := makeSSHKeyPair()
@@ -166,7 +166,7 @@ func GetHostKeyBase(dir string) (string, error) {
 	}
 
 	// check if key pair exists
-	hostKeyFile := filepath.Join(dir, DevPodSSHHostKeyFile)
+	hostKeyFile := filepath.Join(dir, KledSSHHostKeyFile)
 	_, err = os.Stat(hostKeyFile)
 	if err != nil {
 		privateKey, err := makeHostKey()
@@ -199,8 +199,8 @@ func GetPublicKeyBase(dir string) (string, error) {
 	}
 
 	// check if key pair exists
-	privateKeyFile := filepath.Join(dir, DevPodSSHPrivateKeyFile)
-	publicKeyFile := filepath.Join(dir, DevPodSSHPublicKeyFile)
+	privateKeyFile := filepath.Join(dir, KledSSHPrivateKeyFile)
+	publicKeyFile := filepath.Join(dir, KledSSHPublicKeyFile)
 	_, err = os.Stat(privateKeyFile)
 	if err != nil {
 		pubKey, privateKey, err := makeSSHKeyPair()

@@ -33,7 +33,7 @@ func NewProProviderCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 
 			log.Default.SetFormat(log.JSONFormat)
 
-			if os.Getenv(clientimplementation.DevPodDebug) == "true" {
+			if os.Getenv(clientimplementation.KledDebug) == "true" {
 				globalFlags.Debug = true
 			}
 
