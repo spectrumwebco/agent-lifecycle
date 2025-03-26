@@ -5,7 +5,7 @@ export GO111MODULE=on
 export GOFLAGS=-mod=vendor
 
 # Test if we can build the program
-echo "Building DevPod..."
+echo "Building Kled..."
 go generate ./... && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build main.go || exit 1
  
 # List packages
