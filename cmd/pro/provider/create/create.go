@@ -9,7 +9,7 @@ import (
 func NewCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 	c := &cobra.Command{
 		Use:    "create",
-		Short:  "DevPod Pro Provider create commands",
+		Short:  "Kled Pro Provider create commands",
 		Args:   cobra.NoArgs,
 		Hidden: true,
 	}

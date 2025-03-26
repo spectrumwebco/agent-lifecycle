@@ -50,12 +50,12 @@ func (cmd *DeleteCmd) Run(ctx context.Context, args []string) error {
 		return fmt.Errorf("please specify a provider to delete")
 	}
 
-	devPodConfig, err := config.LoadConfig(cmd.Context, cmd.Provider)
+	kledConfig, err := config.LoadConfig(cmd.Context, cmd.Provider) // TODO: Update variable name to reflect Kled branding
 	if err != nil {
 		return err
 	}
 
-	provider := devPodConfig.Current().DefaultProvider
+	provider := kledConfig.Current().DefaultProvider
 	if len(args) > 0 {
 		provider = args[0]
 	} else if provider == "" {
@@ -63,7 +63,7 @@ func (cmd *DeleteCmd) Run(ctx context.Context, args []string) error {
 	}
 
 	// delete the provider
-	err = DeleteProvider(ctx, devPodConfig, provider, cmd.IgnoreNotFound, cmd.Force, logpkg.Default)
+	err = DeleteProvider(ctx, kledConfig, provider, cmd.IgnoreNotFound, cmd.Force, logpkg.Default)
 	if err != nil {
 		return err
 	}
@@ -72,11 +72,11 @@ func (cmd *DeleteCmd) Run(ctx context.Context, args []string) error {
 	return nil
 }
 
-func DeleteProvider(ctx context.Context, devPodConfig *config.Config, provider string, ignoreNotFound, force bool, log logpkg.Logger) error {
+func DeleteProvider(ctx context.Context, kledConfig *config.Config, provider string, ignoreNotFound, force bool, log logpkg.Logger) error {
 	// if force is not set, check if the provider is associated with a pro instance or workspace
 	if !force {
 		// check if this provider is associated with a pro instance
-		proInstances, err := workspace.ListProInstances(devPodConfig, logpkg.Default)
+		proInstances, err := workspace.ListProInstances(kledConfig, logpkg.Default)
 		if err != nil {
 			return fmt.Errorf("list pro instances: %w", err)
 		}
@@ -87,7 +87,7 @@ func DeleteProvider(ctx context.Context, devPodConfig *config.Config, provider s
 		}
 
 		// check if there are workspaces that still use this provider
-		workspaces, err := workspace.List(ctx, devPodConfig, true, platform.AllOwnerFilter, log)
+		workspaces, err := workspace.List(ctx, kledConfig, true, platform.AllOwnerFilter, log)
 		if err != nil {
 			return err
 		}
@@ -100,20 +100,20 @@ func DeleteProvider(ctx context.Context, devPodConfig *config.Config, provider s
 		}
 	}
 
-	return DeleteProviderConfig(devPodConfig, provider, ignoreNotFound)
+	return DeleteProviderConfig(kledConfig, provider, ignoreNotFound)
 }
 
-func DeleteProviderConfig(devPodConfig *config.Config, provider string, ignoreNotFound bool) error {
-	if devPodConfig.Current().DefaultProvider == provider {
-		devPodConfig.Current().DefaultProvider = ""
+func DeleteProviderConfig(kledConfig *config.Config, provider string, ignoreNotFound bool) error {
+	if kledConfig.Current().DefaultProvider == provider {
+		kledConfig.Current().DefaultProvider = ""
 	}
-	delete(devPodConfig.Current().Providers, provider)
-	err := config.SaveConfig(devPodConfig)
+	delete(kledConfig.Current().Providers, provider)
+	err := config.SaveConfig(kledConfig)
 	if err != nil {
 		return fmt.Errorf("save config: %w", err)
 	}
 
-	providerDir, err := provider2.GetProviderDir(devPodConfig.DefaultContext, provider)
+	providerDir, err := provider2.GetProviderDir(kledConfig.DefaultContext, provider)
 	if err != nil {
 		return err
 	}

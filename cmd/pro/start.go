@@ -53,7 +53,7 @@ const LoftRouterDomainSecret = "loft-router-domain"
 const passwordChangedHint = "(has been changed)"
 const defaultUser = "admin"
 
-const defaultReleaseName = "devpod-pro"
+const defaultReleaseName = "kled-pro"
 
 var defaultDeploymentName = "loft" // Need to update helm chart if we change this!
 
@@ -91,23 +91,23 @@ type StartCmd struct {
 // NewStartCmd creates a new command
 func NewStartCmd(flags *proflags.GlobalFlags) *cobra.Command {
 	cmd := &StartCmd{GlobalFlags: *flags,
-		Product:   "devpod-pro",
-		ChartName: "devpod-pro",
+		Product:   "kled-pro",
+		ChartName: "kled-pro",
 		Log:       log.Default,
 	}
 	startCmd := &cobra.Command{
 		Use:   "start",
-		Short: "Start a Devpod Pro instance",
+		Short: "Start a Kled Pro instance",
 		RunE: func(_ *cobra.Command, args []string) error {
 			return cmd.Run(context.Background())
 		},
 	}
 
-	startCmd.Flags().BoolVar(&cmd.Docker, "docker", false, "If enabled will try to deploy DevPod Pro to the local docker installation.")
+	startCmd.Flags().BoolVar(&cmd.Docker, "docker", false, "If enabled will try to deploy Kled Pro to the local docker installation.")
 	startCmd.Flags().StringVar(&cmd.DockerImage, "docker-image", "", "The docker image to install.")
 	startCmd.Flags().StringArrayVar(&cmd.DockerArgs, "docker-arg", []string{}, "Extra docker args")
 	startCmd.Flags().StringVar(&cmd.Context, "context", "", "The kube context to use for installation")
-	startCmd.Flags().StringVar(&cmd.Namespace, "namespace", "devpod-pro", "The namespace to install into")
+	startCmd.Flags().StringVar(&cmd.Namespace, "namespace", "kled-pro", "The namespace to install into")
 	startCmd.Flags().StringVar(&cmd.Host, "host", "", "Provide a hostname to enable ingress and configure its hostname")
 	startCmd.Flags().StringVar(&cmd.Password, "password", "", "The password to use for the admin account. (If empty this will be the namespace UID)")
 	startCmd.Flags().StringVar(&cmd.Version, "version", "", "The version to install")
@@ -115,12 +115,12 @@ func NewStartCmd(flags *proflags.GlobalFlags) *cobra.Command {
 	startCmd.Flags().BoolVar(&cmd.ReuseValues, "reuse-values", true, "Reuse previous helm values on upgrade")
 	startCmd.Flags().BoolVar(&cmd.Upgrade, "upgrade", false, "If true, will try to upgrade the release")
 	startCmd.Flags().StringVar(&cmd.Email, "email", "", "The email to use for the installation")
-	startCmd.Flags().BoolVar(&cmd.Reset, "reset", false, "If true, an existing instance will be deleted before installing DevPod Pro")
+	startCmd.Flags().BoolVar(&cmd.Reset, "reset", false, "If true, an existing instance will be deleted before installing Kled Pro")
 	startCmd.Flags().BoolVar(&cmd.NoWait, "no-wait", false, "If true, will not wait after installing it")
 	startCmd.Flags().BoolVar(&cmd.NoTunnel, "no-tunnel", false, "If true, will not create a loft.host tunnel for this installation")
-	startCmd.Flags().BoolVar(&cmd.NoLogin, "no-login", false, "If true, will not login to a DevPod Pro instance on start")
-	startCmd.Flags().StringVar(&cmd.ChartPath, "chart-path", "", "The local chart path to deploy DevPod Pro")
-	startCmd.Flags().StringVar(&cmd.ChartRepo, "chart-repo", "https://charts.loft.sh/", "The chart repo to deploy DevPod Pro")
+	startCmd.Flags().BoolVar(&cmd.NoLogin, "no-login", false, "If true, will not login to a Kled Pro instance on start")
+	startCmd.Flags().StringVar(&cmd.ChartPath, "chart-path", "", "The local chart path to deploy Kled Pro")
+	startCmd.Flags().StringVar(&cmd.ChartRepo, "chart-repo", "https://charts.loft.sh/", "The chart repo to deploy Kled Pro")
 
 	return startCmd
 }
@@ -172,7 +172,7 @@ func (cmd *StartCmd) Run(ctx context.Context) error {
 	}
 
 	// Install Loft
-	cmd.Log.Info("Welcome to DevPod Pro!")
+	cmd.Log.Info("Welcome to Kled Pro!")
 	cmd.Log.Info("This installer will help you to get started.")
 
 	// make sure we are ready for installing
@@ -341,7 +341,7 @@ func (cmd *StartCmd) successRemote(ctx context.Context, host string) error {
 ##########################   LOGIN   ############################
 
 Username: `+ansi.Color("admin", "green+b")+`
-Password: `+ansi.Color(password, "green+b")+`  # Change via UI or via: `+ansi.Color("devpod pro reset password", "green+b")+`
+Password: `+ansi.Color(password, "green+b")+`  # Change via UI or via: `+ansi.Color("kled pro reset password", "green+b")+`
 
 Login via UI:  %s
 Login via CLI: %s
@@ -399,7 +399,7 @@ The command will wait until DevPod Pro is reachable under the host.
 		return err
 	}
 
-	cmd.Log.Done("DevPod Pro is reachable at https://" + host)
+	cmd.Log.Done("Kled Pro is reachable at https://" + host)
 
 	printSuccess()
 	return nil
@@ -424,7 +424,7 @@ func (cmd *StartCmd) successLocal() error {
 ##########################   LOGIN   ############################
 
 Username: `+ansi.Color("admin", "green+b")+`
-Password: `+ansi.Color(password, "green+b")+`  # Change via UI or via: `+ansi.Color("devpod pro reset password", "green+b")+`
+Password: `+ansi.Color(password, "green+b")+`  # Change via UI or via: `+ansi.Color("kled pro reset password", "green+b")+`
 
 Login via UI:  %s
 Login via CLI: %s
@@ -433,9 +433,9 @@ Login via CLI: %s
 
 #################################################################
 
-DevPod Pro was successfully installed.
+Kled Pro was successfully installed.
 
-Thanks for using DevPod Pro!
+Thanks for using Kled Pro!
 `, ansi.Color(url, "green+b"), ansi.Color("devpod pro login"+" --insecure "+url, "green+b")))
 	blockChan := make(chan bool)
 	<-blockChan
@@ -1015,7 +1015,7 @@ func (cmd *StartCmd) successLoftRouter(url string) error {
 ##########################   LOGIN   ############################
 
 Username: `+ansi.Color("admin", "green+b")+`
-Password: `+ansi.Color(password, "green+b")+`  # Change via UI or via: `+ansi.Color("devpod pro reset password", "green+b")+`
+Password: `+ansi.Color(password, "green+b")+`  # Change via UI or via: `+ansi.Color("kled pro reset password", "green+b")+`
 
 Login via UI:  %s
 Login via CLI: %s

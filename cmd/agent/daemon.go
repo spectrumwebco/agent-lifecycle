@@ -49,7 +49,7 @@ func (cmd *DaemonCmd) Run(ctx context.Context) error {
 	}
 
 	logger := log.NewFileLogger(filepath.Join(logFolder, "agent-daemon.log"), logrus.InfoLevel)
-	logger.Infof("Starting DevPod Daemon patrol at %s...", logFolder)
+	logger.Infof("Starting Kled Daemon patrol at %s...", logFolder)
 
 	// start patrolling
 	cmd.patrol(logger)

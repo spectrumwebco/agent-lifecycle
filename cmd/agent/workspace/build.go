@@ -26,7 +26,7 @@ func NewBuildCmd(flags *flags.GlobalFlags) *cobra.Command {
 	}
 	buildCmd := &cobra.Command{
 		Use:   "build",
-		Short: "Builds a devcontainer",
+		Short: "Builds a kledcontainer",
 		Args:  cobra.NoArgs,
 		RunE: func(_ *cobra.Command, _ []string) error {
 			return cmd.Run(context.Background())

@@ -9,7 +9,7 @@ import (
 func NewContextCmd(flags *flags.GlobalFlags) *cobra.Command {
 	contextCmd := &cobra.Command{
 		Use:   "context",
-		Short: "DevPod Context commands",
+		Short: "Kled Context commands",
 	}
 
 	contextCmd.AddCommand(NewCreateCmd(flags))

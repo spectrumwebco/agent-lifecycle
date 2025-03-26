@@ -52,10 +52,10 @@ func (cmd *TroubleshootCmd) Run(ctx context.Context, args []string) {
 		CLIVersion            string
 		Config                *config.Config
 		Providers             map[string]provider.ProviderWithDefault
-		DevPodProInstances    []DevPodProInstance
+		KledProInstances      []KledProInstance
 		Workspace             *pkgprovider.Workspace
 		WorkspaceStatus       client.Status
-		WorkspaceTroubleshoot *managementv1.DevPodWorkspaceInstanceTroubleshoot
+		WorkspaceTroubleshoot *managementv1.KledWorkspaceInstanceTroubleshoot
 		DaemonStatus          *daemon.Status
 
 		Errors []PrintableError `json:",omitempty"`
@@ -94,7 +94,7 @@ func (cmd *TroubleshootCmd) Run(ctx context.Context, args []string) {
 		info.Errors = append(info.Errors, PrintableError{fmt.Errorf("collect providers: %w", err)})
 	}
 
-	info.DevPodProInstances, err = collectPlatformInfo(info.Config, logger)
+	info.KledProInstances, err = collectPlatformInfo(info.Config, logger)
 	if err != nil {
 		info.Errors = append(info.Errors, PrintableError{fmt.Errorf("collect platform info: %w", err)})
 	}
@@ -158,13 +158,13 @@ func (cmd *TroubleshootCmd) Run(ctx context.Context, args []string) {
 // troubleshooting information using the management client.
 func collectProWorkspaceInfo(
 	ctx context.Context,
-	devPodConfig *config.Config,
+	kledConfig *config.Config,
 	host string,
 	logger log.Logger,
 	workspaceUID string,
 	project string,
-) (*managementv1.DevPodWorkspaceInstanceTroubleshoot, error) {
-	baseClient, err := platform.InitClientFromHost(ctx, devPodConfig, host, logger)
+) (*managementv1.KledWorkspaceInstanceTroubleshoot, error) {
+	baseClient, err := platform.InitClientFromHost(ctx, kledConfig, host, logger)
 	if err != nil {
 		return nil, fmt.Errorf("init client from host: %w", err)
 	}
@@ -184,7 +184,7 @@ func collectProWorkspaceInfo(
 	troubleshoot, err := managementClient.
 		Loft().
 		ManagementV1().
-		DevPodWorkspaceInstances(workspace.Namespace).
+		KledWorkspaceInstances(workspace.Namespace).
 		Troubleshoot(ctx, workspace.Name, metav1.GetOptions{})
 	if err != nil {
 		return nil, fmt.Errorf("troubleshoot: %w", err)
@@ -193,15 +193,14 @@ func collectProWorkspaceInfo(
 	return troubleshoot, nil
 }
 
-// collectProviders collects and configures providers based on the given devPodConfig.
 // It returns a map of providers with their default settings and an error if any occurs.
-func collectProviders(devPodConfig *config.Config, logger log.Logger) (map[string]provider.ProviderWithDefault, error) {
-	providers, err := workspace.LoadAllProviders(devPodConfig, logger)
+func collectProviders(kledConfig *config.Config, logger log.Logger) (map[string]provider.ProviderWithDefault, error) {
+	providers, err := workspace.LoadAllProviders(kledConfig, logger)
 	if err != nil {
 		return nil, err
 	}
 
-	configuredProviders := devPodConfig.Current().Providers
+	configuredProviders := kledConfig.Current().Providers
 	if configuredProviders == nil {
 		configuredProviders = map[string]*config.ProviderConfig{}
 	}
@@ -216,36 +215,35 @@ func collectProviders(devPodConfig *config.Config, logger log.Logger) (map[strin
 		entry.Config.Options = srcOptions
 		retMap[k] = provider.ProviderWithDefault{
 			ProviderWithOptions: *entry,
-			Default:             devPodConfig.Current().DefaultProvider == entry.Config.Name,
+			Default:             kledConfig.Current().DefaultProvider == entry.Config.Name,
 		}
 	}
 
 	return retMap, nil
 }
 
-type DevPodProInstance struct {
+type KledProInstance struct {
 	Host         string
 	ProviderName string
 	Version      string
 }
 
-// collectPlatformInfo collects information about all platform instances in a given devPodConfig.
 // It iterates over the pro instances, retrieves their versions, and appends them to the ProInstance slice.
 // Any errors encountered during this process are combined and returned along with the ProInstance slice.
 // This means that even when an error value is returned, the pro instance slice will contain valid values.
-func collectPlatformInfo(devPodConfig *config.Config, logger log.Logger) ([]DevPodProInstance, error) {
-	proInstanceList, err := workspace.ListProInstances(devPodConfig, logger)
+func collectPlatformInfo(kledConfig *config.Config, logger log.Logger) ([]KledProInstance, error) {
+	proInstanceList, err := workspace.ListProInstances(kledConfig, logger)
 	if err != nil {
 		return nil, fmt.Errorf("list pro instances: %w", err)
 	}
 
-	var proInstances []DevPodProInstance
+	var proInstances []KledProInstance
 	var combinedErrs error
 
 	for _, proInstance := range proInstanceList {
-		version, err := platform.GetProInstanceDevPodVersion(&pkgprovider.ProInstance{Host: proInstance.Host})
+		version, err := platform.GetProInstanceKledVersion(&pkgprovider.ProInstance{Host: proInstance.Host})
 		combinedErrs = errors.Join(combinedErrs, err)
-		proInstances = append(proInstances, DevPodProInstance{
+		proInstances = append(proInstances, KledProInstance{
 			Host:         proInstance.Host,
 			ProviderName: proInstance.Provider,
 			Version:      version,

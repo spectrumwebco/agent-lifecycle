@@ -16,7 +16,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// StatusCmd holds the DevPod daemon flags
 type StatusCmd struct {
 	*proflags.GlobalFlags
 

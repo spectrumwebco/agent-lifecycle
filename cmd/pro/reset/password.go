@@ -42,8 +42,8 @@ func NewPasswordCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 Resets the password of a user.
 
 Example:
-devpod pro reset password
-devpod pro reset password --user admin
+kled pro reset password
+kled pro reset password --user admin
 #######################################################
 	`
 	c := &cobra.Command{

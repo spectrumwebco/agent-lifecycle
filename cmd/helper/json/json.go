@@ -9,7 +9,7 @@ import (
 func NewJSONCmd(flags *flags.GlobalFlags) *cobra.Command {
 	jsonCmd := &cobra.Command{
 		Use:    "json",
-		Short:  "DevPod JSON Utility Commands",
+		Short:  "Kled JSON Utility Commands",
 		Hidden: true,
 	}
 

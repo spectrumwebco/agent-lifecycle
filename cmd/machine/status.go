@@ -57,7 +57,7 @@ func (cmd *StatusCmd) Run(ctx context.Context, args []string) error {
 
 	if cmd.Output == "plain" {
 		if machineStatus == client.StatusStopped {
-			log.Default.Infof("Machine '%s' is '%s', you can start it via 'devpod machine start %s'", machineClient.Machine(), machineStatus, machineClient.Machine())
+			log.Default.Infof("Machine '%s' is '%s', you can start it via 'kled machine start %s'", machineClient.Machine(), machineStatus, machineClient.Machine())
 		} else if machineStatus == client.StatusBusy {
 			log.Default.Infof("Machine '%s' is '%s', which means its currently unaccessible. This is usually resolved by waiting a couple of minutes", machineClient.Machine(), machineStatus)
 		} else if machineStatus == client.StatusNotFound {

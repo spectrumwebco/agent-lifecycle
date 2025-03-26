@@ -25,7 +25,7 @@ import (
 )
 
 const (
-	RootDir = "/var/devpod"
+	RootDir = "/var/kled"
 )
 
 type DaemonCmd struct {
@@ -41,7 +41,7 @@ func NewDaemonCmd() *cobra.Command {
 	}
 	daemonCmd := &cobra.Command{
 		Use:   "daemon",
-		Short: "Starts the DevPod network daemon, SSH server and monitors container activity if timeout is set",
+		Short: "Starts the Kled network daemon, SSH server and monitors container activity if timeout is set",
 		Args:  cobra.NoArgs,
 		RunE:  cmd.Run,
 	}

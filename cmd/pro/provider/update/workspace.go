@@ -54,7 +54,7 @@ func (cmd *WorkspaceCmd) Run(ctx context.Context, stdin io.Reader, stdout io.Wri
 	// GUI
 	instanceEnv := os.Getenv(platform.WorkspaceInstanceEnv)
 	if instanceEnv != "" {
-		newInstance := &managementv1.DevPodWorkspaceInstance{}
+		newInstance := &managementv1.DevPodWorkspaceInstance{} // TODO: Update to KledWorkspaceInstance when API is updated
 		err := json.Unmarshal([]byte(instanceEnv), newInstance)
 		if err != nil {
 			return fmt.Errorf("unmarshal workpace instance %s: %w", instanceEnv, err)
@@ -110,7 +110,7 @@ func (cmd *WorkspaceCmd) Run(ctx context.Context, stdin io.Reader, stdout io.Wri
 	return nil
 }
 
-func updateInstance(ctx context.Context, client client.Client, oldInstance *managementv1.DevPodWorkspaceInstance, newInstance *managementv1.DevPodWorkspaceInstance, log log.Logger) (*managementv1.DevPodWorkspaceInstance, error) {
+func updateInstance(ctx context.Context, client client.Client, oldInstance *managementv1.DevPodWorkspaceInstance, newInstance *managementv1.DevPodWorkspaceInstance, log log.Logger) (*managementv1.DevPodWorkspaceInstance, error) { // TODO: Update to KledWorkspaceInstance when API is updated
 	// This ensures the template is kept up to date with configuration changes
 	if newInstance.Spec.TemplateRef != nil {
 		newInstance.Spec.TemplateRef.SyncOnce = true

@@ -82,7 +82,7 @@ func (cmd *VersionCmd) Run(ctx context.Context, stdin io.Reader, stdout io.Write
 
 	v := VersionInfo{
 		ServerVersion:          platformVersion.Version,
-		RemoteProviderVersion:  platformVersion.DevPodVersion,
+		RemoteProviderVersion:  platformVersion.KledVersion,
 		CurrentProviderVersion: providerVersion,
 	}
 	out, err := json.Marshal(v)

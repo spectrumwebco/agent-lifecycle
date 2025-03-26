@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/loft-sh/devpod/pkg/upgrade"
+	"github.com/loft-sh/kled/pkg/upgrade"
 	"github.com/loft-sh/log"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"

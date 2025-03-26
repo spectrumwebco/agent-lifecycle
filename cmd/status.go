@@ -41,13 +41,13 @@ func NewStatusCmd(flags *flags.GlobalFlags) *cobra.Command {
 			}
 
 			ctx := cobraCmd.Context()
-			devPodConfig, err := config.LoadConfig(cmd.Context, cmd.Provider)
+			kledConfig, err := config.LoadConfig(cmd.Context, cmd.Provider)
 			if err != nil {
 				return err
 			}
 
 			logger := log.Default.ErrorStreamOnly()
-			client, err := workspace2.Get(ctx, devPodConfig, args, false, cmd.Owner, logger)
+			client, err := workspace2.Get(ctx, kledConfig, args, false, cmd.Owner, logger)
 			if err != nil {
 				return err
 			}
@@ -87,11 +87,11 @@ func (cmd *StatusCmd) Run(ctx context.Context, client client2.BaseWorkspaceClien
 
 	if cmd.Output == "plain" {
 		if instanceStatus == client2.StatusStopped {
-			log.Infof("Workspace '%s' is '%s', you can start it via 'devpod up %s'", client.Workspace(), instanceStatus, client.Workspace())
+			log.Infof("Workspace '%s' is '%s', you can start it via 'kled up %s'", client.Workspace(), instanceStatus, client.Workspace())
 		} else if instanceStatus == client2.StatusBusy {
 			log.Infof("Workspace '%s' is '%s', which means its currently unaccessible. This is usually resolved by waiting a couple of minutes", client.Workspace(), instanceStatus)
 		} else if instanceStatus == client2.StatusNotFound {
-			log.Infof("Workspace '%s' is '%s', you can create it via 'devpod up %s'", client.Workspace(), instanceStatus, client.Workspace())
+			log.Infof("Workspace '%s' is '%s', you can create it via 'kled up %s'", client.Workspace(), instanceStatus, client.Workspace())
 		} else {
 			log.Infof("Workspace '%s' is '%s'", client.Workspace(), instanceStatus)
 		}

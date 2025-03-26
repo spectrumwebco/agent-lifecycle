@@ -56,7 +56,7 @@ func (cmd *StopCmd) Run(ctx context.Context) error {
 }
 
 func stopContainer(ctx context.Context, workspaceInfo *provider2.AgentWorkspaceInfo, log log.Logger) error {
-	log.Debugf("Stopping DevPod container...")
+	log.Debugf("Stopping Kled container...")
 	runner, err := CreateRunner(workspaceInfo, log)
 	if err != nil {
 		return err
@@ -66,7 +66,7 @@ func stopContainer(ctx context.Context, workspaceInfo *provider2.AgentWorkspaceI
 	if err != nil {
 		return err
 	}
-	log.Debugf("Successfully stopped DevPod container")
+	log.Debugf("Successfully stopped Kled container")
 
 	return nil
 }

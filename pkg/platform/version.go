@@ -14,13 +14,12 @@ type VersionObject struct {
 	// Version is the server version
 	Version string `json:"version,omitempty"`
 
-	// Version is the remote devpod version
-	DevPodVersion string `json:"devPodVersion,omitempty"`
+	KledVersion string `json:"kledVersion,omitempty"`
 }
 
-func GetProInstanceDevPodVersion(proInstance *provider.ProInstance) (string, error) {
+func GetProInstanceKledVersion(proInstance *provider.ProInstance) (string, error) {
 	url := "https://" + proInstance.Host
-	return GetDevPodVersion(url)
+	return GetKledVersion(url)
 }
 
 func GetPlatformVersion(url string) (*VersionObject, error) {
@@ -46,19 +45,23 @@ func GetPlatformVersion(url string) (*VersionObject, error) {
 	return version, nil
 }
 
-func GetDevPodVersion(url string) (string, error) {
+func GetKledVersion(url string) (string, error) {
 	version, err := GetPlatformVersion(url)
 	if err != nil {
 		return "", err
 	}
-	if version.DevPodVersion == "" {
-		return "", fmt.Errorf("unexpected version '%s', please use --version to define a provider version", version.DevPodVersion)
+	if version.KledVersion == "" {
+		return "", fmt.Errorf("unexpected version '%s', please use --version to define a provider version", version.KledVersion)
 	}
 
 	// make sure it starts with a v
-	if !strings.HasPrefix(version.DevPodVersion, "v") {
-		version.DevPodVersion = "v" + version.DevPodVersion
+	if !strings.HasPrefix(version.KledVersion, "v") {
+		version.KledVersion = "v" + version.KledVersion
 	}
 
-	return version.DevPodVersion, nil
+	return version.KledVersion, nil
+}
+
+func GetDevPodVersion(url string) (string, error) {
+	return GetKledVersion(url)
 }

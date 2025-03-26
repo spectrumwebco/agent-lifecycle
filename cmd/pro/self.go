@@ -33,12 +33,12 @@ func NewSelfCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 		Short:  "Get self",
 		Hidden: true,
 		RunE: func(cobraCmd *cobra.Command, args []string) error {
-			devPodConfig, provider, err := findProProvider(cobraCmd.Context(), cmd.Context, cmd.Provider, cmd.Host, cmd.Log)
+			kledConfig, provider, err := findProProvider(cobraCmd.Context(), cmd.Context, cmd.Provider, cmd.Host, cmd.Log) // TODO: Update variable name to reflect Kled branding
 			if err != nil {
 				return err
 			}
 
-			return cmd.Run(cobraCmd.Context(), devPodConfig, provider)
+			return cmd.Run(cobraCmd.Context(), kledConfig, provider)
 		},
 	}
 
@@ -48,7 +48,7 @@ func NewSelfCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 	return c
 }
 
-func (cmd *SelfCmd) Run(ctx context.Context, devPodConfig *config.Config, provider *provider.ProviderConfig) error {
+func (cmd *SelfCmd) Run(ctx context.Context, kledConfig *config.Config, provider *provider.ProviderConfig) error {
 	var buf bytes.Buffer
 	// ignore --debug because we tunnel json through stdio
 	cmd.Log.SetLevel(logrus.InfoLevel)
@@ -57,10 +57,10 @@ func (cmd *SelfCmd) Run(ctx context.Context, devPodConfig *config.Config, provid
 		ctx,
 		"getSelf",
 		provider.Exec.Proxy.Get.Self,
-		devPodConfig.DefaultContext,
+		kledConfig.DefaultContext,
 		nil,
 		nil,
-		devPodConfig.ProviderOptions(provider.Name),
+		kledConfig.ProviderOptions(provider.Name),
 		provider,
 		nil,
 		nil,

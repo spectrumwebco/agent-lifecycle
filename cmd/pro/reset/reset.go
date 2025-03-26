@@ -9,7 +9,7 @@ import (
 func NewResetCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 	c := &cobra.Command{
 		Use:   "reset",
-		Short: "Reset configuration",
+		Short: "Reset Kled configuration",
 		Args:  cobra.NoArgs,
 	}
 

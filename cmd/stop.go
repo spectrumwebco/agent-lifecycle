@@ -32,7 +32,7 @@ func NewStopCmd(flags *flags.GlobalFlags) *cobra.Command {
 		Short:   "Stops an existing workspace",
 		RunE: func(cobraCmd *cobra.Command, args []string) error {
 			ctx := cobraCmd.Context()
-			devPodConfig, err := config.LoadConfig(cmd.Context, cmd.Provider)
+			kledConfig, err := config.LoadConfig(cmd.Context, cmd.Provider)
 			if err != nil {
 				return err
 			}
@@ -42,12 +42,12 @@ func NewStopCmd(flags *flags.GlobalFlags) *cobra.Command {
 				return fmt.Errorf("decode platform options: %w", err)
 			}
 
-			client, err := workspace2.Get(ctx, devPodConfig, args, false, cmd.Owner, log.Default)
+			client, err := workspace2.Get(ctx, kledConfig, args, false, cmd.Owner, log.Default)
 			if err != nil {
 				return err
 			}
 
-			return cmd.Run(ctx, devPodConfig, client)
+			return cmd.Run(ctx, kledConfig, client)
 		},
 		ValidArgsFunction: func(rootCmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 			return completion.GetWorkspaceSuggestions(rootCmd, cmd.Context, cmd.Provider, args, toComplete, cmd.Owner, log.Default)
@@ -58,7 +58,7 @@ func NewStopCmd(flags *flags.GlobalFlags) *cobra.Command {
 }
 
 // Run runs the command logic
-func (cmd *StopCmd) Run(ctx context.Context, devPodConfig *config.Config, client client2.BaseWorkspaceClient) error {
+func (cmd *StopCmd) Run(ctx context.Context, kledConfig *config.Config, client client2.BaseWorkspaceClient) error {
 	// lock workspace
 	if !cmd.Platform.Enabled {
 		err := client.Lock(ctx)
@@ -77,7 +77,7 @@ func (cmd *StopCmd) Run(ctx context.Context, devPodConfig *config.Config, client
 	}
 
 	// stop if single machine provider
-	wasStopped, err := cmd.stopSingleMachine(ctx, client, devPodConfig)
+	wasStopped, err := cmd.stopSingleMachine(ctx, client, kledConfig)
 	if err != nil {
 		return err
 	} else if wasStopped {
@@ -93,15 +93,15 @@ func (cmd *StopCmd) Run(ctx context.Context, devPodConfig *config.Config, client
 	return nil
 }
 
-func (cmd *StopCmd) stopSingleMachine(ctx context.Context, client client2.BaseWorkspaceClient, devPodConfig *config.Config) (bool, error) {
+func (cmd *StopCmd) stopSingleMachine(ctx context.Context, client client2.BaseWorkspaceClient, kledConfig *config.Config) (bool, error) {
 	// check if single machine
-	singleMachineName := workspace2.SingleMachineName(devPodConfig, client.Provider(), log.Default)
-	if !devPodConfig.Current().IsSingleMachine(client.Provider()) || client.WorkspaceConfig().Machine.ID != singleMachineName {
+	singleMachineName := workspace2.SingleMachineName(kledConfig, client.Provider(), log.Default)
+	if !kledConfig.Current().IsSingleMachine(client.Provider()) || client.WorkspaceConfig().Machine.ID != singleMachineName {
 		return false, nil
 	}
 
 	// try to find other workspace with same machine
-	workspaces, err := workspace2.List(ctx, devPodConfig, false, cmd.Owner, log.Default)
+	workspaces, err := workspace2.List(ctx, kledConfig, false, cmd.Owner, log.Default)
 	if err != nil {
 		return false, errors.Wrap(err, "list workspaces")
 	}
@@ -121,7 +121,7 @@ func (cmd *StopCmd) stopSingleMachine(ctx context.Context, client client2.BaseWo
 	}
 
 	// if we haven't found another workspace on this machine, delete the whole machine
-	machineClient, err := workspace2.GetMachine(devPodConfig, []string{singleMachineName}, log.Default)
+	machineClient, err := workspace2.GetMachine(kledConfig, []string{singleMachineName}, log.Default)
 	if err != nil {
 		return false, errors.Wrap(err, "get machine")
 	}

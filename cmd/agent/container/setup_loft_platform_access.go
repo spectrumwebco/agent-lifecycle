@@ -68,10 +68,10 @@ func (c *SetupLoftPlatformAccessCmd) Run(_ *cobra.Command, args []string) error 
 		return nil
 	}
 
-	err = loftconfig.AuthDevpodCliToPlatform(loftConfig, logger)
+	err = loftconfig.AuthKledCliToPlatform(loftConfig, logger)
 	if err != nil {
 		// log error but don't return to allow other CLIs to install as well
-		logger.Warnf("unable to authenticate devpod cli: %w", err)
+		logger.Warnf("unable to authenticate kled cli: %w", err)
 	}
 
 	err = loftconfig.AuthVClusterCliToPlatform(loftConfig, logger)

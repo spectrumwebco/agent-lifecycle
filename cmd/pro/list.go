@@ -32,7 +32,7 @@ func NewListCmd(flags *proflags.GlobalFlags) *cobra.Command {
 	listCmd := &cobra.Command{
 		Use:     "list",
 		Aliases: []string{"ls"},
-		Short:   "List available DevPod Pro instances",
+		Short:   "List available Kled Pro instances",
 		Args:    cobra.NoArgs,
 		RunE: func(_ *cobra.Command, args []string) error {
 			return cmd.Run(context.Background())

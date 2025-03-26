@@ -24,7 +24,7 @@ func NewPingCmd(flags *flags.GlobalFlags) *cobra.Command {
 	}
 	troubleshootCmd := &cobra.Command{
 		Use:   "ping [workspace-path|workspace-name]",
-		Short: "Pings the DevPod Pro workspace",
+		Short: "Pings the Kled Pro workspace",
 		RunE: func(cobraCmd *cobra.Command, args []string) error {
 			return cmd.Run(cobraCmd.Context(), args)
 		},

@@ -22,7 +22,7 @@ func NewDeleteCmd(flags *flags.GlobalFlags) *cobra.Command {
 	}
 	deleteCmd := &cobra.Command{
 		Use:   "delete",
-		Short: "Delete a DevPod context",
+		Short: "Delete a Kled context",
 		RunE: func(_ *cobra.Command, args []string) error {
 			if len(args) > 1 {
 				return fmt.Errorf("please specify the context to delete")

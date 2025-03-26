@@ -16,7 +16,6 @@ import (
 	"tailscale.com/client/tailscale"
 )
 
-// NetcheckCmd holds the DevPod daemon flags
 type NetcheckCmd struct {
 	*proflags.GlobalFlags
 

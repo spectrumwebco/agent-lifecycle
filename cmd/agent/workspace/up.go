@@ -103,7 +103,7 @@ func (cmd *UpCmd) Run(ctx context.Context) error {
 
 func (cmd *UpCmd) up(ctx context.Context, workspaceInfo *provider2.AgentWorkspaceInfo, tunnelClient tunnel.TunnelClient, logger log.Logger) error {
 	// create devcontainer
-	result, err := cmd.devPodUp(ctx, workspaceInfo, logger)
+	result, err := cmd.kledUp(ctx, workspaceInfo, logger)
 	if err != nil {
 		return err
 	}
@@ -121,7 +121,7 @@ func (cmd *UpCmd) up(ctx context.Context, workspaceInfo *provider2.AgentWorkspac
 	return nil
 }
 
-func (cmd *UpCmd) devPodUp(ctx context.Context, workspaceInfo *provider2.AgentWorkspaceInfo, log log.Logger) (*config2.Result, error) {
+func (cmd *UpCmd) kledUp(ctx context.Context, workspaceInfo *provider2.AgentWorkspaceInfo, log log.Logger) (*config2.Result, error) {
 	runner, err := CreateRunner(workspaceInfo, log)
 	if err != nil {
 		return nil, err
@@ -140,7 +140,7 @@ func (cmd *UpCmd) devPodUp(ctx context.Context, workspaceInfo *provider2.AgentWo
 }
 
 func CreateRunner(workspaceInfo *provider2.AgentWorkspaceInfo, log log.Logger) (devcontainer.Runner, error) {
-	return devcontainer.NewRunner(agent.ContainerDevPodHelperLocation, agent.DefaultAgentDownloadURL(), workspaceInfo, log)
+	return devcontainer.NewRunner(agent.ContainerKledHelperLocation, agent.DefaultAgentDownloadURL(), workspaceInfo, log)
 }
 
 func InitContentFolder(workspaceInfo *provider2.AgentWorkspaceInfo, log log.Logger) (bool, error) {
@@ -384,7 +384,7 @@ func configureCredentials(ctx context.Context, cancel context.CancelFunc, worksp
 	gitCredentials := ""
 	if workspaceInfo.Agent.InjectGitCredentials == "true" {
 		gitCredentials = fmt.Sprintf("!'%s' agent git-credentials --port %d", binaryPath, serverPort)
-		_ = os.Setenv("DEVPOD_GIT_HELPER_PORT", strconv.Itoa(serverPort))
+		_ = os.Setenv("KLED_GIT_HELPER_PORT", strconv.Itoa(serverPort))
 	}
 
 	return dockerCredentials, gitCredentials, nil
@@ -395,7 +395,7 @@ func installDaemon(workspaceInfo *provider2.AgentWorkspaceInfo, log log.Logger) 
 		return nil
 	}
 
-	log.Debugf("Installing DevPod daemon into server...")
+	log.Debugf("Installing Kled daemon into server...")
 	err := agentdaemon.InstallDaemon(workspaceInfo.Agent.DataPath, workspaceInfo.CLIOptions.DaemonInterval, log)
 	if err != nil {
 		return errors.Wrap(err, "install daemon")

@@ -50,17 +50,17 @@ type ProviderWithDefault struct {
 
 // Run runs the command logic
 func (cmd *ListCmd) Run(ctx context.Context) error {
-	devPodConfig, err := config.LoadConfig(cmd.Context, cmd.Provider)
+	kledConfig, err := config.LoadConfig(cmd.Context, cmd.Provider) // TODO: Update variable name to reflect Kled branding
 	if err != nil {
 		return err
 	}
 
-	providers, err := workspace.LoadAllProviders(devPodConfig, log.Default.ErrorStreamOnly())
+	providers, err := workspace.LoadAllProviders(kledConfig, log.Default.ErrorStreamOnly())
 	if err != nil {
 		return err
 	}
 
-	configuredProviders := devPodConfig.Current().Providers
+	configuredProviders := kledConfig.Current().Providers
 	if configuredProviders == nil {
 		configuredProviders = map[string]*config.ProviderConfig{}
 	}
@@ -71,7 +71,7 @@ func (cmd *ListCmd) Run(ctx context.Context) error {
 			tableEntries = append(tableEntries, []string{
 				entry.Config.Name,
 				entry.Config.Version,
-				strconv.FormatBool(devPodConfig.Current().DefaultProvider == entry.Config.Name),
+				strconv.FormatBool(kledConfig.Current().DefaultProvider == entry.Config.Name),
 				strconv.FormatBool(entry.State != nil && entry.State.Initialized),
 				entry.Config.Description,
 			})
@@ -99,7 +99,7 @@ func (cmd *ListCmd) Run(ctx context.Context) error {
 			entry.Config.Options = srcOptions
 			retMap[k] = ProviderWithDefault{
 				ProviderWithOptions: *entry,
-				Default:             devPodConfig.Current().DefaultProvider == entry.Config.Name,
+				Default:             kledConfig.Current().DefaultProvider == entry.Config.Name,
 			}
 		}
 

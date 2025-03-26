@@ -5,7 +5,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/loft-sh/devpod/cmd/agent"
+	"github.com/loft-sh/devpod/cmd/agent" // TODO: Update import paths when repository is renamed
 	"github.com/loft-sh/devpod/cmd/completion"
 	"github.com/loft-sh/devpod/cmd/context"
 	"github.com/loft-sh/devpod/cmd/flags"
@@ -55,9 +55,9 @@ func NewRootCmd() *cobra.Command {
 				_ = os.Setenv(config.KLED_HOME, globalFlags.KledHome)
 			}
 
-			devPodConfig, err := config.LoadConfig(globalFlags.Context, globalFlags.Provider)
+			kledConfig, err := config.LoadConfig(globalFlags.Context, globalFlags.Provider)
 			if err == nil {
-				telemetry.StartCLI(devPodConfig, cobraCmd)
+				telemetry.StartCLI(kledConfig, cobraCmd)
 			}
 
 			return nil

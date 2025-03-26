@@ -27,15 +27,15 @@ func NewUpdateCmd(flags *flags.GlobalFlags) *cobra.Command {
 	}
 	updateCmd := &cobra.Command{
 		Use:   "update [name] [URL or path]",
-		Short: "Updates a provider in DevPod",
+		Short: "Updates a provider in Kled",
 		RunE: func(_ *cobra.Command, args []string) error {
 			ctx := context.Background()
-			devPodConfig, err := config.LoadConfig(cmd.Context, cmd.Provider)
+			kledConfig, err := config.LoadConfig(cmd.Context, cmd.Provider) // TODO: Update variable name to reflect Kled branding
 			if err != nil {
 				return err
 			}
 
-			return cmd.Run(ctx, devPodConfig, args)
+			return cmd.Run(ctx, kledConfig, args)
 		},
 	}
 
@@ -44,9 +44,9 @@ func NewUpdateCmd(flags *flags.GlobalFlags) *cobra.Command {
 	return updateCmd
 }
 
-func (cmd *UpdateCmd) Run(ctx context.Context, devPodConfig *config.Config, args []string) error {
+func (cmd *UpdateCmd) Run(ctx context.Context, kledConfig *config.Config, args []string) error {
 	if len(args) != 1 && len(args) != 2 {
-		return fmt.Errorf("please specify either a local file, url or git repository. E.g. devpod provider update my-provider loft-sh/devpod-provider-gcloud")
+		return fmt.Errorf("please specify either a local file, url or git repository. E.g. kled provider update my-provider loft-sh/devpod-provider-gcloud") // TODO: Update to kled-provider-gcloud when repositories are renamed
 	}
 
 	providerSource := ""
@@ -54,16 +54,16 @@ func (cmd *UpdateCmd) Run(ctx context.Context, devPodConfig *config.Config, args
 		providerSource = args[1]
 	}
 
-	providerConfig, err := workspace.UpdateProvider(devPodConfig, args[0], providerSource, log.Default)
+	providerConfig, err := workspace.UpdateProvider(kledConfig, args[0], providerSource, log.Default)
 	if err != nil {
 		return err
 	}
 
 	log.Default.Donef("Successfully updated provider %s", providerConfig.Name)
 	if cmd.Use {
-		err = ConfigureProvider(ctx, providerConfig, devPodConfig.DefaultContext, cmd.Options, false, false, false, nil, log.Default)
+		err = ConfigureProvider(ctx, providerConfig, kledConfig.DefaultContext, cmd.Options, false, false, false, nil, log.Default)
 		if err != nil {
-			log.Default.Errorf("Error configuring provider, please retry with 'devpod provider use %s --reconfigure'", providerConfig.Name)
+			log.Default.Errorf("Error configuring provider, please retry with 'kled provider use %s --reconfigure'", providerConfig.Name)
 			return errors.Wrap(err, "configure provider")
 		}
 

@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const BaseLogDir = "/var/devpod"
+const BaseLogDir = "/var/kled"
 
 // SSHServerCmd holds the ssh server cmd flags
 type SSHServerCmd struct {
@@ -71,7 +71,7 @@ func getFileLogger(remoteUser string, debug bool) log.Logger {
 	}
 	fallback := log.NewDiscardLogger(logLevel)
 
-	targetFolder := filepath.Join(os.TempDir(), ".devpod")
+	targetFolder := filepath.Join(os.TempDir(), ".kled")
 	if remoteUser != "" {
 		targetFolder = filepath.Join(BaseLogDir, remoteUser)
 	}

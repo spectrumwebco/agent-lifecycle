@@ -34,15 +34,15 @@ func NewWatchWorkspacesCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 	}
 	c := &cobra.Command{
 		Use:    "watch-workspaces",
-		Short:  "Watch workspaces",
+		Short:  "Watch Kled workspaces",
 		Hidden: true,
 		RunE: func(cobraCmd *cobra.Command, args []string) error {
-			devPodConfig, provider, err := findProProvider(cobraCmd.Context(), cmd.Context, cmd.Provider, cmd.Host, cmd.Log)
+			kledConfig, provider, err := findProProvider(cobraCmd.Context(), cmd.Context, cmd.Provider, cmd.Host, cmd.Log) // TODO: Update variable name to reflect Kled branding
 			if err != nil {
 				return err
 			}
 
-			return cmd.Run(cobraCmd.Context(), devPodConfig, provider)
+			return cmd.Run(cobraCmd.Context(), kledConfig, provider)
 		},
 	}
 
@@ -55,8 +55,8 @@ func NewWatchWorkspacesCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 	return c
 }
 
-func (cmd *WatchWorkspacesCmd) Run(ctx context.Context, devPodConfig *config.Config, providerConfig *provider.ProviderConfig) error {
-	opts := devPodConfig.ProviderOptions(providerConfig.Name)
+func (cmd *WatchWorkspacesCmd) Run(ctx context.Context, kledConfig *config.Config, providerConfig *provider.ProviderConfig) error {
+	opts := kledConfig.ProviderOptions(providerConfig.Name)
 	cancelCtx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
@@ -80,7 +80,7 @@ func (cmd *WatchWorkspacesCmd) Run(ctx context.Context, devPodConfig *config.Con
 		cancelCtx,
 		"watchWorkspaces",
 		providerConfig.Exec.Proxy.Watch.Workspaces,
-		devPodConfig.DefaultContext,
+		kledConfig.DefaultContext,
 		nil,
 		nil,
 		opts,

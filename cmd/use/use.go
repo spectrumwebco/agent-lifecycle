@@ -1,9 +1,9 @@
 package use
 
 import (
-	"github.com/loft-sh/devpod/cmd/flags"
-	"github.com/loft-sh/devpod/cmd/ide"
-	"github.com/loft-sh/devpod/cmd/provider"
+	"github.com/loft-sh/kled/cmd/flags"
+	"github.com/loft-sh/kled/cmd/ide"
+	"github.com/loft-sh/kled/cmd/provider"
 	"github.com/spf13/cobra"
 )
 
@@ -11,7 +11,7 @@ import (
 func NewUseCmd(flags *flags.GlobalFlags) *cobra.Command {
 	useCmd := &cobra.Command{
 		Use:   "use",
-		Short: "Use DevPod resources",
+		Short: "Use Kled resources",
 	}
 
 	// use provider
