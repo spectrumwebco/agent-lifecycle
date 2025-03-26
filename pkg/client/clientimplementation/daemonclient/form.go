@@ -21,13 +21,13 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func createInstanceInteractive(ctx context.Context, baseClient platformclient.Client, id, uid, source, picture string, log log.Logger) (*managementv1.KledWorkspaceInstance, error) {
+func createInstanceInteractive(ctx context.Context, baseClient platformclient.Client, id, uid, source, picture string, log log.Logger) (*managementv1.DevPodWorkspaceInstance, error) {
 	formCtx, cancelForm := context.WithCancel(ctx)
 	defer cancelForm()
 
 	var selectedCluster *managementv1.Cluster
 	var selectedProject *managementv1.Project
-	var selectedTemplate *managementv1.KledWorkspaceTemplate
+	var selectedTemplate *managementv1.DevPodWorkspaceTemplate
 	selectedTemplateVersion := ""
 	projectOptions, err := projectOptions(ctx, baseClient)
 	if err != nil {
@@ -46,9 +46,9 @@ func createInstanceInteractive(ctx context.Context, baseClient platformclient.Cl
 				}, &selectedProject).
 				Value(&selectedCluster).
 				WithHeight(5),
-			huh.NewSelect[*managementv1.KledWorkspaceTemplate]().
+			huh.NewSelect[*managementv1.DevPodWorkspaceTemplate]().
 				Title("Template").
-				OptionsFunc(func() []huh.Option[*managementv1.KledWorkspaceTemplate] {
+				OptionsFunc(func() []huh.Option[*managementv1.DevPodWorkspaceTemplate] {
 					return getTemplateOptions(ctx, baseClient, selectedProject, cancelForm, log)
 				}, &selectedProject).
 				Value(&selectedTemplate),
@@ -89,22 +89,22 @@ func createInstanceInteractive(ctx context.Context, baseClient platformclient.Cl
 		}
 	}
 
-	instance := &managementv1.KledWorkspaceInstance{
+	instance := &managementv1.DevPodWorkspaceInstance{
 		ObjectMeta: metav1.ObjectMeta{
 			GenerateName: encoding.SafeConcatNameMax([]string{id}, 53) + "-",
 			Namespace:    project.ProjectNamespace(selectedProject.GetName()),
 			Labels: map[string]string{
-				storagev1.KledWorkspaceIDLabel:  id,
-				storagev1.KledWorkspaceUIDLabel: uid,
+				storagev1.DevPodWorkspaceIDLabel:  id,
+				storagev1.DevPodWorkspaceUIDLabel: uid,
 				labels.ProjectLabel:               selectedProject.GetName(),
 			},
 			Annotations: map[string]string{
-				storagev1.KledWorkspacePictureAnnotation: picture,
-				storagev1.KledWorkspaceSourceAnnotation:  source,
+				storagev1.DevPodWorkspacePictureAnnotation: picture,
+				storagev1.DevPodWorkspaceSourceAnnotation:  source,
 			},
 		},
-		Spec: managementv1.KledWorkspaceInstanceSpec{
-			KledWorkspaceInstanceSpec: storagev1.KledWorkspaceInstanceSpec{
+		Spec: managementv1.DevPodWorkspaceInstanceSpec{
+			DevPodWorkspaceInstanceSpec: storagev1.DevPodWorkspaceInstanceSpec{
 				DisplayName: id,
 				TemplateRef: &storagev1.TemplateRef{
 					Name:    selectedTemplate.GetName(),
@@ -123,7 +123,7 @@ func createInstanceInteractive(ctx context.Context, baseClient platformclient.Cl
 	return instance, nil
 }
 
-func updateInstanceInteractive(ctx context.Context, baseClient platformclient.Client, instance *managementv1.KledWorkspaceInstance, log log.Logger) (*managementv1.KledWorkspaceInstance, error) {
+func updateInstanceInteractive(ctx context.Context, baseClient platformclient.Client, instance *managementv1.DevPodWorkspaceInstance, log log.Logger) (*managementv1.DevPodWorkspaceInstance, error) {
 	formCtx, cancelForm := context.WithCancel(ctx)
 	defer cancelForm()
 
@@ -132,11 +132,11 @@ func updateInstanceInteractive(ctx context.Context, baseClient platformclient.Cl
 	if err != nil {
 		return nil, err
 	}
-	var selectedTemplate *managementv1.KledWorkspaceTemplate
+	var selectedTemplate *managementv1.DevPodWorkspaceTemplate
 	templateOptions := []TemplateOption{}
-	for _, template := range projectTemplates.KledWorkspaceTemplates {
+	for _, template := range projectTemplates.DevPodWorkspaceTemplates {
 		t := &template
-		templateOptions = append(templateOptions, huh.Option[*managementv1.KledWorkspaceTemplate]{
+		templateOptions = append(templateOptions, huh.Option[*managementv1.DevPodWorkspaceTemplate]{
 			Key:   platform.DisplayName(template.GetName(), template.Spec.DisplayName),
 			Value: t,
 		})
@@ -156,7 +156,7 @@ func updateInstanceInteractive(ctx context.Context, baseClient platformclient.Cl
 
 	err = huh.NewForm(
 		huh.NewGroup(
-			huh.NewSelect[*managementv1.KledWorkspaceTemplate]().
+			huh.NewSelect[*managementv1.DevPodWorkspaceTemplate]().
 				Title("Template").
 				Options(templateOptions...).
 				Value(&selectedTemplate),
@@ -248,7 +248,7 @@ func updateInstanceInteractive(ctx context.Context, baseClient platformclient.Cl
 }
 
 type ProjectOption = huh.Option[*managementv1.Project]
-type TemplateOption = huh.Option[*managementv1.KledWorkspaceTemplate]
+type TemplateOption = huh.Option[*managementv1.DevPodWorkspaceTemplate]
 type CancelFunc = func()
 
 var latestTemplateVersion = huh.Option[string]{
@@ -297,8 +297,8 @@ func getClusterOptions(ctx context.Context, client platformclient.Client, projec
 	return opts
 }
 
-func getTemplateOptions(ctx context.Context, client platformclient.Client, project *managementv1.Project, cancel CancelFunc, log log.Logger) []huh.Option[*managementv1.KledWorkspaceTemplate] {
-	opts := []huh.Option[*managementv1.KledWorkspaceTemplate]{}
+func getTemplateOptions(ctx context.Context, client platformclient.Client, project *managementv1.Project, cancel CancelFunc, log log.Logger) []huh.Option[*managementv1.DevPodWorkspaceTemplate] {
+	opts := []huh.Option[*managementv1.DevPodWorkspaceTemplate]{}
 	if project == nil {
 		return opts
 	}
@@ -311,14 +311,14 @@ func getTemplateOptions(ctx context.Context, client platformclient.Client, proje
 		return nil
 	}
 
-	var defaultOpt huh.Option[*managementv1.KledWorkspaceTemplate]
-	for _, template := range templates.KledWorkspaceTemplates {
+	var defaultOpt huh.Option[*managementv1.DevPodWorkspaceTemplate]
+	for _, template := range templates.DevPodWorkspaceTemplates {
 		t := &template
-		opt := huh.Option[*managementv1.KledWorkspaceTemplate]{
+		opt := huh.Option[*managementv1.DevPodWorkspaceTemplate]{
 			Key:   platform.DisplayName(template.GetName(), template.Spec.DisplayName),
 			Value: t,
 		}
-		if t.GetName() == templates.DefaultKledWorkspaceTemplate {
+		if t.GetName() == templates.DefaultDevPodWorkspaceTemplate {
 			defaultOpt = opt
 			continue
 		}
@@ -332,7 +332,7 @@ func getTemplateOptions(ctx context.Context, client platformclient.Client, proje
 	return opts
 }
 
-func getTemplateVersionOptions(template *managementv1.KledWorkspaceTemplate) []huh.Option[string] {
+func getTemplateVersionOptions(template *managementv1.DevPodWorkspaceTemplate) []huh.Option[string] {
 	opts := []huh.Option[string]{latestTemplateVersion}
 	if template == nil {
 		return opts

@@ -166,7 +166,7 @@ func setOptions(
 		stderr := log.Writer(logrus.ErrorLevel, false)
 		defer stderr.Close()
 
-		err = initProvider(ctx, devPodConfig, provider, stdout, stderr)
+		err = initProvider(ctx, kledConfig, provider, stdout, stderr)
 		if err != nil {
 			return nil, err
 		}

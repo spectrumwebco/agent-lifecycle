@@ -64,7 +64,7 @@ func (cmd *UpdateWorkspaceCmd) Run(ctx context.Context, kledConfig *config.Confi
 		ctx,
 		"updateWorkspace",
 		provider.Exec.Proxy.Update.Workspace,
-		devPodConfig.DefaultContext,
+		kledConfig.DefaultContext,
 		nil,
 		nil,
 		opts,

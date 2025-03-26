@@ -55,7 +55,7 @@ func (c *client) Delete(ctx context.Context, opt clientpkg.DeleteOptions) error 
 	}
 
 	// delete the workspace
-	err = managementClient.Loft().ManagementV1().KledWorkspaceInstances(workspace.Namespace).Delete(ctx, workspace.Name, metav1.DeleteOptions{})
+	err = managementClient.Loft().ManagementV1().DevPodWorkspaceInstances(workspace.Namespace).Delete(ctx, workspace.Name, metav1.DeleteOptions{})
 	if err != nil {
 		if !opt.Force {
 			return fmt.Errorf("delete workspace: %w", err)
@@ -81,7 +81,7 @@ func (c *client) Delete(ctx context.Context, opt clientpkg.DeleteOptions) error 
 	// wait until the workspace is deleted
 	c.log.Debugf("Waiting for workspace to get deleted...")
 	err = wait.PollUntilContextTimeout(ctx, time.Second, waitTimeout, false, func(ctx context.Context) (done bool, err error) {
-		workspaceInstance, err := managementClient.Loft().ManagementV1().KledWorkspaceInstances(workspace.Namespace).Get(ctx, workspace.Name, metav1.GetOptions{})
+		workspaceInstance, err := managementClient.Loft().ManagementV1().DevPodWorkspaceInstances(workspace.Namespace).Get(ctx, workspace.Name, metav1.GetOptions{})
 		if kerrors.IsNotFound(err) {
 			return true, nil
 		} else if err != nil {

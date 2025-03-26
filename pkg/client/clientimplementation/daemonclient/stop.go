@@ -33,8 +33,8 @@ func (c *client) Stop(ctx context.Context, opt clientpkg.StopOptions) error {
 	}
 
 	rawOptions, _ := json.Marshal(opt)
-	retStop, err := managementClient.Loft().ManagementV1().KledWorkspaceInstances(workspace.Namespace).Stop(ctx, workspace.Name, &managementv1.KledWorkspaceInstanceStop{
-		Spec: managementv1.KledWorkspaceInstanceStopSpec{
+	retStop, err := managementClient.Loft().ManagementV1().DevPodWorkspaceInstances(workspace.Namespace).Stop(ctx, workspace.Name, &managementv1.DevPodWorkspaceInstanceStop{
+		Spec: managementv1.DevPodWorkspaceInstanceStopSpec{
 			Options: string(rawOptions),
 		},
 	}, metav1.CreateOptions{})

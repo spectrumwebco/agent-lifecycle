@@ -173,7 +173,7 @@ func listProWorkspaces(ctx context.Context, devPodConfig *config.Config, owner p
 
 func listProWorkspacesForProvider(ctx context.Context, devPodConfig *config.Config, provider string, providerConfig *providerpkg.ProviderConfig, owner platform.OwnerFilter, log log.Logger) ([]*providerpkg.Workspace, error) {
 	var (
-		instances []managementv1.KledWorkspaceInstance
+		instances []managementv1.DevPodWorkspaceInstance
 		err       error
 	)
 	if providerConfig.IsProxyProvider() {
@@ -200,14 +200,14 @@ func listProWorkspacesForProvider(ctx context.Context, devPodConfig *config.Conf
 		}
 
 		// id
-		id := instance.GetLabels()[storagev1.KledWorkspaceIDLabel]
+		id := instance.GetLabels()[storagev1.DevPodWorkspaceIDLabel]
 		if id == "" {
 			log.Debugf("no ID label for pro workspace \"%s\" found, skipping", instance.GetName())
 			continue
 		}
 
 		// uid
-		uid := instance.GetLabels()[storagev1.KledWorkspaceUIDLabel]
+		uid := instance.GetLabels()[storagev1.DevPodWorkspaceUIDLabel]
 		if uid == "" {
 			log.Debugf("no UID label for pro workspace \"%s\" found, skipping", instance.GetName())
 			continue
@@ -218,9 +218,9 @@ func listProWorkspacesForProvider(ctx context.Context, devPodConfig *config.Conf
 
 		// source
 		source := providerpkg.WorkspaceSource{}
-		if instance.Annotations != nil && instance.Annotations[storagev1.KledWorkspaceSourceAnnotation] != "" {
+		if instance.Annotations != nil && instance.Annotations[storagev1.DevPodWorkspaceSourceAnnotation] != "" {
 			// source to workspace config source
-			rawSource := instance.Annotations[storagev1.KledWorkspaceSourceAnnotation]
+			rawSource := instance.Annotations[storagev1.DevPodWorkspaceSourceAnnotation]
 			s := providerpkg.ParseWorkspaceSource(rawSource)
 			if s == nil {
 				log.ErrorStreamOnly().Warnf("unable to parse workspace source \"%s\": %v", rawSource)
