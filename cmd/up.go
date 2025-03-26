@@ -94,13 +94,13 @@ func NewUpCmd(f *flags.GlobalFlags) *cobra.Command {
 			ctx, cancel := WithSignals(cobraCmd.Context())
 			defer cancel()
 
-			client, logger, err := cmd.prepareClient(ctx, devPodConfig, args)
+			client, logger, err := cmd.prepareClient(ctx, kledConfig, args)
 			if err != nil {
 				return fmt.Errorf("prepare workspace client: %w", err)
 			}
 			telemetry.CollectorCLI.SetClient(client)
 
-			return cmd.Run(ctx, devPodConfig, client, args, logger)
+			return cmd.Run(ctx, kledConfig, client, args, logger)
 		},
 	}
 	upCmd.Flags().BoolVar(&cmd.ConfigureSSH, "configure-ssh", true, "If true will configure the ssh config to include the Kled workspace")
@@ -213,7 +213,7 @@ func (cmd *UpCmd) Run(
 	}
 
 	// setup dotfiles in the container
-	err = setupDotfiles(cmd.DotfilesSource, cmd.DotfilesScript, cmd.DotfilesScriptEnvFile, cmd.DotfilesScriptEnv, client, devPodConfig, log)
+	err = setupDotfiles(cmd.DotfilesSource, cmd.DotfilesScript, cmd.DotfilesScriptEnvFile, cmd.DotfilesScriptEnv, client, kledConfig, log)
 	if err != nil {
 		return err
 	}
@@ -271,7 +271,7 @@ func (cmd *UpCmd) Run(
 			return startVSCodeInBrowser(
 				cmd.GPGAgentForwarding,
 				ctx,
-				devPodConfig,
+				kledConfig,
 				client,
 				result.SubstitutionContext.ContainerWorkspaceFolder,
 				user,
@@ -307,7 +307,7 @@ func (cmd *UpCmd) Run(
 			return startJupyterNotebookInBrowser(
 				cmd.GPGAgentForwarding,
 				ctx,
-				devPodConfig,
+				kledConfig,
 				client,
 				user,
 				ideConfig.Options,
@@ -318,7 +318,7 @@ func (cmd *UpCmd) Run(
 			return startRStudioInBrowser(
 				cmd.GPGAgentForwarding,
 				ctx,
-				devPodConfig,
+				kledConfig,
 				client,
 				user,
 				ideConfig.Options,
@@ -353,17 +353,17 @@ func (cmd *UpCmd) kledUp(
 
 	switch client := client.(type) {
 	case client2.WorkspaceClient:
-		result, err = cmd.devPodUpMachine(ctx, devPodConfig, client, log)
+		result, err = cmd.kledUpMachine(ctx, kledConfig, client, log)
 		if err != nil {
 			return nil, err
 		}
 	case client2.ProxyClient:
-		result, err = cmd.devPodUpProxy(ctx, client, log)
+		result, err = cmd.kledUpProxy(ctx, client, log)
 		if err != nil {
 			return nil, err
 		}
 	case client2.DaemonClient:
-		result, err = cmd.devPodUpDaemon(ctx, client)
+		result, err = cmd.kledUpDaemon(ctx, client)
 		if err != nil {
 			return nil, err
 		}
@@ -551,7 +551,7 @@ func (cmd *UpCmd) kledUpMachine(
 	return sshtunnel.ExecuteCommand(
 		ctx,
 		client,
-		devPodConfig.ContextOption(config.ContextOptionSSHAddPrivateKeys) == "true",
+		kledConfig.ContextOption(config.ContextOptionSSHAddPrivateKeys) == "true",
 		agentInjectFunc,
 		sshTunnelCmd,
 		agentCommand,
@@ -616,7 +616,7 @@ func startJupyterNotebookInBrowser(
 	extraPorts := []string{fmt.Sprintf("%s:%d", jupyterAddress, jupyter.DefaultServerPort)}
 	return startBrowserTunnel(
 		ctx,
-		devPodConfig,
+		kledConfig,
 		client,
 		user,
 		targetURL,
@@ -673,7 +673,7 @@ func startRStudioInBrowser(
 	extraPorts := []string{fmt.Sprintf("%s:%d", addr, rstudio.DefaultServerPort)}
 	return startBrowserTunnel(
 		ctx,
-		devPodConfig,
+		kledConfig,
 		client,
 		user,
 		targetURL,
@@ -766,7 +766,7 @@ func startVSCodeInBrowser(
 	extraPorts := []string{fmt.Sprintf("%s:%d", vscodeAddress, openvscode.DefaultVSCodePort)}
 	return startBrowserTunnel(
 		ctx,
-		devPodConfig,
+		kledConfig,
 		client,
 		user,
 		targetURL,
@@ -888,7 +888,7 @@ func startBrowserTunnel(
 		defer toolClient.Close()
 
 		err = startServicesDaemon(ctx,
-			devPodConfig,
+			kledConfig,
 			daemonClient,
 			toolClient,
 			user,
@@ -933,14 +933,14 @@ func startBrowserTunnel(
 				})
 			}
 
-			configureDockerCredentials := devPodConfig.ContextOption(config.ContextOptionSSHInjectDockerCredentials) == "true"
-			configureGitCredentials := devPodConfig.ContextOption(config.ContextOptionSSHInjectGitCredentials) == "true"
-			configureGitSSHSignatureHelper := devPodConfig.ContextOption(config.ContextOptionGitSSHSignatureForwarding) == "true"
+			configureDockerCredentials := kledConfig.ContextOption(config.ContextOptionSSHInjectDockerCredentials) == "true"
+			configureGitCredentials := kledConfig.ContextOption(config.ContextOptionSSHInjectGitCredentials) == "true"
+			configureGitSSHSignatureHelper := kledConfig.ContextOption(config.ContextOptionGitSSHSignatureForwarding) == "true"
 
 			// run in container
 			err := tunnel.RunServices(
 				ctx,
-				devPodConfig,
+				kledConfig,
 				containerClient,
 				user,
 				forwardPorts,
@@ -1156,7 +1156,7 @@ func buildDotCmd(	kledConfig *config.Config, dotfilesRepo, dotfilesScript string
 		remoteUser = "root"
 	}
 
-	agentArguments := buildDotCmdAgentArguments(devPodConfig, dotfilesRepo, dotfilesScript, log)
+	agentArguments := buildDotCmdAgentArguments(kledConfig, dotfilesRepo, dotfilesScript, log)
 	sshCmd = append(sshCmd,
 		"--user",
 		remoteUser,
@@ -1278,7 +1278,7 @@ func performGpgForwarding(
 
 // Potentially auto-upgrade other providers in the future.
 func checkProviderUpdate(	kledConfig *config.Config, proInstance *provider2.ProInstance, log log.Logger) error {
-	if version.GetVersion() == version.KledVersion {
+	if version.GetVersion() == version.DevVersion {
 		log.Debugf("Skipping provider upgrade check during development")
 		return nil
 	}
@@ -1297,7 +1297,7 @@ func checkProviderUpdate(	kledConfig *config.Config, proInstance *provider2.ProI
 	if err != nil {
 		return fmt.Errorf("get provider config for pro provider %s: %w", proInstance.Provider, err)
 	}
-	if p.Config.Version == version.KledVersion {
+	if p.Config.Version == version.DevVersion {
 		return nil
 	}
 	if p.Config.Source.Internal {
@@ -1389,7 +1389,7 @@ func (cmd *UpCmd) prepareClient(ctx context.Context,	kledConfig *config.Config, 
 
 	client, err := workspace2.Resolve(
 		ctx,
-		devPodConfig,
+		kledConfig,
 		cmd.IDE,
 		cmd.IDEOptions,
 		args,
@@ -1411,8 +1411,8 @@ func (cmd *UpCmd) prepareClient(ctx context.Context,	kledConfig *config.Config, 
 	}
 
 	if !cmd.Platform.Enabled {
-		proInstance := getProInstance(devPodConfig, client.Provider(), logger)
-		err = checkProviderUpdate(devPodConfig, proInstance, logger)
+		proInstance := getProInstance(kledConfig, client.Provider(), logger)
+		err = checkProviderUpdate(kledConfig, proInstance, logger)
 		if err != nil {
 			return nil, logger, err
 		}

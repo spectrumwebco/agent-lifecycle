@@ -9,7 +9,9 @@ const (
 	DockerfileDefaultTarget = "dev_container_auto_added_stage_label"
 
 	DevPodContextFeatureFolder      = ".devpod-internal"
+	KledContextFeatureFolder      = DevPodContextFeatureFolder
 	DevPodDockerlessBuildInfoFolder = "/workspaces/.dockerless"
+	KledDockerlessBuildInfoFolder = DevPodDockerlessBuildInfoFolder
 )
 
 func GetDockerLabelForID(id string) []string {

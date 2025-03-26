@@ -55,7 +55,7 @@ func (cmd *TroubleshootCmd) Run(ctx context.Context, args []string) {
 		KledProInstances      []KledProInstance
 		Workspace             *pkgprovider.Workspace
 		WorkspaceStatus       client.Status
-		WorkspaceTroubleshoot *managementv1.KledWorkspaceInstanceTroubleshoot
+		WorkspaceTroubleshoot *managementv1.DevPodWorkspaceInstanceTroubleshoot
 		DaemonStatus          *daemon.Status
 
 		Errors []PrintableError `json:",omitempty"`
@@ -110,9 +110,9 @@ func (cmd *TroubleshootCmd) Run(ctx context.Context, args []string) {
 		if info.Workspace.Pro != nil {
 			// (ThomasK33): As there can be multiple pro instances configured
 			// we want to iterate over all and find the host that this workspace belongs to.
-			var proInstance DevPodProInstance
+			var proInstance KledProInstance
 
-			for _, instance := range info.DevPodProInstances {
+			for _, instance := range info.KledProInstances {
 				if instance.ProviderName == info.Workspace.Provider.Name {
 					proInstance = instance
 					break
@@ -163,7 +163,7 @@ func collectProWorkspaceInfo(
 	logger log.Logger,
 	workspaceUID string,
 	project string,
-) (*managementv1.KledWorkspaceInstanceTroubleshoot, error) {
+) (*managementv1.DevPodWorkspaceInstanceTroubleshoot, error) {
 	baseClient, err := platform.InitClientFromHost(ctx, kledConfig, host, logger)
 	if err != nil {
 		return nil, fmt.Errorf("init client from host: %w", err)
@@ -184,7 +184,7 @@ func collectProWorkspaceInfo(
 	troubleshoot, err := managementClient.
 		Loft().
 		ManagementV1().
-		KledWorkspaceInstances(workspace.Namespace).
+		DevPodWorkspaceInstances(workspace.Namespace).
 		Troubleshoot(ctx, workspace.Name, metav1.GetOptions{})
 	if err != nil {
 		return nil, fmt.Errorf("troubleshoot: %w", err)

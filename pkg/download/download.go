@@ -8,8 +8,8 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/loft-sh/kled/pkg/gitcredentials"
-	kledhttp "github.com/loft-sh/kled/pkg/http"
+	"github.com/loft-sh/devpod/pkg/gitcredentials"
+	kledhttp "github.com/loft-sh/devpod/pkg/http"
 	"github.com/loft-sh/log"
 	"github.com/pkg/errors"
 )

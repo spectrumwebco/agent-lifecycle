@@ -13,11 +13,11 @@ import (
 
 	"github.com/gofrs/flock"
 	"github.com/loft-sh/api/v4/pkg/devpod"
-	"github.com/loft-sh/kled/pkg/client"
-	"github.com/loft-sh/kled/pkg/config"
-	kledlog "github.com/loft-sh/kled/pkg/log"
-	"github.com/loft-sh/kled/pkg/options"
-	"github.com/loft-sh/kled/pkg/provider"
+	"github.com/loft-sh/devpod/pkg/client"
+	"github.com/loft-sh/devpod/pkg/config"
+	kledlog "github.com/loft-sh/devpod/pkg/log"
+	"github.com/loft-sh/devpod/pkg/options"
+	"github.com/loft-sh/devpod/pkg/provider"
 	"github.com/loft-sh/log"
 	perrors "github.com/pkg/errors"
 )

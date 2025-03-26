@@ -13,13 +13,13 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/loft-sh/api/v4/pkg/kled"
-	"github.com/loft-sh/kled/pkg/command"
-	"github.com/loft-sh/kled/pkg/config"
-	"github.com/loft-sh/kled/pkg/git"
-	"github.com/loft-sh/kled/pkg/gitcredentials"
-	provider2 "github.com/loft-sh/kled/pkg/provider"
-	"github.com/loft-sh/kled/pkg/util"
+	"github.com/loft-sh/api/v4/pkg/devpod"
+	"github.com/loft-sh/devpod/pkg/command"
+	"github.com/loft-sh/devpod/pkg/config"
+	"github.com/loft-sh/devpod/pkg/git"
+	"github.com/loft-sh/devpod/pkg/gitcredentials"
+	provider2 "github.com/loft-sh/devpod/pkg/provider"
+	"github.com/loft-sh/devpod/pkg/util"
 	"github.com/loft-sh/log"
 	"github.com/moby/patternmatcher/ignorefile"
 	"google.golang.org/grpc"
@@ -335,7 +335,7 @@ func CloneRepositoryForWorkspace(
 		}
 
 		// marshal options
-		jsonOptions, err := json.Marshal(&kled.CloneOptions{
+		jsonOptions, err := json.Marshal(&devpod.CloneOptions{
 			Repository:        source.GitRepository,
 			Branch:            source.GitBranch,
 			Commit:            source.GitCommit,
@@ -350,7 +350,7 @@ func CloneRepositoryForWorkspace(
 
 		// create client
 		log.Infof("Cloning repository %s in platform...", source.GitRepository)
-		_, err = kled.NewRunnerClient(grpcClient).Clone(ctx, &kled.CloneRequest{
+		_, err = devpod.NewRunnerClient(grpcClient).Clone(ctx, &devpod.CloneRequest{
 			TargetPath: workspaceDir,
 			Options:    string(jsonOptions),
 		})

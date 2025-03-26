@@ -262,7 +262,7 @@ func ResolveAgentConfig(devConfig *config.Config, provider *provider2.ProviderCo
 	if agentConfig.Path == "" && agentConfig.Local == "true" {
 		agentConfig.Path, _ = os.Executable()
 	} else if agentConfig.Path == "" {
-		agentConfig.Path = agent.RemoteDevPodHelperLocation
+		agentConfig.Path = agent.RemoteKledHelperLocation
 	}
 	agentConfig.DownloadURL = resolver.ResolveDefaultValue(agentConfig.DownloadURL, options)
 	if agentConfig.DownloadURL == "" {
@@ -280,7 +280,7 @@ func ResolveAgentConfig(devConfig *config.Config, provider *provider2.ProviderCo
 
 // resolveAgentDownloadURL resolves the agent download URL (env -> context -> default)
 func resolveAgentDownloadURL(devConfig *config.Config) string {
-	devPodAgentURL := os.Getenv(agent.EnvDevPodAgentURL)
+	devPodAgentURL := os.Getenv(agent.EnvKledAgentURL)
 	if devPodAgentURL != "" {
 		return strings.TrimSuffix(devPodAgentURL, "/") + "/"
 	}

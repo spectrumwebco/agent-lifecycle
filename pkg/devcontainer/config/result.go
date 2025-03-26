@@ -56,6 +56,10 @@ func GetDevPodCustomizations(parsedConfig *DevContainerConfig) *DevPodCustomizat
 	return devPod
 }
 
+func GetKledCustomizations(parsedConfig *DevContainerConfig) *DevPodCustomizations {
+	return GetDevPodCustomizations(parsedConfig)
+}
+
 func GetVSCodeConfiguration(mergedConfig *MergedDevContainerConfig) *VSCodeCustomizations {
 	if mergedConfig.Customizations == nil || mergedConfig.Customizations["vscode"] == nil {
 		return &VSCodeCustomizations{}

@@ -103,7 +103,7 @@ func (cmd *UpCmd) Run(ctx context.Context) error {
 }
 
 func (cmd *UpCmd) up(ctx context.Context, workspace *managementv1.DevPodWorkspaceInstance, client client.Client) error {
-	options := platform.OptionsFromEnv(storagev1.KledFlagsUp) // TODO: Update to KledFlagsUp when API is updated
+	options := platform.OptionsFromEnv(storagev1.DevPodFlagsUp) // TODO: Update to KledFlagsUp when API is updated
 	if options != nil && os.Getenv("DEBUG") == "true" {
 		options.Add("debug", "true")
 	}
