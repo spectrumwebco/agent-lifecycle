@@ -5,8 +5,8 @@ import (
 	"encoding/base64"
 	"fmt"
 
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/extract"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	"github.com/spectrumwebco/kled-beta/pkg/extract"
 )
 
 var excludedPaths = []string{

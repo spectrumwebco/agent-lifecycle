@@ -6,7 +6,7 @@ import (
 	"strings"
 	"sync"
 
-	versionpkg "github.com/loft-sh/devpod/pkg/version"
+	versionpkg "github.com/spectrumwebco/kled-beta/pkg/version"
 	"github.com/loft-sh/log"
 	"github.com/pkg/errors"
 

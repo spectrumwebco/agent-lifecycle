@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/loft-sh/devpod/pkg/devcontainer/config"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/config"
 )
 
 func getFeatureEnvVariables(feature *config.FeatureConfig, featureOptions interface{}) []string {

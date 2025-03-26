@@ -3,9 +3,9 @@ package container
 import (
 	"fmt"
 
-	"github.com/loft-sh/devpod/cmd/flags"
-	"github.com/loft-sh/devpod/pkg/credentials"
-	"github.com/loft-sh/devpod/pkg/loftconfig"
+	"github.com/spectrumwebco/kled-beta/cmd/flags"
+	"github.com/spectrumwebco/kled-beta/pkg/credentials"
+	"github.com/spectrumwebco/kled-beta/pkg/loftconfig"
 	"github.com/loft-sh/log"
 
 	"github.com/spf13/cobra"

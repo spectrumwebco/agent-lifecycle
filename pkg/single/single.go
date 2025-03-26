@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/gofrs/flock"
-	"github.com/loft-sh/devpod/pkg/command"
+	"github.com/spectrumwebco/kled-beta/pkg/command"
 	"github.com/pkg/errors"
 )
 

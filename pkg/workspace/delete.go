@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	client2 "github.com/loft-sh/devpod/pkg/client"
-	"github.com/loft-sh/devpod/pkg/client/clientimplementation"
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/platform"
+	client2 "github.com/spectrumwebco/kled-beta/pkg/client"
+	"github.com/spectrumwebco/kled-beta/pkg/client/clientimplementation"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	"github.com/spectrumwebco/kled-beta/pkg/platform"
 	"github.com/loft-sh/log"
 	"github.com/pkg/errors"
 )

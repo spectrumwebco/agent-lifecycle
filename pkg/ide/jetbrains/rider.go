@@ -1,8 +1,8 @@
 package jetbrains
 
 import (
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/ide"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	"github.com/spectrumwebco/kled-beta/pkg/ide"
 	"github.com/loft-sh/log"
 )
 

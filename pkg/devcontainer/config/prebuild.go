@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	util "github.com/loft-sh/devpod/pkg/util/hash"
+	util "github.com/spectrumwebco/kled-beta/pkg/util/hash"
 	"github.com/moby/patternmatcher"
 	"github.com/moby/patternmatcher/ignorefile"
 	"github.com/pkg/errors"

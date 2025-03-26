@@ -9,9 +9,9 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/loft-sh/devpod/cmd/pro/flags"
-	devpodhttp "github.com/loft-sh/devpod/pkg/http"
-	"github.com/loft-sh/devpod/pkg/platform/client"
+	"github.com/spectrumwebco/kled-beta/cmd/pro/flags"
+	devpodhttp "github.com/spectrumwebco/kled-beta/pkg/http"
+	"github.com/spectrumwebco/kled-beta/pkg/platform/client"
 	"github.com/loft-sh/log"
 	"github.com/spf13/cobra"
 )

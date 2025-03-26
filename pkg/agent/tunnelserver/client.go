@@ -5,8 +5,8 @@ import (
 	"io"
 	"net"
 
-	"github.com/loft-sh/devpod/pkg/agent/tunnel"
-	"github.com/loft-sh/devpod/pkg/stdio"
+	"github.com/spectrumwebco/kled-beta/pkg/agent/tunnel"
+	"github.com/spectrumwebco/kled-beta/pkg/stdio"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/resolver"

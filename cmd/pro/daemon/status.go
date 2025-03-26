@@ -5,13 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 
-	platformdaemon "github.com/loft-sh/devpod/pkg/daemon/platform"
+	platformdaemon "github.com/spectrumwebco/kled-beta/pkg/daemon/platform"
 
-	"github.com/loft-sh/devpod/cmd/agent"
-	"github.com/loft-sh/devpod/cmd/pro/completion"
-	proflags "github.com/loft-sh/devpod/cmd/pro/flags"
-	"github.com/loft-sh/devpod/pkg/config"
-	providerpkg "github.com/loft-sh/devpod/pkg/provider"
+	"github.com/spectrumwebco/kled-beta/cmd/agent"
+	"github.com/spectrumwebco/kled-beta/cmd/pro/completion"
+	proflags "github.com/spectrumwebco/kled-beta/cmd/pro/flags"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	providerpkg "github.com/spectrumwebco/kled-beta/pkg/provider"
 	"github.com/loft-sh/log"
 	"github.com/spf13/cobra"
 )

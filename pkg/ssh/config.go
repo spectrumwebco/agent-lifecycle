@@ -11,7 +11,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/loft-sh/devpod/pkg/util"
+	"github.com/spectrumwebco/kled-beta/pkg/util"
 	"github.com/loft-sh/log"
 	"github.com/loft-sh/log/scanner"
 	"github.com/pkg/errors"

@@ -5,10 +5,10 @@ import (
 	"time"
 
 	"github.com/loft-sh/api/v4/pkg/devpod"
-	"github.com/loft-sh/devpod/pkg/config"
-	devcontainerconfig "github.com/loft-sh/devpod/pkg/devcontainer/config"
-	"github.com/loft-sh/devpod/pkg/git"
-	"github.com/loft-sh/devpod/pkg/types"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	devcontainerconfig "github.com/spectrumwebco/kled-beta/pkg/devcontainer/config"
+	"github.com/spectrumwebco/kled-beta/pkg/git"
+	"github.com/spectrumwebco/kled-beta/pkg/types"
 )
 
 var (

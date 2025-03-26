@@ -1,11 +1,11 @@
 package helper
 
 import (
-	"github.com/loft-sh/devpod/cmd/agent"
-	"github.com/loft-sh/devpod/cmd/flags"
-	"github.com/loft-sh/devpod/cmd/helper/http"
-	"github.com/loft-sh/devpod/cmd/helper/json"
-	"github.com/loft-sh/devpod/cmd/helper/strings"
+	"github.com/spectrumwebco/kled-beta/cmd/agent"
+	"github.com/spectrumwebco/kled-beta/cmd/flags"
+	"github.com/spectrumwebco/kled-beta/cmd/helper/http"
+	"github.com/spectrumwebco/kled-beta/cmd/helper/json"
+	"github.com/spectrumwebco/kled-beta/cmd/helper/strings"
 	"github.com/spf13/cobra"
 )
 

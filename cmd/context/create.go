@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/loft-sh/devpod/cmd/flags"
-	"github.com/loft-sh/devpod/pkg/config"
-	provider2 "github.com/loft-sh/devpod/pkg/provider"
+	"github.com/spectrumwebco/kled-beta/cmd/flags"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	provider2 "github.com/spectrumwebco/kled-beta/pkg/provider"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )

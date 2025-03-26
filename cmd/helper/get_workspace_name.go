@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/loft-sh/devpod/cmd/flags"
-	"github.com/loft-sh/devpod/pkg/file"
-	"github.com/loft-sh/devpod/pkg/workspace"
+	"github.com/spectrumwebco/kled-beta/cmd/flags"
+	"github.com/spectrumwebco/kled-beta/pkg/file"
+	"github.com/spectrumwebco/kled-beta/pkg/workspace"
 	"github.com/spf13/cobra"
 )
 

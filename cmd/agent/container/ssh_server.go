@@ -5,9 +5,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/loft-sh/devpod/cmd/flags"
-	helperssh "github.com/loft-sh/devpod/pkg/ssh/server"
-	"github.com/loft-sh/devpod/pkg/ssh/server/port"
+	"github.com/spectrumwebco/kled-beta/cmd/flags"
+	helperssh "github.com/spectrumwebco/kled-beta/pkg/ssh/server"
+	"github.com/spectrumwebco/kled-beta/pkg/ssh/server/port"
 	"github.com/loft-sh/log"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"

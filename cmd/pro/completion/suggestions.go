@@ -3,9 +3,9 @@ package completion
 import (
 	"strings"
 
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/platform"
-	"github.com/loft-sh/devpod/pkg/workspace"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	"github.com/spectrumwebco/kled-beta/pkg/platform"
+	"github.com/spectrumwebco/kled-beta/pkg/workspace"
 	"github.com/loft-sh/log"
 	"github.com/spf13/cobra"
 )

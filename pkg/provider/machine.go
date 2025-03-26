@@ -1,8 +1,8 @@
 package provider
 
 import (
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/types"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	"github.com/spectrumwebco/kled-beta/pkg/types"
 )
 
 type Machine struct {

@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/loft-sh/devpod/pkg/git"
+	"github.com/spectrumwebco/kled-beta/pkg/git"
 )
 
 var (

@@ -7,9 +7,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/loft-sh/devpod/cmd/flags"
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/devcontainer"
+	"github.com/spectrumwebco/kled-beta/cmd/flags"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer"
 	"github.com/loft-sh/log"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"

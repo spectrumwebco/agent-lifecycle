@@ -12,9 +12,9 @@ import (
 	"path/filepath"
 	"time"
 
-	devpodlog "github.com/loft-sh/devpod/pkg/log"
-	"github.com/loft-sh/devpod/pkg/platform/client"
-	"github.com/loft-sh/devpod/pkg/ts"
+	devpodlog "github.com/spectrumwebco/kled-beta/pkg/log"
+	"github.com/spectrumwebco/kled-beta/pkg/platform/client"
+	"github.com/spectrumwebco/kled-beta/pkg/ts"
 	"github.com/loft-sh/log"
 	"github.com/sirupsen/logrus"
 	"tailscale.com/client/tailscale"

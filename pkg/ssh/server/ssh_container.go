@@ -7,9 +7,9 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	copypkg "github.com/loft-sh/devpod/pkg/copy"
-	"github.com/loft-sh/devpod/pkg/devcontainer/config"
-	shellpkg "github.com/loft-sh/devpod/pkg/shell"
+	copypkg "github.com/spectrumwebco/kled-beta/pkg/copy"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/config"
+	shellpkg "github.com/spectrumwebco/kled-beta/pkg/shell"
 	"github.com/loft-sh/log"
 	"github.com/loft-sh/ssh"
 )

@@ -10,10 +10,10 @@ import (
 	"runtime"
 	"time"
 
-	devpodhttp "github.com/loft-sh/devpod/pkg/http"
-	"github.com/loft-sh/devpod/pkg/inject"
-	"github.com/loft-sh/devpod/pkg/shell"
-	"github.com/loft-sh/devpod/pkg/version"
+	devpodhttp "github.com/spectrumwebco/kled-beta/pkg/http"
+	"github.com/spectrumwebco/kled-beta/pkg/inject"
+	"github.com/spectrumwebco/kled-beta/pkg/shell"
+	"github.com/spectrumwebco/kled-beta/pkg/version"
 	"github.com/loft-sh/log"
 )
 

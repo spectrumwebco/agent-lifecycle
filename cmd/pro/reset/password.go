@@ -7,9 +7,9 @@ import (
 	"strings"
 
 	storagev1 "github.com/loft-sh/api/v4/pkg/apis/storage/v1"
-	"github.com/loft-sh/devpod/cmd/pro/flags"
-	"github.com/loft-sh/devpod/pkg/platform/kube"
-	"github.com/loft-sh/devpod/pkg/random"
+	"github.com/spectrumwebco/kled-beta/cmd/pro/flags"
+	"github.com/spectrumwebco/kled-beta/pkg/platform/kube"
+	"github.com/spectrumwebco/kled-beta/pkg/random"
 	"github.com/loft-sh/log"
 	"github.com/loft-sh/log/survey"
 	"github.com/pkg/errors"

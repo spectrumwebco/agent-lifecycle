@@ -9,10 +9,10 @@ import (
 
 	"github.com/loft-sh/log"
 
-	client2 "github.com/loft-sh/devpod/pkg/client"
-	config2 "github.com/loft-sh/devpod/pkg/devcontainer/config"
-	devssh "github.com/loft-sh/devpod/pkg/ssh"
-	devsshagent "github.com/loft-sh/devpod/pkg/ssh/agent"
+	client2 "github.com/spectrumwebco/kled-beta/pkg/client"
+	config2 "github.com/spectrumwebco/kled-beta/pkg/devcontainer/config"
+	devssh "github.com/spectrumwebco/kled-beta/pkg/ssh"
+	devsshagent "github.com/spectrumwebco/kled-beta/pkg/ssh/agent"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )

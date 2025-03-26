@@ -6,10 +6,10 @@ import (
 	"io"
 	"os"
 
-	"github.com/loft-sh/devpod/cmd/pro/flags"
-	"github.com/loft-sh/devpod/pkg/platform"
-	"github.com/loft-sh/devpod/pkg/platform/client"
-	"github.com/loft-sh/devpod/pkg/platform/remotecommand"
+	"github.com/spectrumwebco/kled-beta/cmd/pro/flags"
+	"github.com/spectrumwebco/kled-beta/pkg/platform"
+	"github.com/spectrumwebco/kled-beta/pkg/platform/client"
+	"github.com/spectrumwebco/kled-beta/pkg/platform/remotecommand"
 	"github.com/loft-sh/log"
 	"github.com/spf13/cobra"
 )

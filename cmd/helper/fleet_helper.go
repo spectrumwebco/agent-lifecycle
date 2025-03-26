@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/loft-sh/devpod/cmd/flags"
-	"github.com/loft-sh/devpod/pkg/agent"
+	"github.com/spectrumwebco/kled-beta/cmd/flags"
+	"github.com/spectrumwebco/kled-beta/pkg/agent"
 	"github.com/spf13/cobra"
 )
 

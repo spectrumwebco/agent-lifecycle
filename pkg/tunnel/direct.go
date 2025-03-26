@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 
-	devssh "github.com/loft-sh/devpod/pkg/ssh"
+	devssh "github.com/spectrumwebco/kled-beta/pkg/ssh"
 	"github.com/pkg/errors"
 )
 

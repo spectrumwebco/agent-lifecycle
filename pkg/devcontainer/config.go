@@ -5,10 +5,10 @@ import (
 	"path"
 	"path/filepath"
 
-	"github.com/loft-sh/devpod/pkg/devcontainer/config"
-	"github.com/loft-sh/devpod/pkg/devcontainer/crane"
-	"github.com/loft-sh/devpod/pkg/language"
-	provider2 "github.com/loft-sh/devpod/pkg/provider"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/config"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/crane"
+	"github.com/spectrumwebco/kled-beta/pkg/language"
+	provider2 "github.com/spectrumwebco/kled-beta/pkg/provider"
 	"github.com/pkg/errors"
 )
 

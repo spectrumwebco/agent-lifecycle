@@ -6,8 +6,8 @@ import (
 	"net/url"
 	"path/filepath"
 
-	"github.com/loft-sh/devpod/pkg/provider"
-	"github.com/loft-sh/devpod/pkg/ts"
+	"github.com/spectrumwebco/kled-beta/pkg/provider"
+	"github.com/spectrumwebco/kled-beta/pkg/ts"
 	"github.com/loft-sh/log"
 	"github.com/sirupsen/logrus"
 	"tailscale.com/client/tailscale"

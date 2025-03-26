@@ -10,10 +10,10 @@ import (
 	"strings"
 
 	"github.com/google/go-containerregistry/pkg/name"
-	"github.com/loft-sh/devpod/pkg/copy"
-	"github.com/loft-sh/devpod/pkg/devcontainer/config"
-	"github.com/loft-sh/devpod/pkg/devcontainer/graph"
-	"github.com/loft-sh/devpod/pkg/devcontainer/metadata"
+	"github.com/spectrumwebco/kled-beta/pkg/copy"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/config"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/graph"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/metadata"
 	"github.com/loft-sh/log"
 	"github.com/pkg/errors"
 )

@@ -11,7 +11,7 @@ import (
 	"time"
 
 	managementv1 "github.com/loft-sh/api/v4/pkg/apis/management/v1"
-	"github.com/loft-sh/devpod/pkg/platform"
+	"github.com/spectrumwebco/kled-beta/pkg/platform"
 )
 
 const devPodClientPrefix = 0x01

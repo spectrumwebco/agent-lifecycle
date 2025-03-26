@@ -1,7 +1,7 @@
 package flags
 
 import (
-	"github.com/loft-sh/devpod/pkg/platform"
+	"github.com/spectrumwebco/kled-beta/pkg/platform"
 	flag "github.com/spf13/pflag"
 )
 

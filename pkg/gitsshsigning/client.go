@@ -7,8 +7,8 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/loft-sh/devpod/pkg/credentials"
-	devpodhttp "github.com/loft-sh/devpod/pkg/http"
+	"github.com/spectrumwebco/kled-beta/pkg/credentials"
+	devpodhttp "github.com/spectrumwebco/kled-beta/pkg/http"
 	"github.com/loft-sh/log"
 )
 

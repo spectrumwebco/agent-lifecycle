@@ -7,9 +7,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/loft-sh/devpod/e2e/framework"
-	"github.com/loft-sh/devpod/pkg/compose"
-	docker "github.com/loft-sh/devpod/pkg/docker"
+	"github.com/spectrumwebco/kled-beta/e2e/framework"
+	"github.com/spectrumwebco/kled-beta/pkg/compose"
+	docker "github.com/spectrumwebco/kled-beta/pkg/docker"
 	"github.com/loft-sh/log"
 	"github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"

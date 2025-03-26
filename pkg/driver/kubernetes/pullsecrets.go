@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/loft-sh/devpod/pkg/dockercredentials"
+	"github.com/spectrumwebco/kled-beta/pkg/dockercredentials"
 	perrors "github.com/pkg/errors"
 	k8sv1 "k8s.io/api/core/v1"
 	kerrors "k8s.io/apimachinery/pkg/api/errors"

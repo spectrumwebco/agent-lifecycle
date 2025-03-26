@@ -13,9 +13,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/loft-sh/devpod/pkg/command"
-	"github.com/loft-sh/devpod/pkg/devcontainer/config"
-	"github.com/loft-sh/devpod/pkg/types"
+	"github.com/spectrumwebco/kled-beta/pkg/command"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/config"
+	"github.com/spectrumwebco/kled-beta/pkg/types"
 	"github.com/loft-sh/log"
 	"github.com/sirupsen/logrus"
 )

@@ -5,10 +5,10 @@ import (
 	"os/exec"
 	"strconv"
 
-	"github.com/loft-sh/devpod/pkg/command"
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/ide"
-	"github.com/loft-sh/devpod/pkg/single"
+	"github.com/spectrumwebco/kled-beta/pkg/command"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	"github.com/spectrumwebco/kled-beta/pkg/ide"
+	"github.com/spectrumwebco/kled-beta/pkg/single"
 	"github.com/loft-sh/log"
 )
 

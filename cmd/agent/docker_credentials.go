@@ -11,9 +11,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/loft-sh/devpod/cmd/flags"
-	"github.com/loft-sh/devpod/pkg/dockercredentials"
-	devpodhttp "github.com/loft-sh/devpod/pkg/http"
+	"github.com/spectrumwebco/kled-beta/cmd/flags"
+	"github.com/spectrumwebco/kled-beta/pkg/dockercredentials"
+	devpodhttp "github.com/spectrumwebco/kled-beta/pkg/http"
 	"github.com/loft-sh/log"
 	"github.com/spf13/cobra"
 )

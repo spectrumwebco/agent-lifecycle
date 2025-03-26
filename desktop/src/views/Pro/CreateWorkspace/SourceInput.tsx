@@ -177,7 +177,7 @@ export function SourceInput({ isDisabled, resetPreset }: TSourceInputProps) {
     }
 
     return {
-      placeholder: "github.com/loft-sh/devpod-example-go",
+      placeholder: "github.com/spectrumwebco/kled-beta-example-go",
       secondaryAction: (
         <Popover isLazy onOpen={handlePopoverOpened}>
           <PopoverTrigger>

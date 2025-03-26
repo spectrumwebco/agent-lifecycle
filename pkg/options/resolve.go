@@ -6,13 +6,13 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/loft-sh/devpod/pkg/agent"
-	"github.com/loft-sh/devpod/pkg/binaries"
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/options/resolver"
+	"github.com/spectrumwebco/kled-beta/pkg/agent"
+	"github.com/spectrumwebco/kled-beta/pkg/binaries"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	"github.com/spectrumwebco/kled-beta/pkg/options/resolver"
 
-	provider2 "github.com/loft-sh/devpod/pkg/provider"
-	"github.com/loft-sh/devpod/pkg/types"
+	provider2 "github.com/spectrumwebco/kled-beta/pkg/provider"
+	"github.com/spectrumwebco/kled-beta/pkg/types"
 	"github.com/loft-sh/log"
 )
 

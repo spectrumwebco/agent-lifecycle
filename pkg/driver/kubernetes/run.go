@@ -8,9 +8,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/loft-sh/devpod/pkg/devcontainer/config"
-	"github.com/loft-sh/devpod/pkg/driver"
-	provider2 "github.com/loft-sh/devpod/pkg/provider"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/config"
+	"github.com/spectrumwebco/kled-beta/pkg/driver"
+	provider2 "github.com/spectrumwebco/kled-beta/pkg/provider"
 	"github.com/pkg/errors"
 	corev1 "k8s.io/api/core/v1"
 	kerrors "k8s.io/apimachinery/pkg/api/errors"

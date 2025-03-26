@@ -9,9 +9,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/loft-sh/devpod/pkg/config"
-	config2 "github.com/loft-sh/devpod/pkg/devcontainer/config"
-	"github.com/loft-sh/devpod/pkg/id"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	config2 "github.com/spectrumwebco/kled-beta/pkg/devcontainer/config"
+	"github.com/spectrumwebco/kled-beta/pkg/id"
 )
 
 const (

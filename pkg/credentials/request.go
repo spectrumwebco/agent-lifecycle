@@ -8,7 +8,7 @@ import (
 	"syscall"
 	"time"
 
-	devpodhttp "github.com/loft-sh/devpod/pkg/http"
+	devpodhttp "github.com/spectrumwebco/kled-beta/pkg/http"
 	"github.com/loft-sh/log"
 	"github.com/pkg/errors"
 	"k8s.io/apimachinery/pkg/util/wait"

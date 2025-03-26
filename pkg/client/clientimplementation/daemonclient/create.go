@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/loft-sh/devpod/pkg/platform/project"
-	"github.com/loft-sh/devpod/pkg/provider"
+	"github.com/spectrumwebco/kled-beta/pkg/platform/project"
+	"github.com/spectrumwebco/kled-beta/pkg/provider"
 	"github.com/loft-sh/log/terminal"
 )
 

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/platform/client"
-	"github.com/loft-sh/devpod/pkg/provider"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	"github.com/spectrumwebco/kled-beta/pkg/platform/client"
+	"github.com/spectrumwebco/kled-beta/pkg/provider"
 	"github.com/loft-sh/log"
 )
 

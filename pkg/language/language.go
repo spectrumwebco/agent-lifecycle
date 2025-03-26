@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/loft-sh/devpod/pkg/devcontainer/config"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/config"
 	"github.com/loft-sh/log"
 
 	detector "github.com/loft-sh/programming-language-detection/pkg/detector"

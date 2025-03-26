@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	provider2 "github.com/loft-sh/devpod/pkg/provider"
+	provider2 "github.com/spectrumwebco/kled-beta/pkg/provider"
 	"github.com/loft-sh/log"
 )
 

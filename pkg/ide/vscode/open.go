@@ -8,7 +8,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/loft-sh/devpod/pkg/command"
+	"github.com/spectrumwebco/kled-beta/pkg/command"
 	"github.com/loft-sh/log"
 	"github.com/skratchdot/open-golang/open"
 )

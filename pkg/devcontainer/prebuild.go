@@ -7,11 +7,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/loft-sh/devpod/pkg/devcontainer/build"
-	"github.com/loft-sh/devpod/pkg/devcontainer/config"
-	"github.com/loft-sh/devpod/pkg/driver"
-	"github.com/loft-sh/devpod/pkg/image"
-	"github.com/loft-sh/devpod/pkg/provider"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/build"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/config"
+	"github.com/spectrumwebco/kled-beta/pkg/driver"
+	"github.com/spectrumwebco/kled-beta/pkg/image"
+	"github.com/spectrumwebco/kled-beta/pkg/provider"
 	"github.com/pkg/errors"
 )
 

@@ -4,8 +4,8 @@ import (
 	"context"
 	"sync"
 
-	"github.com/loft-sh/devpod/pkg/netstat"
-	devssh "github.com/loft-sh/devpod/pkg/ssh"
+	"github.com/spectrumwebco/kled-beta/pkg/netstat"
+	devssh "github.com/spectrumwebco/kled-beta/pkg/ssh"
 	"github.com/loft-sh/log"
 	"golang.org/x/crypto/ssh"
 )

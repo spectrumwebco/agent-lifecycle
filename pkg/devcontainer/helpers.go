@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/loft-sh/devpod/pkg/file"
-	"github.com/loft-sh/devpod/pkg/git"
-	"github.com/loft-sh/devpod/pkg/image"
+	"github.com/spectrumwebco/kled-beta/pkg/file"
+	"github.com/spectrumwebco/kled-beta/pkg/git"
+	"github.com/spectrumwebco/kled-beta/pkg/image"
 	"github.com/loft-sh/log"
 )
 

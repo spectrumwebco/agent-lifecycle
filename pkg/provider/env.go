@@ -7,7 +7,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/loft-sh/devpod/pkg/config"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
 	log2 "github.com/loft-sh/log"
 )
 

@@ -1,7 +1,7 @@
 package add
 
 import (
-	proflags "github.com/loft-sh/devpod/cmd/pro/flags"
+	proflags "github.com/spectrumwebco/kled-beta/cmd/pro/flags"
 	"github.com/spf13/cobra"
 )
 

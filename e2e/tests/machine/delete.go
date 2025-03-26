@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/google/uuid"
-	"github.com/loft-sh/devpod/e2e/framework"
+	"github.com/spectrumwebco/kled-beta/e2e/framework"
 	"github.com/onsi/ginkgo/v2"
 )
 

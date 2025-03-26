@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	clientpkg "github.com/loft-sh/devpod/pkg/client"
-	"github.com/loft-sh/devpod/pkg/platform"
+	clientpkg "github.com/spectrumwebco/kled-beta/pkg/client"
+	"github.com/spectrumwebco/kled-beta/pkg/platform"
 )
 
 func (c *client) Status(ctx context.Context, opt clientpkg.StatusOptions) (clientpkg.Status, error) {

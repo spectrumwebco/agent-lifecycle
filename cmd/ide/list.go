@@ -7,9 +7,9 @@ import (
 	"sort"
 	"strconv"
 
-	"github.com/loft-sh/devpod/cmd/flags"
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/ide/ideparse"
+	"github.com/spectrumwebco/kled-beta/cmd/flags"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	"github.com/spectrumwebco/kled-beta/pkg/ide/ideparse"
 	"github.com/loft-sh/log"
 	"github.com/loft-sh/log/table"
 	"github.com/spf13/cobra"

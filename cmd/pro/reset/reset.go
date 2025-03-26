@@ -1,7 +1,7 @@
 package reset
 
 import (
-	"github.com/loft-sh/devpod/cmd/pro/flags"
+	"github.com/spectrumwebco/kled-beta/cmd/pro/flags"
 	"github.com/spf13/cobra"
 )
 

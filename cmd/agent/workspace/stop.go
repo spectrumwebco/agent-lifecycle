@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/loft-sh/devpod/cmd/flags"
-	"github.com/loft-sh/devpod/pkg/agent"
-	provider2 "github.com/loft-sh/devpod/pkg/provider"
+	"github.com/spectrumwebco/kled-beta/cmd/flags"
+	"github.com/spectrumwebco/kled-beta/pkg/agent"
+	provider2 "github.com/spectrumwebco/kled-beta/pkg/provider"
 	"github.com/loft-sh/log"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"

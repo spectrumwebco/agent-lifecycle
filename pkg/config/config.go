@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/ghodss/yaml"
-	"github.com/loft-sh/devpod/pkg/types"
+	"github.com/spectrumwebco/kled-beta/pkg/types"
 	"github.com/pkg/errors"
 )
 

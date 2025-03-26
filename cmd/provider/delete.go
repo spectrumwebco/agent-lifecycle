@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/loft-sh/devpod/cmd/completion"
-	"github.com/loft-sh/devpod/cmd/flags"
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/platform"
-	provider2 "github.com/loft-sh/devpod/pkg/provider"
-	"github.com/loft-sh/devpod/pkg/workspace"
+	"github.com/spectrumwebco/kled-beta/cmd/completion"
+	"github.com/spectrumwebco/kled-beta/cmd/flags"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	"github.com/spectrumwebco/kled-beta/pkg/platform"
+	provider2 "github.com/spectrumwebco/kled-beta/pkg/provider"
+	"github.com/spectrumwebco/kled-beta/pkg/workspace"
 	logpkg "github.com/loft-sh/log"
 	"github.com/spf13/cobra"
 )

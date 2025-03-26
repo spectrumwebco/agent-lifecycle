@@ -8,10 +8,10 @@ import (
 	"time"
 
 	"github.com/ghodss/yaml"
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/provider"
-	"github.com/loft-sh/devpod/pkg/shell"
-	"github.com/loft-sh/devpod/pkg/types"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	"github.com/spectrumwebco/kled-beta/pkg/provider"
+	"github.com/spectrumwebco/kled-beta/pkg/shell"
+	"github.com/spectrumwebco/kled-beta/pkg/types"
 	"github.com/pkg/errors"
 )
 

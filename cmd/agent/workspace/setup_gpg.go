@@ -5,10 +5,10 @@ import (
 	"encoding/base64"
 	"fmt"
 
-	"github.com/loft-sh/devpod/cmd/flags"
-	"github.com/loft-sh/devpod/pkg/credentials"
-	"github.com/loft-sh/devpod/pkg/gitcredentials"
-	"github.com/loft-sh/devpod/pkg/gpg"
+	"github.com/spectrumwebco/kled-beta/cmd/flags"
+	"github.com/spectrumwebco/kled-beta/pkg/credentials"
+	"github.com/spectrumwebco/kled-beta/pkg/gitcredentials"
+	"github.com/spectrumwebco/kled-beta/pkg/gpg"
 	"github.com/loft-sh/log"
 	"github.com/spf13/cobra"
 )

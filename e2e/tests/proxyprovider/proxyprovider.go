@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/loft-sh/devpod/e2e/framework"
-	"github.com/loft-sh/devpod/pkg/client"
+	"github.com/spectrumwebco/kled-beta/e2e/framework"
+	"github.com/spectrumwebco/kled-beta/pkg/client"
 	"github.com/onsi/ginkgo/v2"
 )
 

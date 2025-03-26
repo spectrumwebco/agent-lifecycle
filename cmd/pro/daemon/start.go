@@ -10,13 +10,13 @@ import (
 	"syscall"
 
 	managementv1 "github.com/loft-sh/api/v4/pkg/apis/management/v1"
-	daemon "github.com/loft-sh/devpod/pkg/daemon/platform"
-	"github.com/loft-sh/devpod/pkg/platform/client"
+	daemon "github.com/spectrumwebco/kled-beta/pkg/daemon/platform"
+	"github.com/spectrumwebco/kled-beta/pkg/platform/client"
 
-	"github.com/loft-sh/devpod/cmd/pro/completion"
-	proflags "github.com/loft-sh/devpod/cmd/pro/flags"
-	"github.com/loft-sh/devpod/pkg/config"
-	providerpkg "github.com/loft-sh/devpod/pkg/provider"
+	"github.com/spectrumwebco/kled-beta/cmd/pro/completion"
+	proflags "github.com/spectrumwebco/kled-beta/cmd/pro/flags"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	providerpkg "github.com/spectrumwebco/kled-beta/pkg/provider"
 	"github.com/loft-sh/log"
 	"github.com/spf13/cobra"
 )

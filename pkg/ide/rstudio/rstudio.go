@@ -14,12 +14,12 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/loft-sh/devpod/pkg/command"
-	"github.com/loft-sh/devpod/pkg/config"
-	copypkg "github.com/loft-sh/devpod/pkg/copy"
-	devpodhttp "github.com/loft-sh/devpod/pkg/http"
-	"github.com/loft-sh/devpod/pkg/ide"
-	"github.com/loft-sh/devpod/pkg/single"
+	"github.com/spectrumwebco/kled-beta/pkg/command"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	copypkg "github.com/spectrumwebco/kled-beta/pkg/copy"
+	devpodhttp "github.com/spectrumwebco/kled-beta/pkg/http"
+	"github.com/spectrumwebco/kled-beta/pkg/ide"
+	"github.com/spectrumwebco/kled-beta/pkg/single"
 	"github.com/loft-sh/log"
 )
 

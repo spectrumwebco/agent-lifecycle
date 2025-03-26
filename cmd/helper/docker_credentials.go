@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os/user"
 
-	"github.com/loft-sh/devpod/cmd/flags"
-	"github.com/loft-sh/devpod/pkg/credentials"
-	"github.com/loft-sh/devpod/pkg/dockercredentials"
+	"github.com/spectrumwebco/kled-beta/cmd/flags"
+	"github.com/spectrumwebco/kled-beta/pkg/credentials"
+	"github.com/spectrumwebco/kled-beta/pkg/dockercredentials"
 	"github.com/loft-sh/log"
 	"github.com/spf13/cobra"
 )

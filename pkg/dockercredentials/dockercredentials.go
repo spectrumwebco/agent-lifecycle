@@ -8,10 +8,10 @@ import (
 
 	"github.com/docker/cli/cli/config"
 	"github.com/docker/cli/cli/config/types"
-	"github.com/loft-sh/devpod/pkg/command"
-	"github.com/loft-sh/devpod/pkg/docker"
-	"github.com/loft-sh/devpod/pkg/file"
-	"github.com/loft-sh/devpod/pkg/random"
+	"github.com/spectrumwebco/kled-beta/pkg/command"
+	"github.com/spectrumwebco/kled-beta/pkg/docker"
+	"github.com/spectrumwebco/kled-beta/pkg/file"
+	"github.com/spectrumwebco/kled-beta/pkg/random"
 	"github.com/loft-sh/log"
 	"github.com/pkg/errors"
 

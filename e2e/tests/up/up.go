@@ -10,11 +10,11 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/loft-sh/devpod/e2e/framework"
-	config2 "github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/devcontainer/config"
-	docker "github.com/loft-sh/devpod/pkg/docker"
-	"github.com/loft-sh/devpod/pkg/language"
+	"github.com/spectrumwebco/kled-beta/e2e/framework"
+	config2 "github.com/spectrumwebco/kled-beta/pkg/config"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/config"
+	docker "github.com/spectrumwebco/kled-beta/pkg/docker"
+	"github.com/spectrumwebco/kled-beta/pkg/language"
 	"github.com/loft-sh/log"
 	"github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"
@@ -184,7 +184,7 @@ var _ = DevPodDescribe("devpod up test suite", func() {
 			ginkgo.DeferCleanup(f.DevPodWorkspaceDelete, context.Background(), name)
 
 			// Wait for devpod workspace to come online (deadline: 30s)
-			err = f.DevPodUp(ctx, "github.com/loft-sh/devpod@pull/3/head")
+			err = f.DevPodUp(ctx, "github.com/spectrumwebco/kled-beta@pull/3/head")
 			framework.ExpectNoError(err)
 		})
 

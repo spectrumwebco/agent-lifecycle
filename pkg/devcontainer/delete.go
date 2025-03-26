@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	"github.com/loft-sh/devpod/pkg/devcontainer/config"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/config"
 	"github.com/pkg/errors"
 )
 

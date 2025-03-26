@@ -9,14 +9,14 @@ import (
 	"path/filepath"
 	"strings"
 
-	devpodhttp "github.com/loft-sh/devpod/pkg/http"
-	providerpkg "github.com/loft-sh/devpod/pkg/provider"
-	"github.com/loft-sh/devpod/pkg/types"
-	"github.com/loft-sh/devpod/providers"
+	devpodhttp "github.com/spectrumwebco/kled-beta/pkg/http"
+	providerpkg "github.com/spectrumwebco/kled-beta/pkg/provider"
+	"github.com/spectrumwebco/kled-beta/pkg/types"
+	"github.com/spectrumwebco/kled-beta/providers"
 
-	"github.com/loft-sh/devpod/pkg/binaries"
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/download"
+	"github.com/spectrumwebco/kled-beta/pkg/binaries"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	"github.com/spectrumwebco/kled-beta/pkg/download"
 	"github.com/loft-sh/log"
 	"github.com/pkg/errors"
 )

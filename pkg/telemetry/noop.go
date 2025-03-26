@@ -1,6 +1,6 @@
 package telemetry
 
-import "github.com/loft-sh/devpod/pkg/client"
+import "github.com/spectrumwebco/kled-beta/pkg/client"
 
 type noopCollector struct{}
 

@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/loft-sh/devpod/pkg/credentials"
-	"github.com/loft-sh/devpod/pkg/platform/client"
+	"github.com/spectrumwebco/kled-beta/pkg/credentials"
+	"github.com/spectrumwebco/kled-beta/pkg/platform/client"
 	"github.com/loft-sh/log"
 )
 

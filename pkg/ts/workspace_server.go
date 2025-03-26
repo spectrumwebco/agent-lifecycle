@@ -17,8 +17,8 @@ import (
 
 	"github.com/loft-sh/log"
 
-	"github.com/loft-sh/devpod/pkg/platform/client"
-	sshServer "github.com/loft-sh/devpod/pkg/ssh/server"
+	"github.com/spectrumwebco/kled-beta/pkg/platform/client"
+	sshServer "github.com/spectrumwebco/kled-beta/pkg/ssh/server"
 	"tailscale.com/client/tailscale"
 	"tailscale.com/envknob"
 	"tailscale.com/ipn/store/mem"

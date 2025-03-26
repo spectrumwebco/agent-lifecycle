@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/loft-sh/devpod/pkg/shell"
+	"github.com/spectrumwebco/kled-beta/pkg/shell"
 	"github.com/loft-sh/log"
 )
 

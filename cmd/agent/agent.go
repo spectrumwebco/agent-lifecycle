@@ -3,12 +3,12 @@ package agent
 import (
 	"os"
 
-	"github.com/loft-sh/devpod/cmd/agent/container"
-	"github.com/loft-sh/devpod/cmd/agent/workspace"
-	"github.com/loft-sh/devpod/cmd/flags"
-	"github.com/loft-sh/devpod/pkg/client/clientimplementation"
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/envfile"
+	"github.com/spectrumwebco/kled-beta/cmd/agent/container"
+	"github.com/spectrumwebco/kled-beta/cmd/agent/workspace"
+	"github.com/spectrumwebco/kled-beta/cmd/flags"
+	"github.com/spectrumwebco/kled-beta/pkg/client/clientimplementation"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	"github.com/spectrumwebco/kled-beta/pkg/envfile"
 	"github.com/loft-sh/log"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"

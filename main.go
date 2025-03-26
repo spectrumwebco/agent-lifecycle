@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/loft-sh/devpod/cmd"
+	"github.com/spectrumwebco/kled-beta/cmd"
 )
 
 func main() {

@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/loft-sh/devpod/cmd/flags"
-	devpodhttp "github.com/loft-sh/devpod/pkg/http"
+	"github.com/spectrumwebco/kled-beta/cmd/flags"
+	devpodhttp "github.com/spectrumwebco/kled-beta/pkg/http"
 	"github.com/spf13/cobra"
 )
 

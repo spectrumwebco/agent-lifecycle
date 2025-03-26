@@ -6,12 +6,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/loft-sh/devpod/pkg/devcontainer/config"
-	"github.com/loft-sh/devpod/pkg/devcontainer/feature"
-	"github.com/loft-sh/devpod/pkg/devcontainer/metadata"
-	"github.com/loft-sh/devpod/pkg/dockerfile"
-	"github.com/loft-sh/devpod/pkg/id"
-	"github.com/loft-sh/devpod/pkg/provider"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/config"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/feature"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/metadata"
+	"github.com/spectrumwebco/kled-beta/pkg/dockerfile"
+	"github.com/spectrumwebco/kled-beta/pkg/id"
+	"github.com/spectrumwebco/kled-beta/pkg/provider"
 	"github.com/loft-sh/log/hash"
 	"github.com/pkg/errors"
 )

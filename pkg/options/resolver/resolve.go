@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/types"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	"github.com/spectrumwebco/kled-beta/pkg/types"
 	"github.com/loft-sh/log/survey"
 	"github.com/loft-sh/log/terminal"
 	"github.com/pkg/errors"

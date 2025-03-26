@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/loft-sh/devpod/pkg/command"
+	"github.com/spectrumwebco/kled-beta/pkg/command"
 	"github.com/loft-sh/log"
 	perrors "github.com/pkg/errors"
 )

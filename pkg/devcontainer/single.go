@@ -7,11 +7,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/loft-sh/devpod/pkg/daemon/agent"
-	"github.com/loft-sh/devpod/pkg/devcontainer/config"
-	"github.com/loft-sh/devpod/pkg/devcontainer/metadata"
-	"github.com/loft-sh/devpod/pkg/driver"
-	provider2 "github.com/loft-sh/devpod/pkg/provider"
+	"github.com/spectrumwebco/kled-beta/pkg/daemon/agent"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/config"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/metadata"
+	"github.com/spectrumwebco/kled-beta/pkg/driver"
+	provider2 "github.com/spectrumwebco/kled-beta/pkg/provider"
 	"github.com/pkg/errors"
 )
 

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/devcontainer/graph"
-	"github.com/loft-sh/devpod/pkg/types"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/graph"
+	"github.com/spectrumwebco/kled-beta/pkg/types"
 )
 
 func combine(resolvedOptions map[string]config.OptionValue, extraValues map[string]string) map[string]string {

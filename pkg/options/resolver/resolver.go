@@ -4,9 +4,9 @@ import (
 	"context"
 	"regexp"
 
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/devcontainer/graph"
-	"github.com/loft-sh/devpod/pkg/types"
+	"github.com/spectrumwebco/kled-beta/pkg/config"
+	"github.com/spectrumwebco/kled-beta/pkg/devcontainer/graph"
+	"github.com/spectrumwebco/kled-beta/pkg/types"
 	"github.com/loft-sh/log"
 )
 

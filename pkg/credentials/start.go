@@ -7,10 +7,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/loft-sh/devpod/pkg/agent/tunnel"
-	devpodhttp "github.com/loft-sh/devpod/pkg/http"
-	portpkg "github.com/loft-sh/devpod/pkg/port"
-	"github.com/loft-sh/devpod/pkg/random"
+	"github.com/spectrumwebco/kled-beta/pkg/agent/tunnel"
+	devpodhttp "github.com/spectrumwebco/kled-beta/pkg/http"
+	portpkg "github.com/spectrumwebco/kled-beta/pkg/port"
+	"github.com/spectrumwebco/kled-beta/pkg/random"
 	"github.com/loft-sh/log"
 )
 
