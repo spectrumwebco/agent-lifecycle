@@ -8,15 +8,15 @@ import (
 	"runtime"
 	"strconv"
 
-	"github.com/loft-sh/kled/pkg/command"
-	"github.com/loft-sh/kled/pkg/config"
-	copy2 "github.com/loft-sh/kled/pkg/copy"
-	"github.com/loft-sh/kled/pkg/extract"
-	kledhttp "github.com/loft-sh/kled/pkg/http"
-	"github.com/loft-sh/kled/pkg/ide"
-	"github.com/loft-sh/kled/pkg/ide/vscode"
-	"github.com/loft-sh/kled/pkg/single"
-	"github.com/loft-sh/kled/pkg/util"
+	"github.com/loft-sh/devpod/pkg/command"
+	"github.com/loft-sh/devpod/pkg/config"
+	copy2 "github.com/loft-sh/devpod/pkg/copy"
+	"github.com/loft-sh/devpod/pkg/extract"
+	devpodhttp "github.com/loft-sh/devpod/pkg/http"
+	"github.com/loft-sh/devpod/pkg/ide"
+	"github.com/loft-sh/devpod/pkg/ide/vscode"
+	"github.com/loft-sh/devpod/pkg/single"
+	"github.com/loft-sh/devpod/pkg/util"
 	"github.com/loft-sh/log"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -127,7 +127,7 @@ func (o *OpenVSCodeServer) Install() error {
 	vscode.InstallAPKRequirements(o.log)
 
 	// download tar
-	resp, err := kledhttp.GetHTTPClient().Get(url)
+	resp, err := devpodhttp.GetHTTPClient().Get(url)
 	if err != nil {
 		return err
 	}

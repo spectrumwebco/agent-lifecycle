@@ -8,16 +8,16 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/loft-sh/kled/pkg/compose"
-	"github.com/loft-sh/kled/pkg/devcontainer/build"
-	"github.com/loft-sh/kled/pkg/devcontainer/buildkit"
-	"github.com/loft-sh/kled/pkg/devcontainer/config"
-	"github.com/loft-sh/kled/pkg/devcontainer/feature"
-	"github.com/loft-sh/kled/pkg/devcontainer/metadata"
-	"github.com/loft-sh/kled/pkg/dockerfile"
-	"github.com/loft-sh/kled/pkg/driver"
-	"github.com/loft-sh/kled/pkg/image"
-	"github.com/loft-sh/kled/pkg/provider"
+	"github.com/loft-sh/devpod/pkg/compose"
+	"github.com/loft-sh/devpod/pkg/devcontainer/build"
+	"github.com/loft-sh/devpod/pkg/devcontainer/buildkit"
+	"github.com/loft-sh/devpod/pkg/devcontainer/config"
+	"github.com/loft-sh/devpod/pkg/devcontainer/feature"
+	"github.com/loft-sh/devpod/pkg/devcontainer/metadata"
+	"github.com/loft-sh/devpod/pkg/dockerfile"
+	"github.com/loft-sh/devpod/pkg/driver"
+	"github.com/loft-sh/devpod/pkg/image"
+	"github.com/loft-sh/devpod/pkg/provider"
 	"github.com/pkg/errors"
 )
 
@@ -225,11 +225,11 @@ func (r *runner) buildImage(
 
 	// check if there is a prebuild image
 	if !options.ForceDockerless && !options.ForceBuild {
-		kledCustomizations := config.GetKledCustomizations(parsedConfig.Config)
+		devPodCustomizations := config.GetDevPodCustomizations(parsedConfig.Config)
 		if options.Repository != "" {
 			options.PrebuildRepositories = append(options.PrebuildRepositories, options.Repository)
 		}
-		options.PrebuildRepositories = append(options.PrebuildRepositories, kledCustomizations.PrebuildRepository...)
+		options.PrebuildRepositories = append(options.PrebuildRepositories, devPodCustomizations.PrebuildRepository...)
 
 		r.Log.Debugf("Try to find prebuild image %s in repositories %s", prebuildHash, strings.Join(options.PrebuildRepositories, ","))
 		for _, prebuildRepo := range options.PrebuildRepositories {
@@ -377,8 +377,8 @@ func dockerlessFallback(
 	options provider.BuildOptions,
 ) (*config.BuildInfo, error) {
 	contextPath := config.GetContextPath(parsedConfig.Config)
-	kledInternalFolder := filepath.Join(contextPath, config.DevPodContextFeatureFolder)
-	err := os.MkdirAll(kledInternalFolder, 0755)
+	devPodInternalFolder := filepath.Join(contextPath, config.DevPodContextFeatureFolder)
+	err := os.MkdirAll(devPodInternalFolder, 0755)
 	if err != nil {
 		return nil, fmt.Errorf("create kled folder: %w", err)
 	}
@@ -388,7 +388,7 @@ func dockerlessFallback(
 	if err != nil {
 		return nil, fmt.Errorf("rewrite dockerfile: %w", err)
 	} else if devPodDockerfile == "" {
-		devPodDockerfile = filepath.Join(kledInternalFolder, "Dockerfile-without-features")
+		devPodDockerfile = filepath.Join(devPodInternalFolder, "Dockerfile-without-features")
 		err = os.WriteFile(devPodDockerfile, []byte(dockerfileContent), 0600)
 		if err != nil {
 			return nil, fmt.Errorf("write kled dockerfile: %w", err)

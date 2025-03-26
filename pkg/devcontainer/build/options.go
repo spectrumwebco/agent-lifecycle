@@ -6,12 +6,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/loft-sh/kled/pkg/devcontainer/config"
-	"github.com/loft-sh/kled/pkg/devcontainer/feature"
-	"github.com/loft-sh/kled/pkg/devcontainer/metadata"
-	"github.com/loft-sh/kled/pkg/dockerfile"
-	"github.com/loft-sh/kled/pkg/id"
-	"github.com/loft-sh/kled/pkg/provider"
+	"github.com/loft-sh/devpod/pkg/devcontainer/config"
+	"github.com/loft-sh/devpod/pkg/devcontainer/feature"
+	"github.com/loft-sh/devpod/pkg/devcontainer/metadata"
+	"github.com/loft-sh/devpod/pkg/dockerfile"
+	"github.com/loft-sh/devpod/pkg/id"
+	"github.com/loft-sh/devpod/pkg/provider"
 	"github.com/loft-sh/log/hash"
 	"github.com/pkg/errors"
 )

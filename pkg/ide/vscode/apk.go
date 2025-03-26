@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/loft-sh/kled/pkg/command"
+	"github.com/loft-sh/devpod/pkg/command"
 	"github.com/loft-sh/log"
 )
 

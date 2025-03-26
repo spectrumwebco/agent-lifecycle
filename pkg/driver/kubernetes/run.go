@@ -8,9 +8,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/loft-sh/kled/pkg/devcontainer/config"
-	"github.com/loft-sh/kled/pkg/driver"
-	provider2 "github.com/loft-sh/kled/pkg/provider"
+	"github.com/loft-sh/devpod/pkg/devcontainer/config"
+	"github.com/loft-sh/devpod/pkg/driver"
+	provider2 "github.com/loft-sh/devpod/pkg/provider"
 	"github.com/pkg/errors"
 	corev1 "k8s.io/api/core/v1"
 	kerrors "k8s.io/apimachinery/pkg/api/errors"
@@ -18,16 +18,16 @@ import (
 	"k8s.io/utils/ptr"
 )
 
-const DevContainerName = "kled"
-const InitContainerName = "kled-init"
+const DevContainerName = "devpod"
+const InitContainerName = "devpod-init"
 
 const (
-	KledCreatedLabel      = "kled.sh/created"
-	KledWorkspaceLabel    = "kled.sh/workspace"
-	KledWorkspaceUIDLabel = "kled.sh/workspace-uid"
+	KledCreatedLabel      = "devpod.sh/created"
+	DevPodWorkspaceLabel    = "devpod.sh/workspace"
+	DevPodWorkspaceUIDLabel = "devpod.sh/workspace-uid"
 
-	KledInfoAnnotation                   = "kled.sh/info"
-	KledLastAppliedAnnotation            = "kled.sh/last-applied-configuration"
+	KledInfoAnnotation                   = "devpod.sh/info"
+	KledLastAppliedAnnotation            = "devpod.sh/last-applied-configuration"
 	ClusterAutoscalerSaveToEvictAnnotation = "cluster-autoscaler.kubernetes.io/safe-to-evict"
 )
 
@@ -179,7 +179,7 @@ func (k *KubernetesDriver) runContainer(
 	if err != nil {
 		return err
 	}
-	labels[KledWorkspaceUIDLabel] = options.UID
+	labels[DevPodWorkspaceUIDLabel] = options.UID
 
 	// node selector
 	nodeSelector, err := getNodeSelector(pod, k.options.NodeSelector)
@@ -460,11 +460,11 @@ func (k *KubernetesDriver) StartDevContainer(ctx context.Context, workspaceId st
 }
 
 func getID(workspaceID string) string {
-	return "kled-" + workspaceID
+	return "devpod-" + workspaceID
 }
 
 func getPullSecretsName(workspaceID string) string {
-	return fmt.Sprintf("kled-pull-secret-%s", workspaceID)
+	return fmt.Sprintf("devpod-pull-secret-%s", workspaceID)
 }
 
 func optionsEqual(a, b *provider2.ProviderKubernetesDriverConfig) bool {

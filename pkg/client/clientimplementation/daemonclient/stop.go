@@ -8,8 +8,8 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	managementv1 "github.com/loft-sh/api/v4/pkg/apis/management/v1"
-	clientpkg "github.com/loft-sh/kled/pkg/client"
-	"github.com/loft-sh/kled/pkg/platform"
+	clientpkg "github.com/loft-sh/devpod/pkg/client"
+	"github.com/loft-sh/devpod/pkg/platform"
 )
 
 func (c *client) Stop(ctx context.Context, opt clientpkg.StopOptions) error {
@@ -33,8 +33,8 @@ func (c *client) Stop(ctx context.Context, opt clientpkg.StopOptions) error {
 	}
 
 	rawOptions, _ := json.Marshal(opt)
-	retStop, err := managementClient.Loft().ManagementV1().KledWorkspaceInstances(workspace.Namespace).Stop(ctx, workspace.Name, &managementv1.KledWorkspaceInstanceStop{
-		Spec: managementv1.KledWorkspaceInstanceStopSpec{
+	retStop, err := managementClient.Loft().ManagementV1().DevPodWorkspaceInstances(workspace.Namespace).Stop(ctx, workspace.Name, &managementv1.DevPodWorkspaceInstanceStop{
+		Spec: managementv1.DevPodWorkspaceInstanceStopSpec{
 			Options: string(rawOptions),
 		},
 	}, metav1.CreateOptions{})

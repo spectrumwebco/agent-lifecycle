@@ -10,20 +10,20 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/loft-sh/kled/pkg/command"
-	"github.com/loft-sh/kled/pkg/config"
-	copy2 "github.com/loft-sh/kled/pkg/copy"
-	kledhttp "github.com/loft-sh/kled/pkg/http"
-	"github.com/loft-sh/kled/pkg/ide"
-	"github.com/loft-sh/kled/pkg/single"
-	"github.com/loft-sh/kled/pkg/util"
+	"github.com/loft-sh/devpod/pkg/command"
+	"github.com/loft-sh/devpod/pkg/config"
+	copy2 "github.com/loft-sh/devpod/pkg/copy"
+	devpodhttp "github.com/loft-sh/devpod/pkg/http"
+	"github.com/loft-sh/devpod/pkg/ide"
+	"github.com/loft-sh/devpod/pkg/single"
+	"github.com/loft-sh/devpod/pkg/util"
 	"github.com/loft-sh/log"
 	"github.com/loft-sh/log/scanner"
 	"github.com/pkg/errors"
 )
 
 const (
-	FleetURLFile = "/tmp/kled-fleet.url.txt"
+	FleetURLFile = "/tmp/devpod-fleet.url.txt"
 )
 
 const (
@@ -87,7 +87,7 @@ func (o *FleetServer) Install(projectDir string) error {
 
 	// download binary
 	o.log.Infof("Downloading fleet...")
-	resp, err := kledhttp.GetHTTPClient().Get(url)
+	resp, err := devpodhttp.GetHTTPClient().Get(url)
 	if err != nil {
 		return err
 	}

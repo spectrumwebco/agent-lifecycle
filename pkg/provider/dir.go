@@ -21,8 +21,8 @@ const (
 	ProInstanceConfigFile = "pro.json"
 	ProviderConfigFile    = "provider.json"
 
-	DaemonSocket    = "kled.sock"
-	DaemonStateFile = "kled_ts.state"
+	DaemonSocket    = "devpod.sock"
+	DaemonStateFile = "devpod_ts.state"
 )
 
 func GetProInstancesDir(context string) (string, error) {

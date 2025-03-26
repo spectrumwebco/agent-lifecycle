@@ -11,11 +11,11 @@ import (
 	managementv1 "github.com/loft-sh/api/v4/pkg/apis/management/v1"
 	storagev1 "github.com/loft-sh/api/v4/pkg/apis/storage/v1"
 	"github.com/loft-sh/apiserver/pkg/builders"
-	clientpkg "github.com/loft-sh/kled/pkg/client"
-	"github.com/loft-sh/kled/pkg/devcontainer/config"
-	kledlog "github.com/loft-sh/kled/pkg/log"
-	"github.com/loft-sh/kled/pkg/platform"
-	"github.com/loft-sh/kled/pkg/platform/kube"
+	clientpkg "github.com/loft-sh/devpod/pkg/client"
+	"github.com/loft-sh/devpod/pkg/devcontainer/config"
+	devpodlog "github.com/loft-sh/devpod/pkg/log"
+	"github.com/loft-sh/devpod/pkg/platform"
+	"github.com/loft-sh/devpod/pkg/platform/kube"
 	"github.com/loft-sh/log"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -69,7 +69,7 @@ func (c *client) Up(ctx context.Context, opt clientpkg.UpOptions) (*config.Resul
 	// if we have an active up task, cancel it before creating a new one
 	if activeUpTask != nil {
 		c.log.Warnf("Found active up task %s, attempting to cancel it", activeUpTask.ID)
-		_, err = managementClient.Loft().ManagementV1().KledWorkspaceInstances(instance.Namespace).Cancel(ctx, instance.Name, &managementv1.KledWorkspaceInstanceCancel{
+		_, err = managementClient.Loft().ManagementV1().DevPodWorkspaceInstances(instance.Namespace).Cancel(ctx, instance.Name, &managementv1.DevPodWorkspaceInstanceCancel{
 			TaskID: activeUpTask.ID,
 		}, metav1.CreateOptions{})
 		if err != nil {
@@ -78,8 +78,8 @@ func (c *client) Up(ctx context.Context, opt clientpkg.UpOptions) (*config.Resul
 	}
 
 	// create up task
-	task, err := managementClient.Loft().ManagementV1().KledWorkspaceInstances(instance.Namespace).Up(ctx, instance.Name, &managementv1.KledWorkspaceInstanceUp{
-		Spec: managementv1.KledWorkspaceInstanceUpSpec{
+	task, err := managementClient.Loft().ManagementV1().DevPodWorkspaceInstances(instance.Namespace).Up(ctx, instance.Name, &managementv1.DevPodWorkspaceInstanceUp{
+		Spec: managementv1.DevPodWorkspaceInstanceUpSpec{
 			Debug:   opt.Debug,
 			Options: string(rawOptions),
 		},
@@ -93,7 +93,7 @@ func (c *client) Up(ctx context.Context, opt clientpkg.UpOptions) (*config.Resul
 	return waitTaskDone(ctx, managementClient, instance, task.Status.TaskID, c.log)
 }
 
-func waitTaskDone(ctx context.Context, managementClient kube.Interface, instance *managementv1.KledWorkspaceInstance, taskID string, log log.Logger) (*config.Result, error) {
+func waitTaskDone(ctx context.Context, managementClient kube.Interface, instance *managementv1.DevPodWorkspaceInstance, taskID string, log log.Logger) (*config.Result, error) {
 	exitCode, err := observeTask(ctx, managementClient, instance, taskID, log)
 	if err != nil {
 		return nil, fmt.Errorf("up: %w", err)
@@ -102,13 +102,13 @@ func waitTaskDone(ctx context.Context, managementClient kube.Interface, instance
 	}
 
 	// get result
-	tasks := &managementv1.KledWorkspaceInstanceTasks{}
+	tasks := &managementv1.DevPodWorkspaceInstanceTasks{}
 	err = managementClient.Loft().ManagementV1().RESTClient().Get().
 		Namespace(instance.Namespace).
-		Resource("kledworkspaceinstances").
+		Resource("devpodworkspaceinstances").
 		Name(instance.Name).
 		SubResource("tasks").
-		VersionedParams(&managementv1.KledWorkspaceInstanceTasksOptions{
+		VersionedParams(&managementv1.DevPodWorkspaceInstanceTasksOptions{
 			TaskID: taskID,
 		}, builders.ParameterCodec).
 		Do(ctx).
@@ -132,7 +132,7 @@ func waitTaskDone(ctx context.Context, managementClient kube.Interface, instance
 	return result, nil
 }
 
-func templateUpdateRequired(instance *managementv1.KledWorkspaceInstance) bool {
+func templateUpdateRequired(instance *managementv1.DevPodWorkspaceInstance) bool {
 	var templateResolved, templateChangesAvailable bool
 	for _, condition := range instance.Status.Conditions {
 		if condition.Type == storagev1.InstanceTemplateResolved {
@@ -150,7 +150,7 @@ func templateUpdateRequired(instance *managementv1.KledWorkspaceInstance) bool {
 	return !templateResolved || templateChangesAvailable
 }
 
-func printInstanceInfo(instance *managementv1.KledWorkspaceInstance, log log.Logger) {
+func printInstanceInfo(instance *managementv1.DevPodWorkspaceInstance, log log.Logger) {
 	workspaceConfig, _ := json.Marshal(struct {
 		Target     storagev1.WorkspaceTarget
 		Template   *storagev1.TemplateRef
@@ -163,7 +163,7 @@ func printInstanceInfo(instance *managementv1.KledWorkspaceInstance, log log.Log
 	log.Debug("Starting pro workspace with configuration", string(workspaceConfig))
 }
 
-func observeTask(ctx context.Context, managementClient kube.Interface, instance *managementv1.KledWorkspaceInstance, taskID string, log log.Logger) (int, error) {
+func observeTask(ctx context.Context, managementClient kube.Interface, instance *managementv1.DevPodWorkspaceInstance, taskID string, log log.Logger) (int, error) {
 	var (
 		exitCode int
 		err      error
@@ -181,7 +181,7 @@ func observeTask(ctx context.Context, managementClient kube.Interface, instance 
 			defer cancel()
 			defer cancelPrintCtx()
 
-			_, err := managementClient.Loft().ManagementV1().KledWorkspaceInstances(instance.Namespace).Cancel(timeoutCtx, instance.Name, &managementv1.KledWorkspaceInstanceCancel{
+			_, err := managementClient.Loft().ManagementV1().DevPodWorkspaceInstances(instance.Namespace).Cancel(timeoutCtx, instance.Name, &managementv1.DevPodWorkspaceInstanceCancel{
 				TaskID: taskID,
 			}, metav1.CreateOptions{})
 			if err != nil {
@@ -215,15 +215,15 @@ type Message struct {
 	Bytes    []byte      `json:"bytes,omitempty"`
 }
 
-func printLogs(ctx context.Context, managementClient kube.Interface, workspace *managementv1.KledWorkspaceInstance, taskID string, logger log.Logger) (int, error) {
+func printLogs(ctx context.Context, managementClient kube.Interface, workspace *managementv1.DevPodWorkspaceInstance, taskID string, logger log.Logger) (int, error) {
 	// get logs reader
 	logger.Debugf("printing logs of task: %s", taskID)
 	logsReader, err := managementClient.Loft().ManagementV1().RESTClient().Get().
 		Namespace(workspace.Namespace).
-		Resource("kledworkspaceinstances").
+		Resource("devpodworkspaceinstances").
 		Name(workspace.Name).
 		SubResource("log").
-		VersionedParams(&managementv1.KledWorkspaceInstanceLogOptions{
+		VersionedParams(&managementv1.DevPodWorkspaceInstanceLogOptions{
 			TaskID: taskID,
 			Follow: true,
 		}, builders.ParameterCodec).
@@ -243,8 +243,8 @@ func printLogs(ctx context.Context, managementClient kube.Interface, workspace *
 	scanner.Buffer(buf, maxCapacity)
 
 	// create json streamer
-	stdoutStreamer, stdoutDone := kledlog.PipeJSONStream(logger)
-	stderrStreamer, stderrDone := kledlog.PipeJSONStream(logger.ErrorStreamOnly())
+	stdoutStreamer, stdoutDone := devpodlog.PipeJSONStream(logger)
+	stderrStreamer, stderrDone := devpodlog.PipeJSONStream(logger.ErrorStreamOnly())
 	defer func() {
 		// close the streams
 		stdoutStreamer.Close()
@@ -302,11 +302,11 @@ const (
 	TaskTypeDelete = "delete"
 )
 
-func findActiveUpTask(ctx context.Context, managementClient kube.Interface, instance *managementv1.KledWorkspaceInstance) (*managementv1.KledWorkspaceInstanceTask, error) {
-	tasks := &managementv1.KledWorkspaceInstanceTasks{}
+func findActiveUpTask(ctx context.Context, managementClient kube.Interface, instance *managementv1.DevPodWorkspaceInstance) (*managementv1.DevPodWorkspaceInstanceTask, error) {
+	tasks := &managementv1.DevPodWorkspaceInstanceTasks{}
 	err := managementClient.Loft().ManagementV1().RESTClient().Get().
 		Namespace(instance.Namespace).
-		Resource("kledworkspaceinstances").
+		Resource("devpodworkspaceinstances").
 		Name(instance.Name).
 		SubResource("tasks").
 		Do(ctx).

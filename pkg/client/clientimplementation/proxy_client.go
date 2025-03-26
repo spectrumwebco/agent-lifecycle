@@ -13,11 +13,11 @@ import (
 
 	"github.com/gofrs/flock"
 	"github.com/loft-sh/api/v4/pkg/devpod"
-	"github.com/loft-sh/kled/pkg/client"
-	"github.com/loft-sh/kled/pkg/config"
-	kledlog "github.com/loft-sh/kled/pkg/log"
-	"github.com/loft-sh/kled/pkg/options"
-	"github.com/loft-sh/kled/pkg/provider"
+	"github.com/loft-sh/devpod/pkg/client"
+	"github.com/loft-sh/devpod/pkg/config"
+	devpodlog "github.com/loft-sh/devpod/pkg/log"
+	"github.com/loft-sh/devpod/pkg/options"
+	"github.com/loft-sh/devpod/pkg/provider"
 	"github.com/loft-sh/log"
 	perrors "github.com/pkg/errors"
 )
@@ -33,9 +33,9 @@ var (
 	KledFlagsStatus = "KLED_FLAGS_STATUS"
 )
 
-func NewProxyClient(kledConfig *config.Config, prov *provider.ProviderConfig, workspace *provider.Workspace, log log.Logger) (client.ProxyClient, error) {
+func NewProxyClient(devPodConfig *config.Config, prov *provider.ProviderConfig, workspace *provider.Workspace, log log.Logger) (client.ProxyClient, error) {
 	return &proxyClient{
-		kledConfig: kledConfig,
+		devPodConfig: devPodConfig,
 		config:       prov,
 		workspace:    workspace,
 		log:          log,
@@ -48,7 +48,7 @@ type proxyClient struct {
 	workspaceLockOnce sync.Once
 	workspaceLock     *flock.Flock
 
-	kledConfig *config.Config
+	devPodConfig *config.Config
 	config       *provider.ProviderConfig
 	workspace    *provider.Workspace
 	log          log.Logger
@@ -150,7 +150,7 @@ func (s *proxyClient) RefreshOptions(ctx context.Context, userOptionsRaw []strin
 		return perrors.Wrap(err, "parse options")
 	}
 
-	workspace, err := options.ResolveAndSaveOptionsProxy(ctx, s.kledConfig, s.config, s.workspace, userOptions, s.log)
+	workspace, err := options.ResolveAndSaveOptionsProxy(ctx, s.devPodConfig, s.config, s.workspace, userOptions, s.log)
 	if err != nil {
 		return err
 	}
@@ -174,7 +174,7 @@ func (s *proxyClient) Create(ctx context.Context, stdin io.Reader, stdout io.Wri
 		s.workspace.Context,
 		s.workspace,
 		nil,
-		s.kledConfig.ProviderOptions(s.config.Name),
+		s.devPodConfig.ProviderOptions(s.config.Name),
 		s.config,
 		nil,
 		stdin,
@@ -189,7 +189,7 @@ func (s *proxyClient) Create(ctx context.Context, stdin io.Reader, stdout io.Wri
 }
 
 func (s *proxyClient) Up(ctx context.Context, opt client.UpOptions) error {
-	writer, _ := kledlog.PipeJSONStream(s.log.ErrorStreamOnly())
+	writer, _ := devpodlog.PipeJSONStream(s.log.ErrorStreamOnly())
 	defer writer.Close()
 
 	opts := EncodeOptions(opt.CLIOptions, KledFlagsUp)
@@ -204,7 +204,7 @@ func (s *proxyClient) Up(ctx context.Context, opt client.UpOptions) error {
 		s.workspace.Context,
 		s.workspace,
 		nil,
-		s.kledConfig.ProviderOptions(s.config.Name),
+		s.devPodConfig.ProviderOptions(s.config.Name),
 		s.config,
 		opts,
 		opt.Stdin,
@@ -213,14 +213,14 @@ func (s *proxyClient) Up(ctx context.Context, opt client.UpOptions) error {
 		s.log.ErrorStreamOnly(),
 	)
 	if err != nil {
-		return fmt.Errorf("error running kled up: %w", err)
+		return fmt.Errorf("error running devpod up: %w", err)
 	}
 
 	return nil
 }
 
 func (s *proxyClient) Ssh(ctx context.Context, opt client.SshOptions) error {
-	writer, _ := kledlog.PipeJSONStream(s.log.ErrorStreamOnly())
+	writer, _ := devpodlog.PipeJSONStream(s.log.ErrorStreamOnly())
 	defer writer.Close()
 
 	err := RunCommandWithBinaries(
@@ -230,7 +230,7 @@ func (s *proxyClient) Ssh(ctx context.Context, opt client.SshOptions) error {
 		s.workspace.Context,
 		s.workspace,
 		nil,
-		s.kledConfig.ProviderOptions(s.config.Name),
+		s.devPodConfig.ProviderOptions(s.config.Name),
 		s.config,
 		EncodeOptions(opt, KledFlagsSsh),
 		opt.Stdin,
@@ -249,7 +249,7 @@ func (s *proxyClient) Delete(ctx context.Context, opt client.DeleteOptions) erro
 	s.m.Lock()
 	defer s.m.Unlock()
 
-	writer, _ := kledlog.PipeJSONStream(s.log.ErrorStreamOnly())
+	writer, _ := devpodlog.PipeJSONStream(s.log.ErrorStreamOnly())
 	defer writer.Close()
 
 	var gracePeriod *time.Duration
@@ -274,7 +274,7 @@ func (s *proxyClient) Delete(ctx context.Context, opt client.DeleteOptions) erro
 		s.workspace.Context,
 		s.workspace,
 		nil,
-		s.kledConfig.ProviderOptions(s.config.Name),
+		s.devPodConfig.ProviderOptions(s.config.Name),
 		s.config,
 		EncodeOptions(opt, KledFlagsDelete),
 		nil,
@@ -297,7 +297,7 @@ func (s *proxyClient) Stop(ctx context.Context, opt client.StopOptions) error {
 	s.m.Lock()
 	defer s.m.Unlock()
 
-	writer, _ := kledlog.PipeJSONStream(s.log.ErrorStreamOnly())
+	writer, _ := devpodlog.PipeJSONStream(s.log.ErrorStreamOnly())
 	defer writer.Close()
 
 	err := RunCommandWithBinaries(
@@ -307,7 +307,7 @@ func (s *proxyClient) Stop(ctx context.Context, opt client.StopOptions) error {
 		s.workspace.Context,
 		s.workspace,
 		nil,
-		s.kledConfig.ProviderOptions(s.config.Name),
+		s.devPodConfig.ProviderOptions(s.config.Name),
 		s.config,
 		nil,
 		nil,
@@ -335,7 +335,7 @@ func (s *proxyClient) Status(ctx context.Context, options client.StatusOptions) 
 		s.workspace.Context,
 		s.workspace,
 		nil,
-		s.kledConfig.ProviderOptions(s.config.Name),
+		s.devPodConfig.ProviderOptions(s.config.Name),
 		s.config,
 		EncodeOptions(options, KledFlagsStatus),
 		nil,
@@ -347,7 +347,7 @@ func (s *proxyClient) Status(ctx context.Context, options client.StatusOptions) 
 		return client.StatusNotFound, fmt.Errorf("error retrieving container status: %s%w", buf.String(), err)
 	}
 
-	kledlog.ReadJSONStream(bytes.NewReader(buf.Bytes()), s.log.ErrorStreamOnly())
+	devpodlog.ReadJSONStream(bytes.NewReader(buf.Bytes()), s.log.ErrorStreamOnly())
 	status := &client.WorkspaceStatus{}
 	err = json.Unmarshal(stdout.Bytes(), status)
 	if err != nil {
@@ -366,7 +366,7 @@ func (s *proxyClient) updateInstance(ctx context.Context) error {
 		s.workspace.Context,
 		s.workspace,
 		nil,
-		s.kledConfig.ProviderOptions(s.config.Name),
+		s.devPodConfig.ProviderOptions(s.config.Name),
 		s.config,
 		nil,
 		os.Stdin,

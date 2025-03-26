@@ -6,13 +6,13 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/loft-sh/kled/pkg/client"
-	"github.com/loft-sh/kled/pkg/client/clientimplementation"
-	"github.com/loft-sh/kled/pkg/config"
-	"github.com/loft-sh/kled/pkg/encoding"
-	"github.com/loft-sh/kled/pkg/file"
-	providerpkg "github.com/loft-sh/kled/pkg/provider"
-	"github.com/loft-sh/kled/pkg/types"
+	"github.com/loft-sh/devpod/pkg/client"
+	"github.com/loft-sh/devpod/pkg/client/clientimplementation"
+	"github.com/loft-sh/devpod/pkg/config"
+	"github.com/loft-sh/devpod/pkg/encoding"
+	"github.com/loft-sh/devpod/pkg/file"
+	providerpkg "github.com/loft-sh/devpod/pkg/provider"
+	"github.com/loft-sh/devpod/pkg/types"
 	"github.com/loft-sh/log"
 	"github.com/loft-sh/log/survey"
 	"github.com/loft-sh/log/terminal"
@@ -218,7 +218,7 @@ func createMachine(context, machineID, providerName string) (*providerpkg.Machin
 }
 
 func SingleMachineName(devPodConfig *config.Config, provider string, log log.Logger) string {
-	legacyMachineName := "kled-shared-" + provider
+	legacyMachineName := "devpod-shared-" + provider
 	machines, err := listMachines(devPodConfig, log)
 	if err == nil {
 		for _, machine := range machines {
@@ -228,5 +228,5 @@ func SingleMachineName(devPodConfig *config.Config, provider string, log log.Log
 		}
 	}
 
-	return encoding.SafeConcatNameMax([]string{"kled-shared", provider, encoding.GetMachineUIDShort(log)}, encoding.MachineUIDLength)
+	return encoding.SafeConcatNameMax([]string{"devpod-shared", provider, encoding.GetMachineUIDShort(log)}, encoding.MachineUIDLength)
 }

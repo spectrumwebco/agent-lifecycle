@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/loft-sh/kled/pkg/driver"
+	"github.com/loft-sh/devpod/pkg/driver"
 	"github.com/pkg/errors"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -67,7 +67,7 @@ func (k *KubernetesDriver) buildPersistentVolumeClaim(
 	}
 
 	labels := map[string]string{}
-	labels[KledWorkspaceUIDLabel] = options.UID
+	labels[DevPodWorkspaceUIDLabel] = options.UID
 	for k, v := range ExtraKledLabels {
 		labels[k] = v
 	}

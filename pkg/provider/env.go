@@ -176,8 +176,8 @@ func Merge(m1 map[string]string, m2 map[string]string) map[string]string {
 func GetBaseEnvironment(context, provider string) map[string]string {
 	retVars := map[string]string{}
 
-	kledBinary, _ := os.Executable()
-	retVars[KLED] = filepath.ToSlash(kledBinary)
+	devPodBinary, _ := os.Executable()
+	retVars[DEVPOD] = filepath.ToSlash(devPodBinary)
 	retVars[KLED_OS] = runtime.GOOS
 	retVars[KLED_ARCH] = runtime.GOARCH
 	retVars[PROVIDER_ID] = provider

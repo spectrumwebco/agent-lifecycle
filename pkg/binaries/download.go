@@ -10,11 +10,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/loft-sh/kled/pkg/config"
-	"github.com/loft-sh/kled/pkg/copy"
-	"github.com/loft-sh/kled/pkg/download"
-	"github.com/loft-sh/kled/pkg/extract"
-	provider2 "github.com/loft-sh/kled/pkg/provider"
+	"github.com/loft-sh/devpod/pkg/config"
+	"github.com/loft-sh/devpod/pkg/copy"
+	"github.com/loft-sh/devpod/pkg/download"
+	"github.com/loft-sh/devpod/pkg/extract"
+	provider2 "github.com/loft-sh/devpod/pkg/provider"
 	"github.com/loft-sh/log"
 	"github.com/loft-sh/log/hash"
 	"github.com/pkg/errors"
@@ -172,7 +172,7 @@ func fromCache(binary *provider2.ProviderBinary, targetFolder string, log log.Lo
 }
 
 func getCachedBinaryPath(url string) string {
-	return filepath.Join(os.TempDir(), "kled-binaries", hash.String(url)[:16])
+	return filepath.Join(os.TempDir(), "devpod-binaries", hash.String(url)[:16])
 }
 
 func verifyBinary(binaryPath, checksum string) bool {

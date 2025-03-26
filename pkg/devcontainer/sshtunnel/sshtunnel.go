@@ -9,10 +9,10 @@ import (
 
 	"github.com/loft-sh/log"
 
-	client2 "github.com/loft-sh/kled/pkg/client"
-	config2 "github.com/loft-sh/kled/pkg/devcontainer/config"
-	devssh "github.com/loft-sh/kled/pkg/ssh"
-	devsshagent "github.com/loft-sh/kled/pkg/ssh/agent"
+	client2 "github.com/loft-sh/devpod/pkg/client"
+	config2 "github.com/loft-sh/devpod/pkg/devcontainer/config"
+	devssh "github.com/loft-sh/devpod/pkg/ssh"
+	devsshagent "github.com/loft-sh/devpod/pkg/ssh/agent"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
@@ -65,7 +65,7 @@ func ExecuteCommand(
 	}()
 
 	if addPrivateKeys {
-		log.Debug("Adding ssh keys to agent, disable via 'kled context set-options -o SSH_ADD_PRIVATE_KEYS=false'")
+		log.Debug("Adding ssh keys to agent, disable via 'devpod context set-options -o SSH_ADD_PRIVATE_KEYS=false'")
 		err := devssh.AddPrivateKeysToAgent(ctx, log)
 		if err != nil {
 			log.Debugf("Error adding private keys to ssh-agent: %v", err)

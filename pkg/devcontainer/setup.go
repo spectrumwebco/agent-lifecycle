@@ -11,15 +11,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/loft-sh/kled/pkg/agent"
-	"github.com/loft-sh/kled/pkg/agent/tunnelserver"
-	"github.com/loft-sh/kled/pkg/compress"
-	"github.com/loft-sh/kled/pkg/devcontainer/config"
-	"github.com/loft-sh/kled/pkg/devcontainer/crane"
-	"github.com/loft-sh/kled/pkg/devcontainer/sshtunnel"
-	"github.com/loft-sh/kled/pkg/driver"
-	"github.com/loft-sh/kled/pkg/ide"
-	provider2 "github.com/loft-sh/kled/pkg/provider"
+	"github.com/loft-sh/devpod/pkg/agent"
+	"github.com/loft-sh/devpod/pkg/agent/tunnelserver"
+	"github.com/loft-sh/devpod/pkg/compress"
+	"github.com/loft-sh/devpod/pkg/devcontainer/config"
+	"github.com/loft-sh/devpod/pkg/devcontainer/crane"
+	"github.com/loft-sh/devpod/pkg/devcontainer/sshtunnel"
+	"github.com/loft-sh/devpod/pkg/driver"
+	"github.com/loft-sh/devpod/pkg/ide"
+	provider2 "github.com/loft-sh/devpod/pkg/provider"
 	"github.com/loft-sh/log"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -36,7 +36,7 @@ func (r *runner) setupContainer(
 	// inject agent
 	err := agent.InjectAgent(ctx, func(ctx context.Context, command string, stdin io.Reader, stdout io.Writer, stderr io.Writer) error {
 		return r.Driver.CommandDevContainer(ctx, r.ID, "root", command, stdin, stdout, stderr)
-	}, false, agent.ContainerKledHelperLocation, agent.DefaultAgentDownloadURL(), false, r.Log, timeout)
+	}, false, agent.ContainerDevPodHelperLocation, agent.DefaultAgentDownloadURL(), false, r.Log, timeout)
 	if err != nil {
 		return nil, errors.Wrap(err, "inject agent")
 	}
@@ -101,7 +101,7 @@ func (r *runner) setupContainer(
 
 	setupCommand := fmt.Sprintf(
 		"'%s' agent container setup --setup-info '%s' --container-workspace-info '%s'",
-		agent.ContainerKledHelperLocation,
+		agent.ContainerDevPodHelperLocation,
 		compressed,
 		workspaceConfigCompressed,
 	)
@@ -138,7 +138,7 @@ func (r *runner) setupContainer(
 	}
 
 	// ssh tunnel
-	sshTunnelCmd := fmt.Sprintf("'%s' helper ssh-server --stdio", agent.ContainerKledHelperLocation)
+	sshTunnelCmd := fmt.Sprintf("'%s' helper ssh-server --stdio", agent.ContainerDevPodHelperLocation)
 	if ide.ReusesAuthSock(r.WorkspaceConfig.Workspace.IDE.Name) {
 		sshTunnelCmd += fmt.Sprintf(" --reuse-ssh-auth-sock=%s", r.WorkspaceConfig.CLIOptions.SSHAuthSockID)
 	}

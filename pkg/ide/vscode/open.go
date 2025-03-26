@@ -8,7 +8,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/loft-sh/kled/pkg/command"
+	"github.com/loft-sh/devpod/pkg/command"
 	"github.com/loft-sh/log"
 	"github.com/skratchdot/open-golang/open"
 )
@@ -43,7 +43,7 @@ func openViaBrowser(workspace, folder string, newWindow bool, flavor Flavor, log
 		protocol = `codium://`
 	}
 
-	openURL := protocol + `vscode-remote/ssh-remote+` + workspace + `.kled/` + folder
+	openURL := protocol + `vscode-remote/ssh-remote+` + workspace + `.devpod/` + folder
 	if newWindow {
 		openURL += "?windowId=_blank"
 	}
@@ -107,7 +107,7 @@ func openViaCLI(ctx context.Context, workspace, folder string, newWindow bool, f
 		args = append(args, "--reuse-window")
 	}
 	// Needs to be separated by `=` because of windows
-	folderUriArg := fmt.Sprintf("--folder-uri=vscode-remote://ssh-remote+%s.kled/%s", workspace, folder)
+	folderUriArg := fmt.Sprintf("--folder-uri=vscode-remote://ssh-remote+%s.devpod.%s", workspace, folder)
 	args = append(args, folderUriArg)
 	log.Debugf("Run %s command %s %s", flavor.DisplayName(), codePath, strings.Join(args, " "))
 	out, err = exec.CommandContext(ctx, codePath, args...).CombinedOutput()

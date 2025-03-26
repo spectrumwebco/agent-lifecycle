@@ -17,8 +17,8 @@ import (
 
 	"github.com/loft-sh/log"
 
-	"github.com/loft-sh/kled/pkg/platform/client"
-	sshServer "github.com/loft-sh/kled/pkg/ssh/server"
+	"github.com/loft-sh/devpod/pkg/platform/client"
+	sshServer "github.com/loft-sh/devpod/pkg/ssh/server"
 	"tailscale.com/client/tailscale"
 	"tailscale.com/envknob"
 	"tailscale.com/ipn/store/mem"
@@ -296,7 +296,7 @@ func (s *WorkspaceServer) gitCredentialsHandler(w http.ResponseWriter, r *http.R
 	}
 
 	// build the runner URL
-	runnerURL := fmt.Sprintf("http://%s.ts.loft/kled/%s/%s/workspace-git-credentials", discoveredRunner, projectName, workspaceName)
+	runnerURL := fmt.Sprintf("http://%s.ts.loft/devpod.%s/%s/workspace-git-credentials", discoveredRunner, projectName, workspaceName)
 	parsedURL, err := url.Parse(runnerURL)
 	if err != nil {
 		http.Error(w, "failed to parse runner URL", http.StatusInternalServerError)
@@ -440,7 +440,7 @@ func (s *WorkspaceServer) sendHeartbeat(ctx context.Context, client *http.Client
 		return fmt.Errorf("failed to discover runner: %w", err)
 	}
 
-	heartbeatURL := fmt.Sprintf("http://%s.ts.loft/kled/%s/%s/heartbeat", discoveredRunner, projectName, workspaceName)
+	heartbeatURL := fmt.Sprintf("http://%s.ts.loft/devpod.%s/%s/heartbeat", discoveredRunner, projectName, workspaceName)
 	s.log.Infof("Sending heartbeat to %s, because there are %d active connections", heartbeatURL, connections)
 	req, err := http.NewRequestWithContext(ctx, "GET", heartbeatURL, nil)
 	if err != nil {

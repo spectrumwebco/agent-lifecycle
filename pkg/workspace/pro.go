@@ -3,8 +3,8 @@ package workspace
 import (
 	"os"
 
-	"github.com/loft-sh/kled/pkg/config"
-	provider2 "github.com/loft-sh/kled/pkg/provider"
+	"github.com/loft-sh/devpod/pkg/config"
+	provider2 "github.com/loft-sh/devpod/pkg/provider"
 	"github.com/loft-sh/log"
 )
 

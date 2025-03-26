@@ -8,8 +8,8 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/loft-sh/kled/pkg/gitcredentials"
-	kledhttp "github.com/loft-sh/kled/pkg/http"
+	"github.com/loft-sh/devpod/pkg/gitcredentials"
+	devpodhttp "github.com/loft-sh/devpod/pkg/http"
 	"github.com/loft-sh/log"
 	"github.com/pkg/errors"
 )
@@ -20,7 +20,7 @@ func Head(rawURL string) (int, error) {
 		return 0, err
 	}
 
-	resp, err := kledhttp.GetHTTPClient().Do(req)
+	resp, err := devpodhttp.GetHTTPClient().Do(req)
 	if err != nil {
 		return 0, errors.Wrap(err, "download file")
 	}
@@ -64,7 +64,7 @@ func File(rawURL string, log log.Logger) (io.ReadCloser, error) {
 		}
 	}
 
-	resp, err := kledhttp.GetHTTPClient().Do(req)
+	resp, err := devpodhttp.GetHTTPClient().Do(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "download file")
 	} else if resp.StatusCode >= 400 {
@@ -98,7 +98,7 @@ func downloadGithubRelease(org, repo, release, file, token string) (io.ReadClose
 	}
 	req.Header.Set("Authorization", "Bearer "+token)
 	req.Header.Set("Accept", "application/vnd.github+json")
-	resp, err := kledhttp.GetHTTPClient().Do(req)
+	resp, err := devpodhttp.GetHTTPClient().Do(req)
 	if err != nil {
 		return nil, err
 	} else if resp.StatusCode >= 400 {
@@ -135,7 +135,7 @@ func downloadGithubRelease(org, repo, release, file, token string) (io.ReadClose
 	}
 	req.Header.Set("Authorization", "Bearer "+token)
 	req.Header.Set("Accept", "application/octet-stream")
-	downloadResp, err := kledhttp.GetHTTPClient().Do(req)
+	downloadResp, err := devpodhttp.GetHTTPClient().Do(req)
 	if err != nil {
 		return nil, err
 	} else if downloadResp.StatusCode >= 400 {

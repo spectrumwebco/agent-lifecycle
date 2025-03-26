@@ -6,7 +6,7 @@ import { QueryKeys } from "../../queryKeys"
 import { TContextOptionName } from "../../types"
 import { ClearableInput } from "./ClearableInput"
 
-const DEFAULT_KLED_AGENT_URL = "https://github.com/loft-sh/kled/releases/latest/download/"
+const DEFAULT_KLED_AGENT_URL = "https://github.com/loft-sh/devpod/releases/latest/download/"
 
 export function useContextOptions() {
   const queryClient = useQueryClient()

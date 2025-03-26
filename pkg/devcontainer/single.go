@@ -7,11 +7,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/loft-sh/kled/pkg/daemon/agent"
-	"github.com/loft-sh/kled/pkg/devcontainer/config"
-	"github.com/loft-sh/kled/pkg/devcontainer/metadata"
-	"github.com/loft-sh/kled/pkg/driver"
-	provider2 "github.com/loft-sh/kled/pkg/provider"
+	"github.com/loft-sh/devpod/pkg/daemon/agent"
+	"github.com/loft-sh/devpod/pkg/devcontainer/config"
+	"github.com/loft-sh/devpod/pkg/devcontainer/metadata"
+	"github.com/loft-sh/devpod/pkg/driver"
+	provider2 "github.com/loft-sh/devpod/pkg/provider"
 	"github.com/pkg/errors"
 )
 
@@ -25,11 +25,11 @@ const (
 	WorkspaceDaemonConfigExtraEnvVar = "KLED_WORKSPACE_DAEMON_CONFIG"
 
 	DefaultEntrypoint = `
-while ! command -v /usr/local/bin/kled >/dev/null 2>&1; do
+while ! command -v /usr/local/bin/devpod >/dev/null 2>&1; do
   echo "Waiting for kled tool..."
   sleep 1
 done
-exec /usr/local/bin/kled agent container daemon
+exec /usr/local/bin/devpod agent container daemon
 `
 )
 

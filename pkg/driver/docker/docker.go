@@ -13,13 +13,13 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/loft-sh/kled/pkg/compose"
-	config2 "github.com/loft-sh/kled/pkg/config"
-	"github.com/loft-sh/kled/pkg/devcontainer/config"
-	"github.com/loft-sh/kled/pkg/docker"
-	"github.com/loft-sh/kled/pkg/driver"
-	"github.com/loft-sh/kled/pkg/ide/jetbrains"
-	provider2 "github.com/loft-sh/kled/pkg/provider"
+	"github.com/loft-sh/devpod/pkg/compose"
+	config2 "github.com/loft-sh/devpod/pkg/config"
+	"github.com/loft-sh/devpod/pkg/devcontainer/config"
+	"github.com/loft-sh/devpod/pkg/docker"
+	"github.com/loft-sh/devpod/pkg/driver"
+	"github.com/loft-sh/devpod/pkg/ide/jetbrains"
+	provider2 "github.com/loft-sh/devpod/pkg/provider"
 	"github.com/loft-sh/log"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -413,25 +413,25 @@ func (d *dockerDriver) RunDockerDevContainer(
 		}
 
 		// Create temporary files to store /etc/passwd and /etc/group
-		containerPasswdFileIn, err := os.CreateTemp("", "kled_container_passwd_in")
+		containerPasswdFileIn, err := os.CreateTemp("", "devpod_container_passwd_in")
 		if err != nil {
 			return err
 		}
 		defer os.Remove(containerPasswdFileIn.Name())
 
-		containerGroupFileIn, err := os.CreateTemp("", "kled_container_group_in")
+		containerGroupFileIn, err := os.CreateTemp("", "devpod_container_group_in")
 		if err != nil {
 			return err
 		}
 		defer os.Remove(containerGroupFileIn.Name())
 
-		containerPasswdFileOut, err := os.CreateTemp("", "kled_container_passwd_out")
+		containerPasswdFileOut, err := os.CreateTemp("", "devpod_container_passwd_out")
 		if err != nil {
 			return err
 		}
 		defer os.Remove(containerPasswdFileOut.Name())
 
-		containerGroupFileOut, err := os.CreateTemp("", "kled_container_group_out")
+		containerGroupFileOut, err := os.CreateTemp("", "devpod_container_group_out")
 		if err != nil {
 			return err
 		}

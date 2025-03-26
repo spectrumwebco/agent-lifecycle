@@ -10,10 +10,10 @@ import (
 	"runtime"
 	"time"
 
-	kledhttp "github.com/loft-sh/kled/pkg/http"
-	"github.com/loft-sh/kled/pkg/inject"
-	"github.com/loft-sh/kled/pkg/shell"
-	"github.com/loft-sh/kled/pkg/version"
+	devpodhttp "github.com/loft-sh/devpod/pkg/http"
+	"github.com/loft-sh/devpod/pkg/inject"
+	"github.com/loft-sh/devpod/pkg/shell"
+	"github.com/loft-sh/devpod/pkg/version"
 	"github.com/loft-sh/log"
 )
 
@@ -71,7 +71,7 @@ func InjectAgentAndExecute(
 
 	defer log.Debugf("Done InjectAgentAndExecute")
 	if remoteAgentPath == "" {
-		remoteAgentPath = RemoteKledHelperLocation
+		remoteAgentPath = RemoteDevPodHelperLocation
 	}
 	if downloadURL == "" {
 		downloadURL = DefaultAgentDownloadURL()
@@ -124,7 +124,7 @@ func InjectAgentAndExecute(
 			}
 
 			if time.Since(lastMessage) > time.Second*5 {
-				log.Infof("Waiting for kled agent to come up...")
+				log.Infof("Waiting for devpod agent to come up...")
 				lastMessage = time.Now()
 			}
 
@@ -185,7 +185,7 @@ func injectBinary(arm bool, tryDownloadURL string, log log.Logger) (io.ReadClose
 }
 
 func downloadAgentLocally(tryDownloadURL, targetArch string, log log.Logger) (string, error) {
-	agentPath := filepath.Join(os.TempDir(), "kled-cache", "kled-linux-"+targetArch)
+	agentPath := filepath.Join(os.TempDir(), "devpod-cache", "devpod-linux-"+targetArch)
 	err := os.MkdirAll(filepath.Dir(agentPath), 0755)
 	if err != nil {
 		return "", fmt.Errorf("create agent path: %w", err)
@@ -196,10 +196,10 @@ func downloadAgentLocally(tryDownloadURL, targetArch string, log log.Logger) (st
 		return agentPath, nil
 	}
 
-	fullDownloadURL := tryDownloadURL + "/kled-linux-" + targetArch
+	fullDownloadURL := tryDownloadURL + "/devpod-linux-" + targetArch
 	log.Debugf("Attempting to download Kled agent from: %s", fullDownloadURL)
 
-	resp, err := kledhttp.GetHTTPClient().Get(fullDownloadURL)
+	resp, err := devpodhttp.GetHTTPClient().Get(fullDownloadURL)
 	if err != nil {
 		return "", fmt.Errorf("download devpod: %w", err)
 	}
@@ -226,7 +226,7 @@ func downloadAgentLocally(tryDownloadURL, targetArch string, log log.Logger) (st
 }
 
 func getRunnerBinary(targetArch string) string {
-	binaryPath := filepath.Join(os.TempDir(), "kled-cache", "kled-linux-"+targetArch)
+	binaryPath := filepath.Join(os.TempDir(), "devpod-cache", "devpod-linux-"+targetArch)
 	_, err := os.Stat(binaryPath)
 	if err != nil {
 		return ""

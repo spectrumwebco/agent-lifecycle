@@ -137,7 +137,7 @@ function OSSReportIssue() {
         rounded="full"
         icon={<Icon as={FaBug} color={iconColor} />}
         aria-label="Report an Issue"
-        onClick={() => client.open("https://github.com/loft-sh/kled/issues/new/choose")}
+        onClick={() => client.open("https://github.com/loft-sh/devpod/issues/new/choose")}
       />
     </Tooltip>
   )

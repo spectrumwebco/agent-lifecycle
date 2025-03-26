@@ -13,13 +13,13 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/loft-sh/api/v4/pkg/kled"
-	"github.com/loft-sh/kled/pkg/command"
-	"github.com/loft-sh/kled/pkg/config"
-	"github.com/loft-sh/kled/pkg/git"
-	"github.com/loft-sh/kled/pkg/gitcredentials"
-	provider2 "github.com/loft-sh/kled/pkg/provider"
-	"github.com/loft-sh/kled/pkg/util"
+	"github.com/loft-sh/api/v4/pkg/devpod"
+	"github.com/loft-sh/devpod/pkg/command"
+	"github.com/loft-sh/devpod/pkg/config"
+	"github.com/loft-sh/devpod/pkg/git"
+	"github.com/loft-sh/devpod/pkg/gitcredentials"
+	provider2 "github.com/loft-sh/devpod/pkg/provider"
+	"github.com/loft-sh/devpod/pkg/util"
 	"github.com/loft-sh/log"
 	"github.com/moby/patternmatcher/ignorefile"
 	"google.golang.org/grpc"
@@ -27,7 +27,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-var extraSearchLocations = []string{"/home/kled/.kled/agent", "/opt/kled/agent", "/var/lib/kled/agent", "/var/kled/agent"}
+var extraSearchLocations = []string{"/home/devpod/.devpod/agent", "/opt/devpod/agent", "/var/lib/devpod/agent", "/var/devpod/agent"}
 
 var ErrFindAgentHomeFolder = fmt.Errorf("couldn't find kled home directory")
 
@@ -147,7 +147,7 @@ func isDirExecutable(dir string) (bool, error) {
 		return false, err
 	}
 
-	testFile := filepath.Join(dir, "kled_test.sh")
+	testFile := filepath.Join(dir, "devpod_test.sh")
 	err = os.WriteFile(testFile, []byte(`#!/bin/sh
 echo Kled
 `), 0755)
@@ -335,7 +335,7 @@ func CloneRepositoryForWorkspace(
 		}
 
 		// marshal options
-		jsonOptions, err := json.Marshal(&kled.CloneOptions{
+		jsonOptions, err := json.Marshal(&devpod.CloneOptions{
 			Repository:        source.GitRepository,
 			Branch:            source.GitBranch,
 			Commit:            source.GitCommit,
@@ -350,7 +350,7 @@ func CloneRepositoryForWorkspace(
 
 		// create client
 		log.Infof("Cloning repository %s in platform...", source.GitRepository)
-		_, err = kled.NewRunnerClient(grpcClient).Clone(ctx, &kled.CloneRequest{
+		_, err = kled.NewRunnerClient(grpcClient).Clone(ctx, &devpod.CloneRequest{
 			TargetPath: workspaceDir,
 			Options:    string(jsonOptions),
 		})
@@ -380,20 +380,20 @@ func CloneRepositoryForWorkspace(
 
 	log.Done("Successfully cloned repository")
 
-	f, err := os.Open(filepath.Join(workspaceDir, ".kledignore"))
+	f, err := os.Open(filepath.Join(workspaceDir, ".devpodignore"))
 	if err != nil {
 		return nil
 	}
 	excludes, err := ignorefile.ReadAll(f)
 	if err != nil {
-		log.Warn(".kledignore file is invalid : ", err)
+		log.Warn(".devpodignore file is invalid : ", err)
 		return nil
 	}
 	// Remove files from workspace content folder
 	for _, exclude := range excludes {
 		os.RemoveAll(filepath.Join(workspaceDir, exclude))
 	}
-	log.Debug("Ignore files from .kledignore ", excludes)
+	log.Debug("Ignore files from .devpodignore ", excludes)
 
 	return nil
 }
