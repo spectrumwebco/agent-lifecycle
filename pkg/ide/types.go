@@ -4,7 +4,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/loft-sh/kled/pkg/config"
+	"github.com/loft-sh/devpod/pkg/config"
 	"github.com/loft-sh/log"
 )
 

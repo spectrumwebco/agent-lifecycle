@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	clientpkg "github.com/loft-sh/kled/pkg/client"
-	"github.com/loft-sh/kled/pkg/client/clientimplementation"
-	"github.com/loft-sh/kled/pkg/platform"
+	clientpkg "github.com/loft-sh/devpod/pkg/client"
+	"github.com/loft-sh/devpod/pkg/client/clientimplementation"
+	"github.com/loft-sh/devpod/pkg/platform"
 	kerrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/wait"

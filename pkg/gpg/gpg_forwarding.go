@@ -12,7 +12,7 @@ import (
 
 	"github.com/loft-sh/log"
 
-	devssh "github.com/loft-sh/kled/pkg/ssh"
+	devssh "github.com/loft-sh/devpod/pkg/ssh"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/ssh"
 )

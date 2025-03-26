@@ -10,10 +10,10 @@ import (
 	"runtime"
 	"time"
 
-	kledhttp "github.com/loft-sh/kled/pkg/http"
-	"github.com/loft-sh/kled/pkg/inject"
-	"github.com/loft-sh/kled/pkg/shell"
-	"github.com/loft-sh/kled/pkg/version"
+	kledhttp "github.com/loft-sh/devpod/pkg/http"
+	"github.com/loft-sh/devpod/pkg/inject"
+	"github.com/loft-sh/devpod/pkg/shell"
+	"github.com/loft-sh/devpod/pkg/version"
 	"github.com/loft-sh/log"
 )
 

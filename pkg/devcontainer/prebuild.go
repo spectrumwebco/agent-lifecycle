@@ -7,11 +7,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/loft-sh/kled/pkg/devcontainer/build"
-	"github.com/loft-sh/kled/pkg/devcontainer/config"
-	"github.com/loft-sh/kled/pkg/driver"
-	"github.com/loft-sh/kled/pkg/image"
-	"github.com/loft-sh/kled/pkg/provider"
+	"github.com/loft-sh/devpod/pkg/devcontainer/build"
+	"github.com/loft-sh/devpod/pkg/devcontainer/config"
+	"github.com/loft-sh/devpod/pkg/driver"
+	"github.com/loft-sh/devpod/pkg/image"
+	"github.com/loft-sh/devpod/pkg/provider"
 	"github.com/pkg/errors"
 )
 

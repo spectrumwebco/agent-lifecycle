@@ -2,9 +2,9 @@ package tunnelserver
 
 import (
 	"github.com/loft-sh/api/v4/pkg/kled"
-	"github.com/loft-sh/kled/pkg/devcontainer/config"
-	"github.com/loft-sh/kled/pkg/netstat"
-	provider2 "github.com/loft-sh/kled/pkg/provider"
+	"github.com/loft-sh/devpod/pkg/devcontainer/config"
+	"github.com/loft-sh/devpod/pkg/netstat"
+	provider2 "github.com/loft-sh/devpod/pkg/provider"
 )
 
 type Option func(*tunnelServer) *tunnelServer

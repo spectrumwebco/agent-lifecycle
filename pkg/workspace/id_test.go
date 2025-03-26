@@ -32,7 +32,7 @@ func TestToID(t *testing.T) {
 		},
 		{
 			name:  "URL with trailing slash",
-			input: "github.com/loft-sh/kled/",
+			input: "github.com/loft-sh/devpod/",
 			want:  "kled",
 		},
 		{
