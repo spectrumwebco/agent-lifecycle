@@ -30,7 +30,7 @@ const logger: Logger | undefined = import.meta.env.PROD
 const queryClient = new QueryClient({ logger })
 
 let render = true
-const l = localStorage.getItem("devpod-location-current") // check usePreserveLocation before changing this
+const l = localStorage.getItem("kled-location-current") // check usePreserveLocation before changing this
 if (l) {
   const loc = JSON.parse(l) as Location
   if (window.location.pathname !== loc.pathname) {
