@@ -11,19 +11,19 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/loft-sh/api/v4/pkg/devpod"
-	"github.com/loft-sh/devpod/pkg/agent/tunnel"
-	"github.com/loft-sh/devpod/pkg/devcontainer/config"
-	"github.com/loft-sh/devpod/pkg/dockercredentials"
-	"github.com/loft-sh/devpod/pkg/extract"
-	"github.com/loft-sh/devpod/pkg/gitcredentials"
-	"github.com/loft-sh/devpod/pkg/gitsshsigning"
-	"github.com/loft-sh/devpod/pkg/gpg"
-	"github.com/loft-sh/devpod/pkg/loftconfig"
-	"github.com/loft-sh/devpod/pkg/netstat"
-	"github.com/loft-sh/devpod/pkg/platform"
-	provider2 "github.com/loft-sh/devpod/pkg/provider"
-	"github.com/loft-sh/devpod/pkg/stdio"
+	"github.com/loft-sh/api/v4/pkg/kled"
+	"github.com/loft-sh/kled/pkg/agent/tunnel"
+	"github.com/loft-sh/kled/pkg/devcontainer/config"
+	"github.com/loft-sh/kled/pkg/dockercredentials"
+	"github.com/loft-sh/kled/pkg/extract"
+	"github.com/loft-sh/kled/pkg/gitcredentials"
+	"github.com/loft-sh/kled/pkg/gitsshsigning"
+	"github.com/loft-sh/kled/pkg/gpg"
+	"github.com/loft-sh/kled/pkg/loftconfig"
+	"github.com/loft-sh/kled/pkg/netstat"
+	"github.com/loft-sh/kled/pkg/platform"
+	provider2 "github.com/loft-sh/kled/pkg/provider"
+	"github.com/loft-sh/kled/pkg/stdio"
 	"github.com/loft-sh/log"
 	"github.com/moby/patternmatcher/ignorefile"
 	perrors "github.com/pkg/errors"
@@ -93,7 +93,7 @@ type tunnelServer struct {
 	workspace              *provider2.Workspace
 	log                    log.Logger
 
-	platformOptions *devpod.PlatformOptions
+	platformOptions *kled.PlatformOptions
 }
 
 func (t *tunnelServer) RunWithResult(ctx context.Context, reader io.Reader, writer io.WriteCloser) (*config.Result, error) {
@@ -372,13 +372,12 @@ func (t *tunnelServer) StreamWorkspace(message *tunnel.Empty, stream tunnel.Tunn
 		return fmt.Errorf("workspace is nil")
 	}
 
-	// Get .devpodignore files to exclude
 	excludes := []string{}
-	f, err := os.Open(filepath.Join(t.workspace.Source.LocalFolder, ".devpodignore"))
+	f, err := os.Open(filepath.Join(t.workspace.Source.LocalFolder, ".kledignore"))
 	if err == nil {
 		excludes, err = ignorefile.ReadAll(f)
 		if err != nil {
-			t.log.Warnf("Error reading .devpodignore file: %v", err)
+			t.log.Warnf("Error reading .kledignore file: %v", err)
 		}
 	}
 
@@ -408,14 +407,13 @@ func (t *tunnelServer) StreamMount(message *tunnel.StreamMountRequest, stream tu
 		return fmt.Errorf("mount %s is not allowed to download", message.Mount)
 	}
 
-	// Get .devpodignore files to exclude
 	excludes := []string{}
 	if t.workspace != nil {
-		f, err := os.Open(filepath.Join(t.workspace.Source.LocalFolder, ".devpodignore"))
+		f, err := os.Open(filepath.Join(t.workspace.Source.LocalFolder, ".kledignore"))
 		if err == nil {
 			excludes, err = ignorefile.ReadAll(f)
 			if err != nil {
-				t.log.Warnf("Error reading .devpodignore file: %v", err)
+				t.log.Warnf("Error reading .kledignore file: %v", err)
 			}
 		}
 	}

@@ -35,12 +35,12 @@ func NewUpdateWorkspaceCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 		Short:  "Update workspace instance",
 		Hidden: true,
 		RunE: func(cobraCmd *cobra.Command, args []string) error {
-			devPodConfig, provider, err := findProProvider(cobraCmd.Context(), cmd.Context, cmd.Provider, cmd.Host, cmd.Log)
+			kledConfig, provider, err := findProProvider(cobraCmd.Context(), cmd.Context, cmd.Provider, cmd.Host, cmd.Log) // TODO: Update variable name to reflect Kled branding
 			if err != nil {
 				return err
 			}
 
-			return cmd.Run(cobraCmd.Context(), devPodConfig, provider)
+			return cmd.Run(cobraCmd.Context(), kledConfig, provider)
 		},
 	}
 
@@ -52,8 +52,8 @@ func NewUpdateWorkspaceCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 	return c
 }
 
-func (cmd *UpdateWorkspaceCmd) Run(ctx context.Context, devPodConfig *config.Config, provider *provider.ProviderConfig) error {
-	opts := devPodConfig.ProviderOptions(provider.Name)
+func (cmd *UpdateWorkspaceCmd) Run(ctx context.Context, kledConfig *config.Config, provider *provider.ProviderConfig) error {
+	opts := kledConfig.ProviderOptions(provider.Name)
 	opts[platform.WorkspaceInstanceEnv] = config.OptionValue{Value: cmd.Instance}
 
 	var buf bytes.Buffer

@@ -23,7 +23,7 @@ import (
 func NewProProviderCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 	c := &cobra.Command{
 		Use:    "provider",
-		Short:  "DevPod Pro provider commands",
+		Short:  "Kled Pro provider commands",
 		Args:   cobra.NoArgs,
 		Hidden: true,
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
@@ -33,7 +33,7 @@ func NewProProviderCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 
 			log.Default.SetFormat(log.JSONFormat)
 
-			if os.Getenv(clientimplementation.DevPodDebug) == "true" {
+			if os.Getenv(clientimplementation.KledDebug) == "true" {
 				globalFlags.Debug = true
 			}
 
@@ -42,7 +42,7 @@ func NewProProviderCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 			if os.Getenv(telemetry.UIEnvVar) == "true" {
 				cmd.VisitParents(func(c *cobra.Command) {
 					// find the root command
-					if c.Name() == "devpod" {
+					if c.Name() == "kled" {
 						if c.Annotations == nil {
 							c.Annotations = map[string]string{}
 						}

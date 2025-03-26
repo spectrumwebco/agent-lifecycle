@@ -38,7 +38,7 @@ type streams struct {
 // NewUpCmd creates a new command
 func NewUpCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 	logLevel := logrus.InfoLevel
-	if os.Getenv(clientimplementation.DevPodDebug) == "true" || globalFlags.Debug {
+	if os.Getenv(clientimplementation.KledDebug) == "true" || globalFlags.Debug {
 		logLevel = logrus.DebugLevel
 	}
 
@@ -103,7 +103,7 @@ func (cmd *UpCmd) Run(ctx context.Context) error {
 }
 
 func (cmd *UpCmd) up(ctx context.Context, workspace *managementv1.DevPodWorkspaceInstance, client client.Client) error {
-	options := platform.OptionsFromEnv(storagev1.DevPodFlagsUp)
+	options := platform.OptionsFromEnv(storagev1.KledFlagsUp) // TODO: Update to KledFlagsUp when API is updated
 	if options != nil && os.Getenv("DEBUG") == "true" {
 		options.Add("debug", "true")
 	}
@@ -139,7 +139,7 @@ func templateUpdateRequired(instance *managementv1.DevPodWorkspaceInstance) bool
 	return !templateResolved || templateChangesAvailable
 }
 
-func printInstanceInfo(instance *managementv1.DevPodWorkspaceInstance, log log.Logger) {
+func printInstanceInfo(instance *managementv1.DevPodWorkspaceInstance, log log.Logger) { // TODO: Update to KledWorkspaceInstance when API is updated
 	workspaceConfig, _ := json.Marshal(struct {
 		// Cluster    storagev1.WorkspaceTargetNamespace
 		Template   *storagev1.TemplateRef

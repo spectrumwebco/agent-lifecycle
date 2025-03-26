@@ -13,15 +13,15 @@ type Token struct {
 	AuthorizedKeys string `json:"authorizedKeys,omitempty"`
 }
 
-func GetDevPodToken() (string, error) {
+func GetKledToken() (string, error) {
 	// get host key
-	hostKey, err := ssh.GetDevPodHostKey()
+	hostKey, err := ssh.GetKledHostKey()
 	if err != nil {
 		return "", errors.Wrap(err, "generate host key")
 	}
 
 	// get public key
-	publicKey, err := ssh.GetDevPodPublicKey()
+	publicKey, err := ssh.GetKledPublicKey()
 	if err != nil {
 		return "", errors.Wrap(err, "generate key pair")
 	}

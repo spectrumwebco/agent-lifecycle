@@ -66,7 +66,7 @@ type ProviderUpdateInfo struct {
 }
 
 func (cmd *CheckUpdateCmd) Run(ctx context.Context, devPodConfig *config.Config, provider *provider.ProviderConfig) error {
-	remoteVersion, err := platform.GetDevPodVersion(fmt.Sprintf("https://%s", cmd.Host))
+	remoteVersion, err := platform.GetKledVersion(fmt.Sprintf("https://%s", cmd.Host))
 	if err != nil {
 		return err
 	}

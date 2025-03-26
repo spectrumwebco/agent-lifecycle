@@ -82,7 +82,7 @@ func Templates(ctx context.Context, client client.Client, projectName string) (*
 	if err != nil {
 		return templateList, fmt.Errorf("list templates: %w", err)
 	} else if len(templateList.DevPodWorkspaceTemplates) == 0 {
-		return templateList, fmt.Errorf("seems like there is no template allowed in project %s, please make sure to at least have a single template available", projectName)
+		return templateList, fmt.Errorf("seems like there is no template allowed in project %s, please make sure to at least have a single template available", projectName) // TODO: Update to KledWorkspaceTemplates when API is updated
 	}
 
 	return templateList, nil
@@ -93,7 +93,7 @@ func FindTemplate(ctx context.Context, managementClient kube.Interface, projectN
 	if err != nil {
 		return nil, fmt.Errorf("list templates: %w", err)
 	} else if len(templateList.DevPodWorkspaceTemplates) == 0 {
-		return nil, fmt.Errorf("seems like there is no DevPod template allowed in project %s, please make sure to at least have a single template available", projectName)
+		return nil, fmt.Errorf("seems like there is no Kled template allowed in project %s, please make sure to at least have a single template available", projectName)
 	}
 
 	// find template
@@ -123,7 +123,7 @@ func GetTemplateParameters(template *managementv1.DevPodWorkspaceTemplate, templ
 			return nil, fmt.Errorf("couldn't find any version in template")
 		}
 
-		return latestVersion.(*storagev1.DevPodWorkspaceTemplateVersion).Parameters, nil
+		return latestVersion.(*storagev1.DevPodWorkspaceTemplateVersion).Parameters, nil // TODO: Update to KledWorkspaceTemplateVersion when API is updated
 	}
 
 	_, latestMatched, err := GetLatestMatchedVersion(template, templateVersion)
@@ -133,7 +133,7 @@ func GetTemplateParameters(template *managementv1.DevPodWorkspaceTemplate, templ
 		return nil, fmt.Errorf("couldn't find any matching version to %s", templateVersion)
 	}
 
-	return latestMatched.(*storagev1.DevPodWorkspaceTemplateVersion).Parameters, nil
+	return latestMatched.(*storagev1.DevPodWorkspaceTemplateVersion).Parameters, nil // TODO: Update to KledWorkspaceTemplateVersion when API is updated
 }
 
 type matchedVersion struct {

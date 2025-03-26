@@ -7,29 +7,29 @@ import (
 	"strings"
 	"time"
 
-	"github.com/loft-sh/devpod/pkg/daemon/agent"
-	"github.com/loft-sh/devpod/pkg/devcontainer/config"
-	"github.com/loft-sh/devpod/pkg/devcontainer/metadata"
-	"github.com/loft-sh/devpod/pkg/driver"
-	provider2 "github.com/loft-sh/devpod/pkg/provider"
+	"github.com/loft-sh/kled/pkg/daemon/agent"
+	"github.com/loft-sh/kled/pkg/devcontainer/config"
+	"github.com/loft-sh/kled/pkg/devcontainer/metadata"
+	"github.com/loft-sh/kled/pkg/driver"
+	provider2 "github.com/loft-sh/kled/pkg/provider"
 	"github.com/pkg/errors"
 )
 
 var dockerlessImage = "ghcr.io/loft-sh/dockerless:0.2.0"
 
 const (
-	DevPodExtraEnvVar                = "DEVPOD"
+	KledExtraEnvVar                  = "KLED"
 	RemoteContainersExtraEnvVar      = "REMOTE_CONTAINERS"
-	WorkspaceIDExtraEnvVar           = "DEVPOD_WORKSPACE_ID"
-	WorkspaceUIDExtraEnvVar          = "DEVPOD_WORKSPACE_UID"
-	WorkspaceDaemonConfigExtraEnvVar = "DEVPOD_WORKSPACE_DAEMON_CONFIG"
+	WorkspaceIDExtraEnvVar           = "KLED_WORKSPACE_ID"
+	WorkspaceUIDExtraEnvVar          = "KLED_WORKSPACE_UID"
+	WorkspaceDaemonConfigExtraEnvVar = "KLED_WORKSPACE_DAEMON_CONFIG"
 
 	DefaultEntrypoint = `
-while ! command -v /usr/local/bin/devpod >/dev/null 2>&1; do
-  echo "Waiting for devpod tool..."
+while ! command -v /usr/local/bin/kled >/dev/null 2>&1; do
+  echo "Waiting for kled tool..."
   sleep 1
 done
-exec /usr/local/bin/devpod agent container daemon
+exec /usr/local/bin/kled agent container daemon
 `
 )
 
@@ -53,7 +53,7 @@ func (r *runner) runSingleContainer(
 
 	// if options.Recreate is true, and workspace is a running container, we should not rebuild
 	if options.Recreate && parsedConfig.Config.ContainerID != "" {
-		return nil, fmt.Errorf("cannot recreate container not created by DevPod")
+		return nil, fmt.Errorf("cannot recreate container not created by Kled")
 	} else if !options.Recreate && containerDetails != nil {
 		// start container if not running
 		if strings.ToLower(containerDetails.State.Status) != "running" {
@@ -130,7 +130,7 @@ func (r *runner) runSingleContainer(
 
 		// Inject the daemon entrypoint if platform configuration is provided.
 		if options.CLIOptions.Platform.AccessKey != "" {
-			r.Log.Debugf("Platform config detected, injecting DevPod daemon entrypoint.")
+			r.Log.Debugf("Platform config detected, injecting Kled daemon entrypoint.")
 
 			data, err := agent.GetEncodedDaemonConfig(options.Platform, r.WorkspaceConfig.Workspace, substitutionContext, mergedConfig)
 			if err != nil {
@@ -335,7 +335,7 @@ func (r *runner) addExtraEnvVars(env map[string]string) map[string]string {
 		env = make(map[string]string)
 	}
 
-	env[DevPodExtraEnvVar] = "true"
+	env[KledExtraEnvVar] = "true"
 	env[RemoteContainersExtraEnvVar] = "true"
 	if r.WorkspaceConfig != nil && r.WorkspaceConfig.Workspace != nil && r.WorkspaceConfig.Workspace.ID != "" {
 		env[WorkspaceIDExtraEnvVar] = r.WorkspaceConfig.Workspace.ID

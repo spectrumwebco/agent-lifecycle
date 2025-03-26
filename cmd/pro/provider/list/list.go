@@ -9,7 +9,7 @@ import (
 func NewCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 	c := &cobra.Command{
 		Use:    "list",
-		Short:  "DevPod Pro Provider list commands",
+		Short:  "Kled Pro Provider list commands",
 		Args:   cobra.NoArgs,
 		Hidden: true,
 	}

@@ -26,7 +26,7 @@ func NewCreateCmd(flags *flags.GlobalFlags) *cobra.Command {
 	}
 	createCmd := &cobra.Command{
 		Use:   "create",
-		Short: "Create a new DevPod context",
+		Short: "Create a new Kled context",
 		RunE: func(_ *cobra.Command, args []string) error {
 			if len(args) != 1 {
 				return fmt.Errorf("please specify the context to create")

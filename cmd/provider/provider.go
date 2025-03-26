@@ -9,7 +9,7 @@ import (
 func NewProviderCmd(flags *flags.GlobalFlags) *cobra.Command {
 	providerCmd := &cobra.Command{
 		Use:   "provider",
-		Short: "DevPod Provider commands",
+		Short: "Kled Provider commands",
 	}
 
 	providerCmd.AddCommand(NewListCmd(flags))

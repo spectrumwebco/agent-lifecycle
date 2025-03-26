@@ -36,7 +36,7 @@ func NewWakeupCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 	}
 	c := &cobra.Command{
 		Use:   "wakeup",
-		Short: "Wake a workspace up",
+		Short: "Wake a Kled workspace up",
 		RunE: func(cobraCmd *cobra.Command, args []string) error {
 			log.Default.SetFormat(log.TextFormat)
 
@@ -58,12 +58,12 @@ func (cmd *WakeupCmd) Run(ctx context.Context, args []string) error {
 	}
 	targetWorkspace := args[0]
 
-	devPodConfig, err := config.LoadConfig(cmd.Context, "")
+	kledConfig, err := config.LoadConfig(cmd.Context, "") // TODO: Update variable name to reflect Kled branding
 	if err != nil {
 		return err
 	}
 
-	baseClient, err := platform.InitClientFromHost(ctx, devPodConfig, cmd.Host, cmd.Log)
+	baseClient, err := platform.InitClientFromHost(ctx, kledConfig, cmd.Host, cmd.Log)
 	if err != nil {
 		return err
 	}
@@ -103,7 +103,7 @@ func (cmd *WakeupCmd) Run(ctx context.Context, args []string) error {
 		return err
 	}
 
-	_, err = managementClient.Loft().ManagementV1().DevPodWorkspaceInstances(project.ProjectNamespace(cmd.Project)).Patch(ctx, workspaceInstance.Name, patch.Type(), patchData, metav1.PatchOptions{})
+	_, err = managementClient.Loft().ManagementV1().DevPodWorkspaceInstances(project.ProjectNamespace(cmd.Project)).Patch(ctx, workspaceInstance.Name, patch.Type(), patchData, metav1.PatchOptions{}) // TODO: Update to KledWorkspaceInstances when API is updated
 	if err != nil {
 		return err
 	}
@@ -111,7 +111,7 @@ func (cmd *WakeupCmd) Run(ctx context.Context, args []string) error {
 	// wait for sleeping
 	cmd.Log.Info("Wait until workspace wakes up...")
 	err = wait.PollUntilContextTimeout(ctx, time.Second, platform.Timeout(), false, func(ctx context.Context) (done bool, err error) {
-		workspaceInstance, err := managementClient.Loft().ManagementV1().DevPodWorkspaceInstances(project.ProjectNamespace(cmd.Project)).Get(ctx, workspaceInstance.Name, metav1.GetOptions{})
+		workspaceInstance, err := managementClient.Loft().ManagementV1().DevPodWorkspaceInstances(project.ProjectNamespace(cmd.Project)).Get(ctx, workspaceInstance.Name, metav1.GetOptions{}) // TODO: Update to KledWorkspaceInstances when API is updated
 		if err != nil {
 			return false, err
 		}

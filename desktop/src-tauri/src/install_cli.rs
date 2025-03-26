@@ -1,4 +1,4 @@
-use crate::{commands::DEVPOD_BINARY_NAME, AppHandle};
+use crate::{commands::KLED_BINARY_NAME, AppHandle};
 use log::error;
 use std::path::Path;
 use std::str::Lines;
@@ -44,11 +44,10 @@ pub fn install_cli(app_handle: AppHandle, force: bool) -> Result<(), InstallCLIE
     }
 }
 
-// The path to the `devpod-cli` binary/executable. If bundled correctly, will be placed next to the desktop app executable.
 fn get_cli_path() -> Result<PathBuf, std::io::Error> {
     let mut exe_path = env::current_exe()?;
     exe_path.pop();
-    exe_path.push(DEVPOD_BINARY_NAME);
+    exe_path.push(KLED_BINARY_NAME);
 
     Ok(exe_path)
 }
@@ -62,11 +61,9 @@ fn install(_app_handle: AppHandle, force: bool) -> Result<(), InstallCLIError> {
 
     let cli_path = get_cli_path().map_err(InstallCLIError::NoExePath)?;
 
-    // The binary we ship with is `devpod-cli`, but we want to link it to `devpod` so that users can just run `devpod` in their terminal
     let mut target_paths: Vec<PathBuf> = vec![];
 
-    // /usr/local/bin/devpod
-    let raw_system_bin = format!("/usr/local/bin/{}", "devpod");
+    let raw_system_bin = format!("/usr/local/bin/{}", "kled");
     target_paths.push(PathBuf::from(&raw_system_bin));
 
     if force {
@@ -84,13 +81,11 @@ fn install(_app_handle: AppHandle, force: bool) -> Result<(), InstallCLIError> {
     }
 
     if let Some(home) = home_dir() {
-        // $HOME/bin/devpod
         let mut user_bin = home.clone();
-        user_bin.push("bin/devpod");
+        user_bin.push("bin/kled");
 
-        // $HOME/.local/bin/devpod
         let mut user_local_bin = home;
-        user_local_bin.push(".local/bin/devpod");
+        user_local_bin.push(".local/bin/kled");
 
         target_paths.push(user_local_bin);
         target_paths.push(user_bin);
@@ -238,17 +233,16 @@ fn install(app_handle: AppHandle, force: bool) -> Result<(), InstallCLIError> {
     bin_dir.push("bin");
 
     // Create binary directory in app dir and write bin_files to disk
-    // These will be stored in a /bin folder under our control, usually `%APP_DIR%/sh.loft.devpod/bin`
     let cli_path = cli_path.to_str().ok_or(InstallCLIError::PathConversion)?;
 
     let sh_file = BinFile {
-        name: "devpod".to_string(),
+        name: "kled".to_string(),
         // WARN: we actually need to debug print here because this escapes the backslash to `\\` and will then be recognised by the shell
         content: format!("#!/usr/bin/env sh\n{:?}.exe \"$@\" \nexit $?", cli_path),
     };
 
     let cmd_file = BinFile {
-        name: format!("{}.cmd", "devpod".to_string()),
+        name: format!("{}.cmd", "kled".to_string()),
         content: format!("@echo off\n\"{}.exe\" %*", cli_path),
     };
 

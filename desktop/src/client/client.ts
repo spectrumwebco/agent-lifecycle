@@ -15,7 +15,7 @@ import { TSettings } from "../contexts"
 import { Release } from "../gen"
 import { Result, Return, hasCapability, isError, noop } from "../lib"
 import { TCommunityContributions, TProInstance, TUnsubscribeFn } from "../types"
-import { Command as DevPodCommand } from "./command"
+import { Command as KledCommand } from "./command"
 import { ContextClient } from "./context"
 import { IDEsClient } from "./ides"
 import { ProClient } from "./pro"
@@ -46,7 +46,7 @@ type TChannels = {
         type: "ImportWorkspace"
         workspace_id: string
         workspace_uid: string
-        devpod_pro_host: string
+        kled_pro_host: string
         project: string
         options: Record<string, string> | null
       }>
@@ -110,16 +110,16 @@ class Client {
       this.workspaces.setSSHKeyPath(value as string)
     }
     if (name === "additionalEnvVars") {
-      DevPodCommand.ADDITIONAL_ENV_VARS = value as string
+      KledCommand.ADDITIONAL_ENV_VARS = value as string
     }
     if (name === "httpProxyUrl") {
-      DevPodCommand.HTTP_PROXY = value as string
+      KledCommand.HTTP_PROXY = value as string
     }
     if (name === "httpsProxyUrl") {
-      DevPodCommand.HTTPS_PROXY = value as string
+      KledCommand.HTTPS_PROXY = value as string
     }
     if (name === "noProxy") {
-      DevPodCommand.NO_PROXY = value as string
+      KledCommand.NO_PROXY = value as string
     }
   }
 
@@ -235,7 +235,7 @@ class Client {
     try {
       let p = await this.getDir(dir)
       if (dir === "AppLog") {
-        p = await path.join(p, "DevPod.log")
+        p = await path.join(p, "Kled.log")
       }
 
       shell.open(p)
@@ -313,13 +313,13 @@ class Client {
         const home_dir = await this.getEnv("HOME")
         // this will throw if doesn't exist
         const exists = await invoke<boolean>("file_exists", {
-          filepath: home_dir + "/.local/bin/devpod",
+          filepath: home_dir + "/.local/bin/kled",
         })
 
         return Return.Value(exists)
       }
 
-      const result = await Command.create("run-path-devpod-cli", ["version"]).execute()
+      const result = await Command.create("run-path-kled-cli", ["version"]).execute()
       if (result.code !== 0) {
         return Return.Value(false)
       }

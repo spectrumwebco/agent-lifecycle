@@ -168,7 +168,7 @@ pub struct OpenProInstanceMsg {
 pub struct ImportWorkspaceMsg {
     pub workspace_id: String,
     pub workspace_uid: String,
-    pub devpod_pro_host: String,
+    pub kled_pro_host: String,
     pub project: String,
     pub options: HashMap<String, String>,
 }
@@ -188,9 +188,9 @@ impl<'de> Deserialize<'de> for ImportWorkspaceMsg {
             .remove("workspace-uid")
             .ok_or_else(|| de::Error::missing_field("workspace-uid"))?;
 
-        let devpod_pro_host = options
-            .remove("devpod-pro-host")
-            .ok_or_else(|| de::Error::missing_field("devpod-pro-host"))?;
+        let kled_pro_host = options
+            .remove("kled-pro-host")
+            .ok_or_else(|| de::Error::missing_field("kled-pro-host"))?;
 
         let project = options
             .remove("project")
@@ -199,7 +199,7 @@ impl<'de> Deserialize<'de> for ImportWorkspaceMsg {
         Ok(ImportWorkspaceMsg {
             workspace_id,
             workspace_uid,
-            devpod_pro_host,
+            kled_pro_host,
             project,
             options,
         })

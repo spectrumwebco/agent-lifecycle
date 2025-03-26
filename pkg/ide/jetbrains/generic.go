@@ -10,13 +10,13 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/loft-sh/devpod/pkg/command"
-	"github.com/loft-sh/devpod/pkg/config"
-	copy2 "github.com/loft-sh/devpod/pkg/copy"
-	"github.com/loft-sh/devpod/pkg/extract"
-	devpodhttp "github.com/loft-sh/devpod/pkg/http"
-	"github.com/loft-sh/devpod/pkg/ide"
-	"github.com/loft-sh/devpod/pkg/util"
+	"github.com/loft-sh/kled/pkg/command"
+	"github.com/loft-sh/kled/pkg/config"
+	copy2 "github.com/loft-sh/kled/pkg/copy"
+	"github.com/loft-sh/kled/pkg/extract"
+	kledhttp "github.com/loft-sh/kled/pkg/http"
+	"github.com/loft-sh/kled/pkg/ide"
+	"github.com/loft-sh/kled/pkg/util"
 	"github.com/loft-sh/log"
 	"github.com/pkg/errors"
 	"github.com/skratchdot/open-golang/open"
@@ -76,7 +76,7 @@ type GenericJetBrainsServer struct {
 
 func (o *GenericJetBrainsServer) OpenGateway(workspaceFolder, workspaceID string) error {
 	o.log.Infof("Starting %s through JetBrains Gateway...", o.options.DisplayName)
-	err := open.Run(`jetbrains-gateway://connect#idePath=` + url.QueryEscape(o.getDirectory(path.Join("/", "home", o.userName))) + `&projectPath=` + url.QueryEscape(workspaceFolder) + `&host=` + workspaceID + `.devpod&port=22&user=` + url.QueryEscape(o.userName) + `&type=ssh&deploy=false`)
+	err := open.Run(`jetbrains-gateway://connect#idePath=` + url.QueryEscape(o.getDirectory(path.Join("/", "home", o.userName))) + `&projectPath=` + url.QueryEscape(workspaceFolder) + `&host=` + workspaceID + `.kled&port=22&user=` + url.QueryEscape(o.userName) + `&type=ssh&deploy=false`)
 	if err != nil {
 		o.log.Debugf("Error opening jetbrains-gateway: %v", err)
 		o.log.Errorf("Seems like you don't have JetBrains Gateway installed on your computer. Please install JetBrains Gateway via https://www.jetbrains.com/remote-development/gateway/")
@@ -86,11 +86,11 @@ func (o *GenericJetBrainsServer) OpenGateway(workspaceFolder, workspaceID string
 }
 
 func (o *GenericJetBrainsServer) GetVolume() string {
-	return fmt.Sprintf("type=volume,src=devpod-%s,dst=%s", o.options.ID, o.getDownloadFolder())
+	return fmt.Sprintf("type=volume,src=kled-%s,dst=%s", o.options.ID, o.getDownloadFolder())
 }
 
 func (o *GenericJetBrainsServer) getDownloadFolder() string {
-	return fmt.Sprintf("/var/devpod/%s", o.options.ID)
+	return fmt.Sprintf("/var/kled/%s", o.options.ID)
 }
 
 func (o *GenericJetBrainsServer) Install() error {
@@ -172,7 +172,7 @@ func (o *GenericJetBrainsServer) download(targetFolder string, log log.Logger) (
 	// initiate download
 	log.Infof("Download %s from %s", o.options.DisplayName, downloadURL)
 	defer log.Debugf("Successfully downloaded %s", o.options.DisplayName)
-	resp, err := devpodhttp.GetHTTPClient().Get(downloadURL)
+	resp, err := kledhttp.GetHTTPClient().Get(downloadURL)
 	if err != nil {
 		return "", errors.Wrap(err, "download binary")
 	}

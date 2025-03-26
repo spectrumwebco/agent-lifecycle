@@ -13,12 +13,12 @@ import (
 
 	managementv1 "github.com/loft-sh/api/v4/pkg/apis/management/v1"
 	storagev1 "github.com/loft-sh/api/v4/pkg/apis/storage/v1"
-	"github.com/loft-sh/devpod/pkg/client/clientimplementation"
-	"github.com/loft-sh/devpod/pkg/config"
-	daemon "github.com/loft-sh/devpod/pkg/daemon/platform"
-	"github.com/loft-sh/devpod/pkg/platform"
-	providerpkg "github.com/loft-sh/devpod/pkg/provider"
-	"github.com/loft-sh/devpod/pkg/types"
+	"github.com/loft-sh/kled/pkg/client/clientimplementation"
+	"github.com/loft-sh/kled/pkg/config"
+	daemon "github.com/loft-sh/kled/pkg/daemon/platform"
+	"github.com/loft-sh/kled/pkg/platform"
+	providerpkg "github.com/loft-sh/kled/pkg/provider"
+	"github.com/loft-sh/kled/pkg/types"
 	"github.com/loft-sh/log"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -173,7 +173,7 @@ func listProWorkspaces(ctx context.Context, devPodConfig *config.Config, owner p
 
 func listProWorkspacesForProvider(ctx context.Context, devPodConfig *config.Config, provider string, providerConfig *providerpkg.ProviderConfig, owner platform.OwnerFilter, log log.Logger) ([]*providerpkg.Workspace, error) {
 	var (
-		instances []managementv1.DevPodWorkspaceInstance
+		instances []managementv1.KledWorkspaceInstance
 		err       error
 	)
 	if providerConfig.IsProxyProvider() {
@@ -200,14 +200,14 @@ func listProWorkspacesForProvider(ctx context.Context, devPodConfig *config.Conf
 		}
 
 		// id
-		id := instance.GetLabels()[storagev1.DevPodWorkspaceIDLabel]
+		id := instance.GetLabels()[storagev1.KledWorkspaceIDLabel]
 		if id == "" {
 			log.Debugf("no ID label for pro workspace \"%s\" found, skipping", instance.GetName())
 			continue
 		}
 
 		// uid
-		uid := instance.GetLabels()[storagev1.DevPodWorkspaceUIDLabel]
+		uid := instance.GetLabels()[storagev1.KledWorkspaceUIDLabel]
 		if uid == "" {
 			log.Debugf("no UID label for pro workspace \"%s\" found, skipping", instance.GetName())
 			continue
@@ -218,9 +218,9 @@ func listProWorkspacesForProvider(ctx context.Context, devPodConfig *config.Conf
 
 		// source
 		source := providerpkg.WorkspaceSource{}
-		if instance.Annotations != nil && instance.Annotations[storagev1.DevPodWorkspaceSourceAnnotation] != "" {
+		if instance.Annotations != nil && instance.Annotations[storagev1.KledWorkspaceSourceAnnotation] != "" {
 			// source to workspace config source
-			rawSource := instance.Annotations[storagev1.DevPodWorkspaceSourceAnnotation]
+			rawSource := instance.Annotations[storagev1.KledWorkspaceSourceAnnotation]
 			s := providerpkg.ParseWorkspaceSource(rawSource)
 			if s == nil {
 				log.ErrorStreamOnly().Warnf("unable to parse workspace source \"%s\": %v", rawSource)

@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/loft-sh/devpod/pkg/upgrade"
+	"github.com/loft-sh/kled/pkg/upgrade"
 	"github.com/loft-sh/log"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -18,7 +18,7 @@ func NewUpgradeCmd() *cobra.Command {
 	cmd := &UpgradeCmd{log: log.GetInstance()}
 	upgradeCmd := &cobra.Command{
 		Use:   "upgrade",
-		Short: "Upgrade the DevPod CLI to the newest version",
+		Short: "Upgrade the Kled CLI to the newest version",
 		Args:  cobra.NoArgs,
 		RunE:  cmd.Run,
 	}

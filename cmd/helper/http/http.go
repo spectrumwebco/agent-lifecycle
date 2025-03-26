@@ -9,7 +9,7 @@ import (
 func NewHTTPCmd(flags *flags.GlobalFlags) *cobra.Command {
 	httpCmd := &cobra.Command{
 		Use:    "http",
-		Short:  "DevPod HTTP Utility Commands",
+		Short:  "Kled HTTP Utility Commands",
 		Hidden: true,
 	}
 

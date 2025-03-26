@@ -9,7 +9,7 @@ import (
 	"github.com/loft-sh/log"
 	"github.com/skratchdot/open-golang/open"
 
-	"github.com/loft-sh/devpod/pkg/config"
+	"github.com/loft-sh/kled/pkg/config"
 )
 
 // Open first finds the zed binary for the local platform and then opens the zed editor with the given workspace folder
@@ -20,7 +20,7 @@ func Open(ctx context.Context, values map[string]config.OptionValue, userName, w
 		workspaceFolder = fmt.Sprintf("/%s", workspaceFolder)
 	}
 
-	sshHost := fmt.Sprintf("%s.devpod%s", workspaceID, workspaceFolder)
+	sshHost := fmt.Sprintf("%s.kled%s", workspaceID, workspaceFolder)
 	openURL := fmt.Sprintf("zed://ssh/%s", sshHost)
 	err := open.Run(openURL)
 	if err != nil {

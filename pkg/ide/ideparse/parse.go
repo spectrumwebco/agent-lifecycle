@@ -6,16 +6,16 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/loft-sh/devpod/pkg/command"
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/ide"
-	"github.com/loft-sh/devpod/pkg/ide/fleet"
-	"github.com/loft-sh/devpod/pkg/ide/jetbrains"
-	"github.com/loft-sh/devpod/pkg/ide/jupyter"
-	"github.com/loft-sh/devpod/pkg/ide/openvscode"
-	"github.com/loft-sh/devpod/pkg/ide/rstudio"
-	"github.com/loft-sh/devpod/pkg/ide/vscode"
-	"github.com/loft-sh/devpod/pkg/provider"
+	"github.com/loft-sh/kled/pkg/command"
+	"github.com/loft-sh/kled/pkg/config"
+	"github.com/loft-sh/kled/pkg/ide"
+	"github.com/loft-sh/kled/pkg/ide/fleet"
+	"github.com/loft-sh/kled/pkg/ide/jetbrains"
+	"github.com/loft-sh/kled/pkg/ide/jupyter"
+	"github.com/loft-sh/kled/pkg/ide/openvscode"
+	"github.com/loft-sh/kled/pkg/ide/rstudio"
+	"github.com/loft-sh/kled/pkg/ide/vscode"
+	"github.com/loft-sh/kled/pkg/provider"
 	"github.com/pkg/errors"
 )
 
@@ -41,29 +41,29 @@ var AllowedIDEs = []AllowedIDE{
 		Name:        config.IDENone,
 		DisplayName: "None",
 		Options:     map[string]ide.Option{},
-		Icon:        "https://devpod.sh/assets/none.svg",
-		IconDark:    "https://devpod.sh/assets/none_dark.svg",
+		Icon:        "https://kled.sh/assets/none.svg",
+		IconDark:    "https://kled.sh/assets/none_dark.svg",
 		Group:       config.IDEGroupPrimary,
 	},
 	{
 		Name:        config.IDEVSCode,
 		DisplayName: "VSCode",
 		Options:     vscode.Options,
-		Icon:        "https://devpod.sh/assets/vscode.svg",
+		Icon:        "https://kled.sh/assets/vscode.svg",
 		Group:       config.IDEGroupPrimary,
 	},
 	{
 		Name:        config.IDEOpenVSCode,
 		DisplayName: "VSCode Browser",
 		Options:     openvscode.Options,
-		Icon:        "https://devpod.sh/assets/vscodebrowser.svg",
+		Icon:        "https://kled.sh/assets/vscodebrowser.svg",
 		Group:       config.IDEGroupPrimary,
 	},
 	{
 		Name:         config.IDECursor,
 		DisplayName:  "Cursor",
 		Options:      vscode.Options,
-		Icon:         "https://devpod.sh/assets/cursor.svg",
+		Icon:         "https://kled.sh/assets/cursor.svg",
 		Experimental: true,
 		Group:        config.IDEGroupPrimary,
 	},
@@ -71,7 +71,7 @@ var AllowedIDEs = []AllowedIDE{
 		Name:         config.IDEZed,
 		DisplayName:  "Zed",
 		Options:      ide.Options{},
-		Icon:         "https://devpod.sh/assets/zed.svg",
+		Icon:         "https://kled.sh/assets/zed.svg",
 		Experimental: true,
 		Group:        config.IDEGroupPrimary,
 	},
@@ -79,7 +79,7 @@ var AllowedIDEs = []AllowedIDE{
 		Name:         config.IDECodium,
 		DisplayName:  "Codium",
 		Options:      vscode.Options,
-		Icon:         "https://devpod.sh/assets/codium.svg",
+		Icon:         "https://kled.sh/assets/codium.svg",
 		Experimental: true,
 		Group:        config.IDEGroupPrimary,
 	},
@@ -87,35 +87,35 @@ var AllowedIDEs = []AllowedIDE{
 		Name:        config.IDEIntellij,
 		DisplayName: "Intellij",
 		Options:     jetbrains.IntellijOptions,
-		Icon:        "https://devpod.sh/assets/intellij.svg",
+		Icon:        "https://kled.sh/assets/intellij.svg",
 		Group:       config.IDEGroupJetBrains,
 	},
 	{
 		Name:        config.IDEPyCharm,
 		DisplayName: "PyCharm",
 		Options:     jetbrains.PyCharmOptions,
-		Icon:        "https://devpod.sh/assets/pycharm.svg",
+		Icon:        "https://kled.sh/assets/pycharm.svg",
 		Group:       config.IDEGroupJetBrains,
 	},
 	{
 		Name:        config.IDEPhpStorm,
 		DisplayName: "PhpStorm",
 		Options:     jetbrains.PhpStormOptions,
-		Icon:        "https://devpod.sh/assets/phpstorm.svg",
+		Icon:        "https://kled.sh/assets/phpstorm.svg",
 		Group:       config.IDEGroupJetBrains,
 	},
 	{
 		Name:        config.IDERider,
 		DisplayName: "Rider",
 		Options:     jetbrains.RiderOptions,
-		Icon:        "https://devpod.sh/assets/rider.svg",
+		Icon:        "https://kled.sh/assets/rider.svg",
 		Group:       config.IDEGroupJetBrains,
 	},
 	{
 		Name:         config.IDEFleet,
 		DisplayName:  "Fleet",
 		Options:      fleet.Options,
-		Icon:         "https://devpod.sh/assets/fleet.svg",
+		Icon:         "https://kled.sh/assets/fleet.svg",
 		Experimental: true,
 		Group:        config.IDEGroupJetBrains,
 	},
@@ -123,50 +123,50 @@ var AllowedIDEs = []AllowedIDE{
 		Name:        config.IDEGoland,
 		DisplayName: "Goland",
 		Options:     jetbrains.GolandOptions,
-		Icon:        "https://devpod.sh/assets/goland.svg",
+		Icon:        "https://kled.sh/assets/goland.svg",
 		Group:       config.IDEGroupJetBrains,
 	},
 	{
 		Name:        config.IDEWebStorm,
 		DisplayName: "WebStorm",
 		Options:     jetbrains.WebStormOptions,
-		Icon:        "https://devpod.sh/assets/webstorm.svg",
+		Icon:        "https://kled.sh/assets/webstorm.svg",
 		Group:       config.IDEGroupJetBrains,
 	},
 	{
 		Name:        config.IDERustRover,
 		DisplayName: "RustRover",
 		Options:     jetbrains.RustRoverOptions,
-		Icon:        "https://devpod.sh/assets/rustrover.svg",
+		Icon:        "https://kled.sh/assets/rustrover.svg",
 		Group:       config.IDEGroupJetBrains,
 	},
 	{
 		Name:        config.IDERubyMine,
 		DisplayName: "RubyMine",
 		Options:     jetbrains.RubyMineOptions,
-		Icon:        "https://devpod.sh/assets/rubymine.svg",
+		Icon:        "https://kled.sh/assets/rubymine.svg",
 		Group:       config.IDEGroupJetBrains,
 	},
 	{
 		Name:        config.IDECLion,
 		DisplayName: "CLion",
 		Options:     jetbrains.CLionOptions,
-		Icon:        "https://devpod.sh/assets/clion.svg",
+		Icon:        "https://kled.sh/assets/clion.svg",
 		Group:       config.IDEGroupJetBrains,
 	},
 	{
 		Name:        config.IDEDataSpell,
 		DisplayName: "DataSpell",
 		Options:     jetbrains.DataSpellOptions,
-		Icon:        "https://devpod.sh/assets/dataspell.svg",
+		Icon:        "https://kled.sh/assets/dataspell.svg",
 		Group:       config.IDEGroupJetBrains,
 	},
 	{
 		Name:         config.IDEJupyterNotebook,
 		DisplayName:  "Jupyter Notebook",
 		Options:      jupyter.Options,
-		Icon:         "https://devpod.sh/assets/jupyter.svg",
-		IconDark:     "https://devpod.sh/assets/jupyter_dark.svg",
+		Icon:         "https://kled.sh/assets/jupyter.svg",
+		IconDark:     "https://kled.sh/assets/jupyter_dark.svg",
 		Experimental: true,
 		Group:        config.IDEGroupOther,
 	},
@@ -174,7 +174,7 @@ var AllowedIDEs = []AllowedIDE{
 		Name:         config.IDEVSCodeInsiders,
 		DisplayName:  "VSCode Insiders",
 		Options:      vscode.Options,
-		Icon:         "https://devpod.sh/assets/vscode_insiders.svg",
+		Icon:         "https://kled.sh/assets/vscode_insiders.svg",
 		Experimental: true,
 		Group:        config.IDEGroupOther,
 	},
@@ -182,7 +182,7 @@ var AllowedIDEs = []AllowedIDE{
 		Name:         config.IDEPositron,
 		DisplayName:  "Positron",
 		Options:      vscode.Options,
-		Icon:         "https://devpod.sh/assets/positron.svg",
+		Icon:         "https://kled.sh/assets/positron.svg",
 		Experimental: true,
 		Group:        config.IDEGroupOther,
 	},
@@ -190,7 +190,7 @@ var AllowedIDEs = []AllowedIDE{
 		Name:         config.IDERStudio,
 		DisplayName:  "RStudio Server",
 		Options:      rstudio.Options,
-		Icon:         "https://devpod.sh/assets/rstudio.svg",
+		Icon:         "https://kled.sh/assets/rstudio.svg",
 		Experimental: true,
 		Group:        config.IDEGroupOther,
 	},

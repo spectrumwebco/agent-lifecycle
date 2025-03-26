@@ -82,12 +82,12 @@ func NewUpCmd(f *flags.GlobalFlags) *cobra.Command {
 		Use:   "up [flags] [workspace-path|workspace-name]",
 		Short: "Starts a new workspace",
 		RunE: func(cobraCmd *cobra.Command, args []string) error {
-			devPodConfig, err := config.LoadConfig(cmd.Context, cmd.Provider)
+			kledConfig, err := config.LoadConfig(cmd.Context, cmd.Provider)
 			if err != nil {
 				return err
 			}
 
-			if devPodConfig.ContextOption(config.ContextOptionSSHStrictHostKeyChecking) == "true" {
+			if kledConfig.ContextOption(config.ContextOptionSSHStrictHostKeyChecking) == "true" {
 				cmd.StrictHostKeyChecking = true
 			}
 
@@ -103,8 +103,8 @@ func NewUpCmd(f *flags.GlobalFlags) *cobra.Command {
 			return cmd.Run(ctx, devPodConfig, client, args, logger)
 		},
 	}
-	upCmd.Flags().BoolVar(&cmd.ConfigureSSH, "configure-ssh", true, "If true will configure the ssh config to include the DevPod workspace")
-	upCmd.Flags().BoolVar(&cmd.GPGAgentForwarding, "gpg-agent-forwarding", false, "If true forward the local gpg-agent to the DevPod workspace")
+	upCmd.Flags().BoolVar(&cmd.ConfigureSSH, "configure-ssh", true, "If true will configure the ssh config to include the Kled workspace")
+	upCmd.Flags().BoolVar(&cmd.GPGAgentForwarding, "gpg-agent-forwarding", false, "If true forward the local gpg-agent to the Kled workspace")
 	upCmd.Flags().StringVar(&cmd.SSHConfigPath, "ssh-config", "", "The path to the ssh config to modify, if empty will use ~/.ssh/config")
 	upCmd.Flags().StringVar(&cmd.DotfilesSource, "dotfiles", "", "The path or url to the dotfiles to use in the container")
 	upCmd.Flags().StringVar(&cmd.DotfilesScript, "dotfiles-script", "", "The path in dotfiles directory to use to install the dotfiles, if empty will try to guess")
@@ -143,7 +143,7 @@ func NewUpCmd(f *flags.GlobalFlags) *cobra.Command {
 // Run runs the command logic
 func (cmd *UpCmd) Run(
 	ctx context.Context,
-	devPodConfig *config.Config,
+	kledConfig *config.Config,
 	client client2.BaseWorkspaceClient,
 	args []string,
 	log log.Logger,
@@ -166,8 +166,7 @@ func (cmd *UpCmd) Run(
 		log.Debug("Reusing SSH_AUTH_SOCK is not supported with platform mode, consider launching the IDE from the platform UI")
 	}
 
-	// run devpod agent up
-	result, err := cmd.devPodUp(ctx, devPodConfig, client, log)
+	result, err := cmd.kledUp(ctx, kledConfig, client, log)
 	if err != nil {
 		return err
 	} else if result == nil {
@@ -190,19 +189,19 @@ func (cmd *UpCmd) Run(
 
 	// configure container ssh
 	if cmd.ConfigureSSH {
-		devPodHome := ""
-		envDevPodHome, ok := os.LookupEnv("DEVPOD_HOME")
+		kledHome := ""
+		envKledHome, ok := os.LookupEnv("KLED_HOME")
 		if ok {
-			devPodHome = envDevPodHome
+			kledHome = envKledHome
 		}
-		setupGPGAgentForwarding := cmd.GPGAgentForwarding || devPodConfig.ContextOption(config.ContextOptionGPGAgentForwarding) == "true"
+		setupGPGAgentForwarding := cmd.GPGAgentForwarding || kledConfig.ContextOption(config.ContextOptionGPGAgentForwarding) == "true"
 
-		err = configureSSH(client, cmd.SSHConfigPath, user, workdir, setupGPGAgentForwarding, devPodHome)
+		err = configureSSH(client, cmd.SSHConfigPath, user, workdir, setupGPGAgentForwarding, kledHome)
 		if err != nil {
 			return err
 		}
 
-		log.Infof("Run 'ssh %s.devpod' to ssh into the devcontainer", client.Workspace())
+		log.Infof("Run 'ssh %s.kled' to ssh into the devcontainer", client.Workspace())
 	}
 
 	// setup git ssh signature
@@ -332,9 +331,9 @@ func (cmd *UpCmd) Run(
 	return nil
 }
 
-func (cmd *UpCmd) devPodUp(
+func (cmd *UpCmd) kledUp(
 	ctx context.Context,
-	devPodConfig *config.Config,
+	kledConfig *config.Config,
 	client client2.BaseWorkspaceClient,
 	log log.Logger,
 ) (*config2.Result, error) {
@@ -381,7 +380,7 @@ func (cmd *UpCmd) devPodUp(
 	return result, nil
 }
 
-func (cmd *UpCmd) devPodUpProxy(
+func (cmd *UpCmd) kledUpProxy(
 	ctx context.Context,
 	client client2.ProxyClient,
 	log log.Logger,
@@ -408,9 +407,8 @@ func (cmd *UpCmd) devPodUpProxy(
 		defer log.Debugf("Done executing up command")
 		defer cancel()
 
-		// build devpod up options
-		workspace := client.WorkspaceConfig()
-		baseOptions := cmd.CLIOptions
+	workspace := client.WorkspaceConfig()
+	baseOptions := cmd.CLIOptions
 		baseOptions.ID = workspace.ID
 		baseOptions.DevContainerPath = workspace.DevContainerPath
 		baseOptions.DevContainerImage = workspace.DevContainerImage
@@ -457,11 +455,10 @@ func (cmd *UpCmd) devPodUpProxy(
 	return result, <-errChan
 }
 
-func (cmd *UpCmd) devPodUpDaemon(
+func (cmd *UpCmd) kledUpDaemon(
 	ctx context.Context,
 	client client2.DaemonClient,
 ) (*config2.Result, error) {
-	// build devpod up options
 	workspace := client.WorkspaceConfig()
 	baseOptions := cmd.CLIOptions
 	baseOptions.ID = workspace.ID
@@ -484,9 +481,9 @@ func (cmd *UpCmd) devPodUpDaemon(
 	})
 }
 
-func (cmd *UpCmd) devPodUpMachine(
+func (cmd *UpCmd) kledUpMachine(
 	ctx context.Context,
-	devPodConfig *config.Config,
+	kledConfig *config.Config,
 	client client2.WorkspaceClient,
 	log log.Logger,
 ) (*config2.Result, error) {
@@ -576,7 +573,7 @@ func (cmd *UpCmd) devPodUpMachine(
 func startJupyterNotebookInBrowser(
 	forwardGpg bool,
 	ctx context.Context,
-	devPodConfig *config.Config,
+	kledConfig *config.Config,
 	client client2.BaseWorkspaceClient,
 	user string,
 	ideOptions map[string]config.OptionValue,
@@ -633,7 +630,7 @@ func startJupyterNotebookInBrowser(
 func startRStudioInBrowser(
 	forwardGpg bool,
 	ctx context.Context,
-	devPodConfig *config.Config,
+	kledConfig *config.Config,
 	client client2.BaseWorkspaceClient,
 	user string,
 	ideOptions map[string]config.OptionValue,
@@ -725,7 +722,7 @@ func startFleet(ctx context.Context, client client2.BaseWorkspaceClient, logger 
 func startVSCodeInBrowser(
 	forwardGpg bool,
 	ctx context.Context,
-	devPodConfig *config.Config,
+	kledConfig *config.Config,
 	client client2.BaseWorkspaceClient,
 	workspaceFolder, user string,
 	ideOptions map[string]config.OptionValue,
@@ -862,7 +859,7 @@ func setupBackhaul(client client2.BaseWorkspaceClient, authSockId string, log lo
 
 func startBrowserTunnel(
 	ctx context.Context,
-	devPodConfig *config.Config,
+	kledConfig *config.Config,
 	client client2.BaseWorkspaceClient,
 	user, targetURL string,
 	forwardPorts bool,
@@ -970,7 +967,7 @@ func startBrowserTunnel(
 	return nil
 }
 
-func configureSSH(client client2.BaseWorkspaceClient, sshConfigPath, user, workdir string, gpgagent bool, devPodHome string) error {
+func configureSSH(client client2.BaseWorkspaceClient, sshConfigPath, user, workdir string, gpgagent bool, kledHome string) error {
 	path, err := devssh.ResolveSSHConfigPath(sshConfigPath)
 	if err != nil {
 		return errors.Wrap(err, "Invalid ssh config path")
@@ -984,7 +981,7 @@ func configureSSH(client client2.BaseWorkspaceClient, sshConfigPath, user, workd
 		user,
 		workdir,
 		gpgagent,
-		devPodHome,
+		kledHome,
 		log.Default,
 	)
 	if err != nil {
@@ -994,10 +991,10 @@ func configureSSH(client client2.BaseWorkspaceClient, sshConfigPath, user, workd
 	return nil
 }
 
-func mergeDevPodUpOptions(baseOptions *provider2.CLIOptions) error {
+func mergeKledUpOptions(baseOptions *provider2.CLIOptions) error {
 	oldOptions := *baseOptions
 	found, err := clientimplementation.DecodeOptionsFromEnv(
-		clientimplementation.DevPodFlagsUp,
+		clientimplementation.KledFlagsUp,
 		baseOptions,
 	)
 	if err != nil {
@@ -1063,15 +1060,15 @@ func setupDotfiles(
 	dotfiles, script string,
 	envFiles, envKeyValuePairs []string,
 	client client2.BaseWorkspaceClient,
-	devPodConfig *config.Config,
+	kledConfig *config.Config,
 	log log.Logger,
 ) error {
-	dotfilesRepo := devPodConfig.ContextOption(config.ContextOptionDotfilesURL)
+	dotfilesRepo := kledConfig.ContextOption(config.ContextOptionDotfilesURL)
 	if dotfiles != "" {
 		dotfilesRepo = dotfiles
 	}
 
-	dotfilesScript := devPodConfig.ContextOption(config.ContextOptionDotfilesScript)
+	dotfilesScript := kledConfig.ContextOption(config.ContextOptionDotfilesScript)
 	if script != "" {
 		dotfilesScript = script
 	}
@@ -1082,9 +1079,9 @@ func setupDotfiles(
 	}
 
 	log.Infof("Dotfiles git repository %s specified", dotfilesRepo)
-	log.Debug("Cloning dotfiles into the devcontainer...")
+	log.Debug("Cloning dotfiles into the container...")
 
-	dotCmd, err := buildDotCmd(devPodConfig, dotfilesRepo, dotfilesScript, envFiles, envKeyValuePairs, client, log)
+	dotCmd, err := buildDotCmd(kledConfig, dotfilesRepo, dotfilesScript, envFiles, envKeyValuePairs, client, log)
 	if err != nil {
 		return err
 	}
@@ -1104,12 +1101,12 @@ func setupDotfiles(
 		return err
 	}
 
-	log.Infof("Done setting up dotfiles into the devcontainer")
+	log.Infof("Done setting up dotfiles into the container")
 
 	return nil
 }
 
-func buildDotCmdAgentArguments(devPodConfig *config.Config, dotfilesRepo, dotfilesScript string, log log.Logger) []string {
+func buildDotCmdAgentArguments(	kledConfig *config.Config, dotfilesRepo, dotfilesScript string, log log.Logger) []string {
 	agentArguments := []string{
 		"agent",
 		"workspace",
@@ -1118,7 +1115,7 @@ func buildDotCmdAgentArguments(devPodConfig *config.Config, dotfilesRepo, dotfil
 		dotfilesRepo,
 	}
 
-	if devPodConfig.ContextOption(config.ContextOptionSSHStrictHostKeyChecking) == "true" {
+	if kledConfig.ContextOption(config.ContextOptionSSHStrictHostKeyChecking) == "true" {
 		agentArguments = append(agentArguments, "--strict-host-key-checking")
 	}
 
@@ -1134,7 +1131,7 @@ func buildDotCmdAgentArguments(devPodConfig *config.Config, dotfilesRepo, dotfil
 	return agentArguments
 }
 
-func buildDotCmd(devPodConfig *config.Config, dotfilesRepo, dotfilesScript string, envFiles, envKeyValuePairs []string, client client2.BaseWorkspaceClient, log log.Logger) (*exec.Cmd, error) {
+func buildDotCmd(	kledConfig *config.Config, dotfilesRepo, dotfilesScript string, envFiles, envKeyValuePairs []string, client client2.BaseWorkspaceClient, log log.Logger) (*exec.Cmd, error) {
 	sshCmd := []string{
 		"ssh",
 		"--agent-forwarding=true",
@@ -1168,7 +1165,7 @@ func buildDotCmd(devPodConfig *config.Config, dotfilesRepo, dotfilesScript strin
 		client.Workspace(),
 		"--log-output=raw",
 		"--command",
-		agent.ContainerDevPodHelperLocation+" "+strings.Join(agentArguments, " "),
+		agent.ContainerKledHelperLocation+" "+strings.Join(agentArguments, " "),
 	)
 	execPath, err := os.Executable()
 	if err != nil {
@@ -1228,7 +1225,7 @@ func setupGitSSHSignature(signingKey string, client client2.BaseWorkspaceClient,
 		"--context",
 		client.Context(),
 		client.Workspace(),
-		"--command", fmt.Sprintf("devpod agent git-ssh-signature-helper %s", signingKey),
+		"--command", fmt.Sprintf("kled agent git-ssh-signature-helper %s", signingKey),
 	).Run()
 	if err != nil {
 		log.Error("failure in setting up git ssh signature helper")
@@ -1279,10 +1276,9 @@ func performGpgForwarding(
 	return nil
 }
 
-// checkProviderUpdate currently only ensures the local provider is in sync with the remote for DevPod Pro instances
 // Potentially auto-upgrade other providers in the future.
-func checkProviderUpdate(devPodConfig *config.Config, proInstance *provider2.ProInstance, log log.Logger) error {
-	if version.GetVersion() == version.DevVersion {
+func checkProviderUpdate(	kledConfig *config.Config, proInstance *provider2.ProInstance, log log.Logger) error {
+	if version.GetVersion() == version.KledVersion {
 		log.Debugf("Skipping provider upgrade check during development")
 		return nil
 	}
@@ -1292,16 +1288,16 @@ func checkProviderUpdate(devPodConfig *config.Config, proInstance *provider2.Pro
 	}
 
 	// compare versions
-	newVersion, err := platform.GetProInstanceDevPodVersion(proInstance)
+	newVersion, err := platform.GetProInstanceKledVersion(proInstance)
 	if err != nil {
 		return fmt.Errorf("version for pro instance %s: %w", proInstance.Host, err)
 	}
 
-	p, err := workspace2.FindProvider(devPodConfig, proInstance.Provider, log)
+	p, err := workspace2.FindProvider(kledConfig, proInstance.Provider, log)
 	if err != nil {
 		return fmt.Errorf("get provider config for pro provider %s: %w", proInstance.Provider, err)
 	}
-	if p.Config.Version == version.DevVersion {
+	if p.Config.Version == version.KledVersion {
 		return nil
 	}
 	if p.Config.Source.Internal {
@@ -1321,7 +1317,7 @@ func checkProviderUpdate(devPodConfig *config.Config, proInstance *provider2.Pro
 	}
 	log.Infof("New provider version available, attempting to update %s from %s to %s", proInstance.Provider, p.Config.Version, newVersion)
 
-	providerSource, err := workspace2.ResolveProviderSource(devPodConfig, proInstance.Provider, log)
+	providerSource, err := workspace2.ResolveProviderSource(kledConfig, proInstance.Provider, log)
 	if err != nil {
 		return fmt.Errorf("resolve provider source %s: %w", proInstance.Provider, err)
 	}
@@ -1332,7 +1328,7 @@ func checkProviderUpdate(devPodConfig *config.Config, proInstance *provider2.Pro
 	}
 	providerSource = splitted[0] + "@" + newVersion
 
-	_, err = workspace2.UpdateProvider(devPodConfig, proInstance.Provider, providerSource, log)
+	_, err = workspace2.UpdateProvider(kledConfig, proInstance.Provider, providerSource, log)
 	if err != nil {
 		return fmt.Errorf("update provider %s: %w", proInstance.Provider, err)
 	}
@@ -1341,8 +1337,8 @@ func checkProviderUpdate(devPodConfig *config.Config, proInstance *provider2.Pro
 	return nil
 }
 
-func getProInstance(devPodConfig *config.Config, providerName string, log log.Logger) *provider2.ProInstance {
-	proInstances, err := workspace2.ListProInstances(devPodConfig, log)
+func getProInstance(	kledConfig *config.Config, providerName string, log log.Logger) *provider2.ProInstance {
+	proInstances, err := workspace2.ListProInstances(kledConfig, log)
 	if err != nil {
 		return nil
 	} else if len(proInstances) == 0 {
@@ -1357,9 +1353,9 @@ func getProInstance(devPodConfig *config.Config, providerName string, log log.Lo
 	return proInstance
 }
 
-func (cmd *UpCmd) prepareClient(ctx context.Context, devPodConfig *config.Config, args []string) (client2.BaseWorkspaceClient, log.Logger, error) {
+func (cmd *UpCmd) prepareClient(ctx context.Context,	kledConfig *config.Config, args []string) (client2.BaseWorkspaceClient, log.Logger, error) {
 	// try to parse flags from env
-	if err := mergeDevPodUpOptions(&cmd.CLIOptions); err != nil {
+	if err := mergeKledUpOptions(&cmd.CLIOptions); err != nil {
 		return nil, nil, err
 	}
 
@@ -1370,7 +1366,7 @@ func (cmd *UpCmd) prepareClient(ctx context.Context, devPodConfig *config.Config
 		logger.Debug("Using error output stream")
 
 		// merge context options from env
-		config.MergeContextOptions(devPodConfig.Current(), os.Environ())
+		config.MergeContextOptions(kledConfig.Current(), os.Environ())
 	}
 
 	if err := mergeEnvFromFiles(&cmd.CLIOptions); err != nil {
@@ -1388,7 +1384,7 @@ func (cmd *UpCmd) prepareClient(ctx context.Context, devPodConfig *config.Config
 	}
 
 	if cmd.SSHConfigPath == "" {
-		cmd.SSHConfigPath = devPodConfig.ContextOption(config.ContextOptionSSHConfigPath)
+		cmd.SSHConfigPath = kledConfig.ContextOption(config.ContextOptionSSHConfigPath)
 	}
 
 	client, err := workspace2.Resolve(

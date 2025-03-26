@@ -5,7 +5,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/loft-sh/devpod/cmd/agent"
+	"github.com/loft-sh/devpod/cmd/agent" // TODO: Update import paths when repository is renamed
 	"github.com/loft-sh/devpod/cmd/completion"
 	"github.com/loft-sh/devpod/cmd/context"
 	"github.com/loft-sh/devpod/cmd/flags"
@@ -30,8 +30,8 @@ var globalFlags *flags.GlobalFlags
 // NewRootCmd returns a new root command
 func NewRootCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:           "devpod",
-		Short:         "DevPod",
+		Use:           "kled",
+		Short:         "Kled",
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		PersistentPreRunE: func(cobraCmd *cobra.Command, args []string) error {
@@ -47,24 +47,24 @@ func NewRootCmd() *cobra.Command {
 				log2.Default.SetLevel(logrus.FatalLevel)
 			} else if globalFlags.Debug {
 				log2.Default.SetLevel(logrus.DebugLevel)
-			} else if os.Getenv(clientimplementation.DevPodDebug) == "true" {
+			} else if os.Getenv(clientimplementation.KledDebug) == "true" {
 				log2.Default.SetLevel(logrus.DebugLevel)
 			}
 
-			if globalFlags.DevPodHome != "" {
-				_ = os.Setenv(config.DEVPOD_HOME, globalFlags.DevPodHome)
+			if globalFlags.KledHome != "" {
+				_ = os.Setenv(config.KLED_HOME, globalFlags.KledHome)
 			}
 
-			devPodConfig, err := config.LoadConfig(globalFlags.Context, globalFlags.Provider)
+			kledConfig, err := config.LoadConfig(globalFlags.Context, globalFlags.Provider)
 			if err == nil {
-				telemetry.StartCLI(devPodConfig, cobraCmd)
+				telemetry.StartCLI(kledConfig, cobraCmd)
 			}
 
 			return nil
 		},
 		PersistentPostRunE: func(cmd *cobra.Command, args []string) error {
-			if globalFlags.DevPodHome != "" {
-				_ = os.Unsetenv(config.DEVPOD_HOME)
+			if globalFlags.KledHome != "" {
+				_ = os.Unsetenv(config.KLED_HOME)
 			}
 
 			return nil

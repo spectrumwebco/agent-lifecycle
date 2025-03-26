@@ -31,7 +31,7 @@ func NewDeleteCmd(flags *flags.GlobalFlags) *cobra.Command {
 		Long: `Deletes an existing workspace. You can specify the workspace by its path or name.
 If the workspace is not found, you can use the --ignore-not-found flag to treat it as a successful delete.`,
 		RunE: func(_ *cobra.Command, args []string) error {
-			_, err := clientimplementation.DecodeOptionsFromEnv(clientimplementation.DevPodFlagsDelete, &cmd.DeleteOptions)
+			_, err := clientimplementation.DecodeOptionsFromEnv(clientimplementation.KledFlagsDelete, &cmd.DeleteOptions)
 			if err != nil {
 				return fmt.Errorf("decode up options: %w", err)
 			}

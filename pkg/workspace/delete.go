@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	client2 "github.com/loft-sh/devpod/pkg/client"
-	"github.com/loft-sh/devpod/pkg/client/clientimplementation"
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/platform"
+	client2 "github.com/loft-sh/kled/pkg/client"
+	"github.com/loft-sh/kled/pkg/client/clientimplementation"
+	"github.com/loft-sh/kled/pkg/config"
+	"github.com/loft-sh/kled/pkg/platform"
 	"github.com/loft-sh/log"
 	"github.com/pkg/errors"
 )
@@ -17,7 +17,7 @@ func Delete(ctx context.Context, devPodConfig *config.Config, args []string, ign
 	client, err := Get(ctx, devPodConfig, args, false, owner, log)
 	if err != nil {
 		if len(args) == 0 {
-			return "", fmt.Errorf("cannot delete workspace because there was an error loading the workspace: %w. Please specify the id of the workspace you want to delete. E.g. 'devpod delete my-workspace --force'", err)
+			return "", fmt.Errorf("cannot delete workspace because there was an error loading the workspace: %w. Please specify the id of the workspace you want to delete. E.g. 'kled delete my-workspace --force'", err)
 		}
 
 		workspaceID := Exists(ctx, devPodConfig, args, "", owner, log)

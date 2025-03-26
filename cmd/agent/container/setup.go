@@ -80,8 +80,8 @@ func NewSetupContainerCmd(flags *flags.GlobalFlags) *cobra.Command {
 		},
 	}
 	setupContainerCmd.Flags().BoolVar(&cmd.StreamMounts, "stream-mounts", false, "If true, will try to stream the bind mounts from the host")
-	setupContainerCmd.Flags().BoolVar(&cmd.ChownWorkspace, "chown-workspace", false, "If DevPod should chown the workspace to the remote user")
-	setupContainerCmd.Flags().BoolVar(&cmd.InjectGitCredentials, "inject-git-credentials", false, "If DevPod should inject git credentials during setup")
+	setupContainerCmd.Flags().BoolVar(&cmd.ChownWorkspace, "chown-workspace", false, "If Kled should chown the workspace to the remote user")
+	setupContainerCmd.Flags().BoolVar(&cmd.InjectGitCredentials, "inject-git-credentials", false, "If Kled should inject git credentials during setup")
 	setupContainerCmd.Flags().StringVar(&cmd.ContainerWorkspaceInfo, "container-workspace-info", "", "The container workspace info")
 	setupContainerCmd.Flags().StringVar(&cmd.SetupInfo, "setup-info", "", "The container setup info")
 	setupContainerCmd.Flags().StringVar(&cmd.AccessKey, "access-key", "", "Access Key to use")
@@ -201,8 +201,8 @@ func (cmd *SetupContainerCmd) Run(ctx context.Context) error {
 
 	// start container daemon if necessary
 	if !workspaceInfo.CLIOptions.Platform.Enabled && !workspaceInfo.CLIOptions.DisableDaemon && workspaceInfo.ContainerTimeout != "" {
-		err = single.Single("devpod.daemon.pid", func() (*exec.Cmd, error) {
-			logger.Debugf("Start DevPod Container Daemon with Inactivity Timeout %s", workspaceInfo.ContainerTimeout)
+		err = single.Single("kled.daemon.pid", func() (*exec.Cmd, error) {
+			logger.Debugf("Start Kled Container Daemon with Inactivity Timeout %s", workspaceInfo.ContainerTimeout)
 			binaryPath, err := os.Executable()
 			if err != nil {
 				return nil, err
@@ -273,8 +273,8 @@ func dockerlessBuild(
 	}
 
 	// check if build info is there
-	fallbackDir := filepath.Join(config.DevPodDockerlessBuildInfoFolder, config.DevPodContextFeatureFolder)
-	buildInfoDir := filepath.Join(buildContext, config.DevPodContextFeatureFolder)
+	fallbackDir := filepath.Join(config.KledDockerlessBuildInfoFolder, config.KledContextFeatureFolder)
+	buildInfoDir := filepath.Join(buildContext, config.KledContextFeatureFolder)
 	_, err = os.Stat(buildInfoDir)
 	if err != nil {
 		// try to rename from fallback dir
@@ -562,7 +562,7 @@ func configureSystemGitCredentials(ctx context.Context, cancel context.CancelFun
 	}
 
 	gitCredentials := fmt.Sprintf("!'%s' agent git-credentials --port %d", binaryPath, serverPort)
-	_ = os.Setenv("DEVPOD_GIT_HELPER_PORT", strconv.Itoa(serverPort))
+	_ = os.Setenv("KLED_GIT_HELPER_PORT", strconv.Itoa(serverPort))
 
 	err = git.CommandContext(ctx, git.GetDefaultExtraEnv(false), "config", "--system", "--add", "credential.helper", gitCredentials).Run()
 	if err != nil {
@@ -592,8 +592,8 @@ func streamMount(ctx context.Context, workspaceInfo *provider2.ContainerWorkspac
 			},
 		}
 
-		// build the url
-		logger.Infof("Download %s into DevContainer %s", m.Source, m.Target)
+	// build the url
+	logger.Infof("Download %s into KledContainer %s", m.Source, m.Target)
 		url := fmt.Sprintf(
 			"https://%s/kubernetes/management/apis/management.loft.sh/v1/namespaces/%s/devpodworkspaceinstances/%s/download?path=%s",
 			ts.RemoveProtocol(workspaceInfo.CLIOptions.Platform.PlatformHost),
@@ -636,7 +636,7 @@ func streamMount(ctx context.Context, workspaceInfo *provider2.ContainerWorkspac
 	}
 
 	// stream mount
-	logger.Infof("Copy %s into DevContainer %s", m.Source, m.Target)
+	logger.Infof("Copy %s into KledContainer %s", m.Source, m.Target)
 	stream, err := tunnelClient.StreamMount(ctx, &tunnel.StreamMountRequest{Mount: m.String()})
 	if err != nil {
 		return fmt.Errorf("init stream mount %s: %w", m.String(), err)

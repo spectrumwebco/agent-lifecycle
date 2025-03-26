@@ -34,7 +34,7 @@ func NewRebuildCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 	}
 	c := &cobra.Command{
 		Use:   "rebuild",
-		Short: "Rebuild a workspace",
+		Short: "Rebuild a Kled workspace",
 		RunE: func(cobraCmd *cobra.Command, args []string) error {
 			log.Default.SetFormat(log.TextFormat)
 
@@ -56,12 +56,12 @@ func (cmd *RebuildCmd) Run(ctx context.Context, args []string) error {
 	}
 	targetWorkspace := args[0]
 
-	devPodConfig, err := config.LoadConfig(cmd.Context, "")
+	kledConfig, err := config.LoadConfig(cmd.Context, "") // TODO: Update variable name to reflect Kled branding
 	if err != nil {
 		return err
 	}
 
-	baseClient, err := platform.InitClientFromHost(ctx, devPodConfig, cmd.Host, cmd.Log)
+	baseClient, err := platform.InitClientFromHost(ctx, kledConfig, cmd.Host, cmd.Log)
 	if err != nil {
 		return fmt.Errorf("resolve host \"%s\": %w", cmd.Host, err)
 	}

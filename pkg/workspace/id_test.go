@@ -17,23 +17,23 @@ func TestToID(t *testing.T) {
 	}{
 		{
 			name:  "Simple URL, no @, parse repo name",
-			input: "github.com/loft-sh/devpod",
-			want:  "devpod",
+			input: "github.com/loft-sh/kled",
+			want:  "kled",
 		},
 		{
 			name:  "URL with .git suffix",
-			input: "github.com/loft-sh/devpod.git",
-			want:  "devpod",
+			input: "github.com/loft-sh/kled.git",
+			want:  "kled",
 		},
 		{
 			name:  "URL with .git suffix and https prefix",
-			input: "https://github.com/loft-sh/devpod.git",
-			want:  "devpod",
+			input: "https://github.com/loft-sh/kled.git",
+			want:  "kled",
 		},
 		{
 			name:  "URL with trailing slash",
-			input: "github.com/loft-sh/devpod/",
-			want:  "devpod",
+			input: "github.com/loft-sh/kled/",
+			want:  "kled",
 		},
 		{
 			name:  "Bare string with no slash",
@@ -42,28 +42,28 @@ func TestToID(t *testing.T) {
 		},
 		{
 			name:  "Local directory",
-			input: "/home/loft/devpod",
-			want:  "devpod",
+			input: "/home/loft/kled",
+			want:  "kled",
 		},
 		{
 			name:  "Branch with valid characters",
-			input: "github.com/loft-sh/devpod@feature1",
-			want:  "github-com-loft-sh-devpod",
+			input: "github.com/loft-sh/kled@feature1",
+			want:  "github-com-loft-sh-kled",
 		},
 		{
 			name:  "Branch with valid characters and /",
-			input: "github.com/loft-sh/devpod@feat/feature1",
+			input: "github.com/loft-sh/kled@feat/feature1",
 			want:  "feat-feature1",
 		},
 		{
 			name:  "PR reference",
-			input: "github.com/loft-sh/devpod@pr/123",
+			input: "github.com/loft-sh/kled@pr/123",
 			want:  "pr-123",
 		},
 		{
 			name:  "Truncation beyond 48 characters",
-			input: "github.com/loft-sh/devpodreallylongreponame_that_exceeds_48_characters_total_length",
-			want:  "devpodreallylongreponamethatexceeds48characterst",
+			input: "github.com/loft-sh/kledreallylongreponame_that_exceeds_48_characters_total_length",
+			want:  "kledreallylongreponamethatexceeds48characterst",
 		},
 	}
 

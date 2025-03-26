@@ -253,7 +253,7 @@ func (cmd *ImportCmd) importProvider(devPodConfig *config.Config, exportConfig *
 		devPodConfig.Current().Providers[cmd.ProviderID] = exportConfig.Provider.Config
 		err = config.SaveConfig(devPodConfig)
 		if err != nil {
-			return fmt.Errorf("save devpod config: %w", err)
+			return fmt.Errorf("save kled config: %w", err)
 		}
 	}
 

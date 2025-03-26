@@ -13,10 +13,10 @@ import (
 
 const (
 	// general
-	DEVPOD           = "DEVPOD"
-	DEVPOD_OS        = "DEVPOD_OS"
-	DEVPOD_ARCH      = "DEVPOD_ARCH"
-	DEVPOD_LOG_LEVEL = "DEVPOD_LOG_LEVEL"
+	KLED           = "KLED"
+	KLED_OS        = "KLED_OS"
+	KLED_ARCH      = "KLED_ARCH"
+	KLED_LOG_LEVEL = "KLED_LOG_LEVEL"
 
 	// workspace
 	WORKSPACE_ID       = "WORKSPACE_ID"
@@ -176,16 +176,15 @@ func Merge(m1 map[string]string, m2 map[string]string) map[string]string {
 func GetBaseEnvironment(context, provider string) map[string]string {
 	retVars := map[string]string{}
 
-	// devpod binary
-	devPodBinary, _ := os.Executable()
-	retVars[DEVPOD] = filepath.ToSlash(devPodBinary)
-	retVars[DEVPOD_OS] = runtime.GOOS
-	retVars[DEVPOD_ARCH] = runtime.GOARCH
+	kledBinary, _ := os.Executable()
+	retVars[KLED] = filepath.ToSlash(kledBinary)
+	retVars[KLED_OS] = runtime.GOOS
+	retVars[KLED_ARCH] = runtime.GOARCH
 	retVars[PROVIDER_ID] = provider
 	retVars[PROVIDER_CONTEXT] = context
 	providerFolder, _ := GetProviderDir(context, provider)
 	retVars[PROVIDER_FOLDER] = filepath.ToSlash(providerFolder)
-	retVars[DEVPOD_LOG_LEVEL] = log2.Default.GetLevel().String()
+	retVars[KLED_LOG_LEVEL] = log2.Default.GetLevel().String()
 	return retVars
 }
 

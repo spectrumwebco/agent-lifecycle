@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/loft-sh/devpod/pkg/driver"
+	"github.com/loft-sh/kled/pkg/driver"
 	"github.com/pkg/errors"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -67,13 +67,13 @@ func (k *KubernetesDriver) buildPersistentVolumeClaim(
 	}
 
 	labels := map[string]string{}
-	labels[DevPodWorkspaceUIDLabel] = options.UID
-	for k, v := range ExtraDevPodLabels {
+	labels[KledWorkspaceUIDLabel] = options.UID
+	for k, v := range ExtraKledLabels {
 		labels[k] = v
 	}
 
 	annotations := map[string]string{}
-	annotations[DevPodInfoAnnotation] = containerInfo
+	annotations[KledInfoAnnotation] = containerInfo
 	extraAnnotations, err := parseLabels(k.options.PvcAnnotations)
 	if err != nil {
 		k.Log.Error("Failed to parse annotations from PVC_ANNOTATIONS option: %v", err)

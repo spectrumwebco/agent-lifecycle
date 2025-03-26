@@ -32,7 +32,7 @@ func NewSetOptionsCmd(flags *flags.GlobalFlags) *cobra.Command {
 	}
 	setOptionsCmd := &cobra.Command{
 		Use:   "set-options [provider]",
-		Short: "Sets options for the given provider. Similar to 'devpod provider use', but does not switch the default provider.",
+		Short: "Sets options for the given provider. Similar to 'kled provider use', but does not switch the default provider.",
 		RunE: func(_ *cobra.Command, args []string) error {
 			logger := log.Logger(log.Default)
 			if cmd.Dry {
@@ -55,12 +55,12 @@ func NewSetOptionsCmd(flags *flags.GlobalFlags) *cobra.Command {
 
 // Run runs the command logic
 func (cmd *SetOptionsCmd) Run(ctx context.Context, args []string, log log.Logger) error {
-	devPodConfig, err := config.LoadConfig(cmd.Context, cmd.Provider)
+	kledConfig, err := config.LoadConfig(cmd.Context, cmd.Provider) // TODO: Update variable name to reflect Kled branding
 	if err != nil {
 		return err
 	}
 
-	providerName := devPodConfig.Current().DefaultProvider
+	providerName := kledConfig.Current().DefaultProvider
 	if len(args) > 0 {
 		providerName = args[0]
 	} else if providerName == "" {
@@ -68,20 +68,20 @@ func (cmd *SetOptionsCmd) Run(ctx context.Context, args []string, log log.Logger
 	}
 	log.Debugf("providerName=%+v", providerName)
 
-	if os.Getenv("DEVPOD_UI") == "" && len(cmd.Options) == 0 {
+	if os.Getenv("KLED_UI") == "" && len(cmd.Options) == 0 {
 		return fmt.Errorf("please specify option")
 	}
 	log.Debugf("Options=%+v", cmd.Options)
 
-	providerWithOptions, err := workspace.FindProvider(devPodConfig, providerName, log)
+	providerWithOptions, err := workspace.FindProvider(kledConfig, providerName, log)
 	if err != nil {
 		return err
 	}
 
-	devPodConfig, err = setOptions(
+	kledConfig, err = setOptions(
 		ctx,
 		providerWithOptions.Config,
-		devPodConfig.DefaultContext,
+		kledConfig.DefaultContext,
 		cmd.Options,
 		cmd.Reconfigure,
 		cmd.Dry,
@@ -96,13 +96,13 @@ func (cmd *SetOptionsCmd) Run(ctx context.Context, args []string, log log.Logger
 
 	// save provider config
 	if !cmd.Dry {
-		err = config.SaveConfig(devPodConfig)
+		err = config.SaveConfig(kledConfig)
 		if err != nil {
 			return errors.Wrap(err, "save config")
 		}
 	} else {
 		// print options to stdout
-		err = printOptions(devPodConfig, providerWithOptions, "json", true)
+		err = printOptions(kledConfig, providerWithOptions, "json", true)
 		if err != nil {
 			return fmt.Errorf("print options: %w", err)
 		}

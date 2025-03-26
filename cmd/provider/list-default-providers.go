@@ -18,7 +18,7 @@ type ListAvailableCmd struct {
 	flags.GlobalFlags
 }
 
-func getDevpodProviderList() error {
+func getKledProviderList() error {
 	req, err := http.NewRequest("GET", "https://api.github.com/users/loft-sh/repos", nil)
 	if err != nil {
 		return err
@@ -42,8 +42,8 @@ func getDevpodProviderList() error {
 
 	fmt.Println("List of available providers from loft:")
 	for _, v := range jsonResult {
-		if strings.Contains(v["name"].(string), "devpod-provider") {
-			name := strings.TrimPrefix(v["name"].(string), "devpod-provider-")
+		if strings.Contains(v["name"].(string), "devpod-provider") { // TODO: Update to kled-provider when repositories are renamed
+			name := strings.TrimPrefix(v["name"].(string), "devpod-provider-") // TODO: Update to kled-provider- when repositories are renamed
 			fmt.Println("\t", name)
 		}
 	}
@@ -70,5 +70,5 @@ func NewListAvailableCmd(flags *flags.GlobalFlags) *cobra.Command {
 
 // Run runs the command logic
 func (cmd *ListAvailableCmd) Run(ctx context.Context) error {
-	return getDevpodProviderList()
+	return getKledProviderList()
 }

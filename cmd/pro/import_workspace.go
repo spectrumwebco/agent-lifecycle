@@ -62,7 +62,7 @@ func NewImportCmd(globalFlags *proflags.GlobalFlags) *cobra.Command {
 
 func (cmd *ImportCmd) Run(ctx context.Context, args []string) error {
 	if len(args) != 1 {
-		return fmt.Errorf("usage: devpod pro import-workspace <devpod-pro-host>")
+		return fmt.Errorf("usage: kled pro import-workspace <kled-pro-host>")
 	}
 
 	devPodProHost := args[0]

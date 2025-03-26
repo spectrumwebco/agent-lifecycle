@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/loft-sh/devpod/pkg/devcontainer/build"
-	"github.com/loft-sh/devpod/pkg/docker"
+	"github.com/loft-sh/kled/pkg/devcontainer/build"
+	"github.com/loft-sh/kled/pkg/docker"
 	"github.com/loft-sh/log"
 	buildkit "github.com/moby/buildkit/client"
 	"github.com/moby/buildkit/session"

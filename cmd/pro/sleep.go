@@ -46,7 +46,7 @@ func NewSleepCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 	}
 
 	c.Flags().StringVar(&cmd.Project, "project", "", "The project to use")
-	c.Flags().Int64Var(&cmd.ForceDuration, "prevent-wakeup", -1, "The amount of seconds this workspace should sleep until it can be woken up again (use 0 for infinite sleeping). During this time the space can only be woken up by `devpod pro wakeup`, manually deleting the annotation on the namespace or through the UI")
+	c.Flags().Int64Var(&cmd.ForceDuration, "prevent-wakeup", -1, "The amount of seconds this workspace should sleep until it can be woken up again (use 0 for infinite sleeping). During this time the space can only be woken up by `kled pro wakeup`, manually deleting the annotation on the namespace or through the UI")
 	_ = c.MarkFlagRequired("project")
 	c.Flags().StringVar(&cmd.Host, "host", "", "The pro instance to use")
 	_ = c.MarkFlagRequired("host")
@@ -60,12 +60,12 @@ func (cmd *SleepCmd) Run(ctx context.Context, args []string) error {
 	}
 	targetWorkspace := args[0]
 
-	devPodConfig, err := config.LoadConfig(cmd.Context, "")
+	kledConfig, err := config.LoadConfig(cmd.Context, "") // TODO: Update variable name to reflect Kled branding
 	if err != nil {
 		return err
 	}
 
-	baseClient, err := platform.InitClientFromHost(ctx, devPodConfig, cmd.Host, cmd.Log)
+	baseClient, err := platform.InitClientFromHost(ctx, kledConfig, cmd.Host, cmd.Log)
 	if err != nil {
 		return err
 	}
@@ -100,7 +100,7 @@ func (cmd *SleepCmd) Run(ctx context.Context, args []string) error {
 		return fmt.Errorf("create patch: %w", err)
 	}
 
-	_, err = managementClient.Loft().ManagementV1().DevPodWorkspaceInstances(project.ProjectNamespace(cmd.Project)).Patch(ctx, workspaceInstance.Name, patch.Type(), patchData, metav1.PatchOptions{})
+	_, err = managementClient.Loft().ManagementV1().DevPodWorkspaceInstances(project.ProjectNamespace(cmd.Project)).Patch(ctx, workspaceInstance.Name, patch.Type(), patchData, metav1.PatchOptions{}) // TODO: Update to KledWorkspaceInstances when API is updated
 	if err != nil {
 		return err
 	}
@@ -108,7 +108,7 @@ func (cmd *SleepCmd) Run(ctx context.Context, args []string) error {
 	// wait for sleeping
 	cmd.Log.Info("Wait until workspace is sleeping...")
 	err = wait.PollUntilContextTimeout(ctx, time.Second, platform.Timeout(), false, func(ctx context.Context) (done bool, err error) {
-		workspaceInstance, err := managementClient.Loft().ManagementV1().DevPodWorkspaceInstances(project.ProjectNamespace(cmd.Project)).Get(ctx, workspaceInstance.Name, metav1.GetOptions{})
+		workspaceInstance, err := managementClient.Loft().ManagementV1().DevPodWorkspaceInstances(project.ProjectNamespace(cmd.Project)).Get(ctx, workspaceInstance.Name, metav1.GetOptions{}) // TODO: Update to KledWorkspaceInstances when API is updated
 		if err != nil {
 			return false, err
 		}

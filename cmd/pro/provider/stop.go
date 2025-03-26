@@ -59,7 +59,7 @@ func (cmd *StopCmd) Run(ctx context.Context, stdin io.Reader, stdout io.Writer, 
 		return fmt.Errorf("couldn't find workspace")
 	}
 
-	conn, err := platform.DialInstance(baseClient, workspace, "stop", platform.OptionsFromEnv(storagev1.DevPodFlagsStop), cmd.Log)
+	conn, err := platform.DialInstance(baseClient, workspace, "stop", platform.OptionsFromEnv(storagev1.KledFlagsStop), cmd.Log) // TODO: Update to KledFlagsStop when API is updated
 	if err != nil {
 		return err
 	}

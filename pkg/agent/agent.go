@@ -13,10 +13,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/loft-sh/devpod/pkg/command"
-	"github.com/loft-sh/devpod/pkg/compress"
-	provider2 "github.com/loft-sh/devpod/pkg/provider"
-	"github.com/loft-sh/devpod/pkg/version"
+	"github.com/loft-sh/kled/pkg/command"
+	"github.com/loft-sh/kled/pkg/compress"
+	provider2 "github.com/loft-sh/kled/pkg/provider"
+	"github.com/loft-sh/kled/pkg/version"
 	"github.com/loft-sh/log"
 	perrors "github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -24,26 +24,26 @@ import (
 
 const DefaultInactivityTimeout = time.Minute * 20
 
-const ContainerDevPodHelperLocation = "/usr/local/bin/devpod"
+const ContainerKledHelperLocation = "/usr/local/bin/kled"
 
-const RemoteDevPodHelperLocation = "/tmp/devpod"
+const RemoteKledHelperLocation = "/tmp/kled"
 
-const ContainerActivityFile = "/tmp/devpod.activity"
+const ContainerActivityFile = "/tmp/kled.activity"
 
-const defaultAgentDownloadURL = "https://github.com/loft-sh/devpod/releases/download/"
+const defaultAgentDownloadURL = "https://github.com/loft-sh/kled/releases/download/"
 
-const EnvDevPodAgentURL = "DEVPOD_AGENT_URL"
+const EnvKledAgentURL = "KLED_AGENT_URL"
 
 const WorkspaceBusyFile = "workspace.lock"
 
 func DefaultAgentDownloadURL() string {
-	devPodAgentURL := os.Getenv(EnvDevPodAgentURL)
-	if devPodAgentURL != "" {
-		return strings.TrimSuffix(devPodAgentURL, "/") + "/"
+	kledAgentURL := os.Getenv(EnvKledAgentURL)
+	if kledAgentURL != "" {
+		return strings.TrimSuffix(kledAgentURL, "/") + "/"
 	}
 
 	if version.GetVersion() == version.DevVersion {
-		return "https://github.com/loft-sh/devpod/releases/latest/download/"
+		return "https://github.com/loft-sh/kled/releases/latest/download/"
 	}
 
 	return defaultAgentDownloadURL + version.GetVersion()
@@ -322,13 +322,13 @@ func Tunnel(
 	// inject agent
 	err := InjectAgent(ctx, func(ctx context.Context, command string, stdin io.Reader, stdout io.Writer, stderr io.Writer) error {
 		return exec(ctx, "root", command, stdin, stdout, stderr)
-	}, false, ContainerDevPodHelperLocation, DefaultAgentDownloadURL(), false, log, timeout)
+	}, false, ContainerKledHelperLocation, DefaultAgentDownloadURL(), false, log, timeout)
 	if err != nil {
 		return err
 	}
 
 	// build command
-	command := fmt.Sprintf("'%s' helper ssh-server --stdio", ContainerDevPodHelperLocation)
+	command := fmt.Sprintf("'%s' helper ssh-server --stdio", ContainerKledHelperLocation)
 	if log.GetLevel() == logrus.DebugLevel {
 		command += " --debug"
 	}

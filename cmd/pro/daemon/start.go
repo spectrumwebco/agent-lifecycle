@@ -21,7 +21,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// StartCmd holds the devpod daemon flags
 type StartCmd struct {
 	*proflags.GlobalFlags
 
@@ -58,7 +57,7 @@ func NewStartCmd(flags *proflags.GlobalFlags) *cobra.Command {
 }
 
 func (cmd *StartCmd) Run(ctx context.Context, devPodConfig *config.Config, provider *providerpkg.ProviderConfig) error {
-	isDesktopControlled := os.Getenv("DEVPOD_UI") == "true"
+	isDesktopControlled := os.Getenv("KLED_UI") == "true"
 	dir, err := ensureDaemonDir(devPodConfig.DefaultContext, provider.Name)
 	if err != nil {
 		return err

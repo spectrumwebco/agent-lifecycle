@@ -7,14 +7,13 @@ import (
 	"github.com/loft-sh/devpod/pkg/util"
 )
 
-// Override devpod home
-const DEVPOD_HOME = "DEVPOD_HOME"
+const KLED_HOME = "KLED_HOME"
 
 // Override config path
-const DEVPOD_CONFIG = "DEVPOD_CONFIG"
+const KLED_CONFIG = "KLED_CONFIG"
 
 func GetConfigDir() (string, error) {
-	homeDir := os.Getenv(DEVPOD_HOME)
+	homeDir := os.Getenv(KLED_HOME)
 	if homeDir != "" {
 		return homeDir, nil
 	}
@@ -24,12 +23,12 @@ func GetConfigDir() (string, error) {
 		return "", err
 	}
 
-	configDir := filepath.Join(homeDir, ".devpod")
+	configDir := filepath.Join(homeDir, ".kled")
 	return configDir, nil
 }
 
 func GetConfigPath() (string, error) {
-	configOrigin := os.Getenv(DEVPOD_CONFIG)
+	configOrigin := os.Getenv(KLED_CONFIG)
 	if configOrigin == "" {
 		configDir, err := GetConfigDir()
 		if err != nil {

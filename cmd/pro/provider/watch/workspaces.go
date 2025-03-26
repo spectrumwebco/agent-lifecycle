@@ -57,12 +57,12 @@ type ProWorkspaceInstance struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   managementv1.DevPodWorkspaceInstanceSpec `json:"spec,omitempty"`
+	Spec   managementv1.DevPodWorkspaceInstanceSpec `json:"spec,omitempty"` // TODO: Update to KledWorkspaceInstanceSpec when API is updated
 	Status ProWorkspaceInstanceStatus               `json:"status,omitempty"`
 }
 
 type ProWorkspaceInstanceStatus struct {
-	managementv1.DevPodWorkspaceInstanceStatus `json:",inline"`
+	managementv1.DevPodWorkspaceInstanceStatus `json:",inline"` // TODO: Update to KledWorkspaceInstanceStatus when API is updated
 
 	Source *provider.WorkspaceSource    `json:"source,omitempty"`
 	IDE    *provider.WorkspaceIDEConfig `json:"ide,omitempty"`
@@ -96,7 +96,7 @@ func (cmd *WorkspacesCmd) Run(ctx context.Context, stdin io.Reader, stdout io.Wr
 	factory := informers.NewSharedInformerFactoryWithOptions(clientset, time.Second*60,
 		informers.WithNamespace(project.ProjectNamespace(projectName)),
 	)
-	workspaceInformer := factory.Management().V1().DevPodWorkspaceInstances()
+	workspaceInformer := factory.Management().V1().DevPodWorkspaceInstances() // TODO: Update to KledWorkspaceInstances when API is updated
 
 	self := baseClient.Self()
 	filterByOwner := os.Getenv(provider.LOFT_FILTER_BY_OWNER) == "true"
@@ -160,7 +160,7 @@ func (cmd *WorkspacesCmd) Run(ctx context.Context, stdin io.Reader, stdout io.Wr
 }
 
 type instanceStore struct {
-	informer      informermanagementv1.DevPodWorkspaceInstanceInformer
+	informer      informermanagementv1.DevPodWorkspaceInstanceInformer // TODO: Update to KledWorkspaceInstanceInformer when API is updated
 	self          *managementv1.Self
 	context       string
 	filterByOwner bool
@@ -192,12 +192,12 @@ func (s *instanceStore) Add(instance *managementv1.DevPodWorkspaceInstance) {
 	}
 	var source *provider.WorkspaceSource
 	if instance.GetAnnotations() != nil && instance.GetAnnotations()[storagev1.DevPodWorkspaceSourceAnnotation] != "" {
-		source = provider.ParseWorkspaceSource(instance.GetAnnotations()[storagev1.DevPodWorkspaceSourceAnnotation])
+		source = provider.ParseWorkspaceSource(instance.GetAnnotations()[storagev1.DevPodWorkspaceSourceAnnotation]) // TODO: Update to KledWorkspaceSourceAnnotation when API is updated
 	}
 
 	var ideConfig *provider.WorkspaceIDEConfig
 	if instance.GetLabels() != nil && instance.GetLabels()[storagev1.DevPodWorkspaceIDLabel] != "" {
-		id := instance.GetLabels()[storagev1.DevPodWorkspaceIDLabel]
+		id := instance.GetLabels()[storagev1.DevPodWorkspaceIDLabel] // TODO: Update to KledWorkspaceIDLabel when API is updated
 		workspaceConfig, err := provider.LoadWorkspaceConfig(s.context, id)
 		if err == nil {
 			ideConfig = &workspaceConfig.IDE

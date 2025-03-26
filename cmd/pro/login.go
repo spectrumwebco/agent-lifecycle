@@ -48,10 +48,10 @@ func NewLoginCmd(flags *proflags.GlobalFlags) *cobra.Command {
 	}
 	loginCmd := &cobra.Command{
 		Use:   "login",
-		Short: "Log into a DevPod Pro instance",
+		Short: "Log into a Kled Pro instance",
 		RunE: func(_ *cobra.Command, args []string) error {
 			if len(args) != 1 {
-				return fmt.Errorf("please specify the DevPod Pro host, e.g. devpod pro login my-pro.my-domain.com")
+				return fmt.Errorf("please specify the Kled Pro host, e.g. kled pro login my-pro.my-domain.com")
 			}
 
 			return cmd.Run(context.Background(), args[0], log.Default)
@@ -59,10 +59,10 @@ func NewLoginCmd(flags *proflags.GlobalFlags) *cobra.Command {
 	}
 
 	loginCmd.Flags().StringVar(&cmd.AccessKey, "access-key", "", "If defined will use the given access key to login")
-	loginCmd.Flags().BoolVar(&cmd.Login, "login", true, "If enabled will automatically try to log into the Loft DevPod Pro")
+	loginCmd.Flags().BoolVar(&cmd.Login, "login", true, "If enabled will automatically try to log into the Loft Kled Pro")
 	loginCmd.Flags().BoolVar(&cmd.Use, "use", true, "If enabled will automatically activate the provider")
-	loginCmd.Flags().StringVar(&cmd.Provider, "provider", "", "Optional name how the DevPod Pro provider will be named")
-	loginCmd.Flags().StringVar(&cmd.Version, "version", "", "The version to use for the DevPod provider")
+	loginCmd.Flags().StringVar(&cmd.Provider, "provider", "", "Optional name how the Kled Pro provider will be named")
+	loginCmd.Flags().StringVar(&cmd.Version, "version", "", "The version to use for the Kled provider")
 	loginCmd.Flags().StringArrayVarP(&cmd.Options, "option", "o", []string{}, "Provider option in the form KEY=VALUE")
 	loginCmd.Flags().BoolVar(&cmd.ForceBrowser, "force-browser", false, "Force login through browser")
 
@@ -74,7 +74,7 @@ func NewLoginCmd(flags *proflags.GlobalFlags) *cobra.Command {
 // Run runs the command logic
 func (cmd *LoginCmd) Run(ctx context.Context, fullURL string, log log.Logger) error {
 	if strings.HasPrefix(fullURL, "http://") {
-		return fmt.Errorf("http is not supported for DevPod Pro, please use https:// instead")
+		return fmt.Errorf("http is not supported for Kled Pro, please use https:// instead")
 	} else if !strings.HasPrefix(fullURL, "https://") {
 		fullURL = "https://" + fullURL
 	} else if cmd.Provider != "" && len(cmd.Provider) > 32 {
@@ -191,7 +191,7 @@ func (cmd *LoginCmd) Run(ctx context.Context, fullURL string, log log.Logger) er
 		if err != nil {
 			return err
 		}
-		log.Donef("Successfully logged into DevPod Pro instance %s", ansi.Color(fullURL, "white+b"))
+		log.Donef("Successfully logged into Kled Pro instance %s", ansi.Color(fullURL, "white+b"))
 	}
 
 	// 3. Configure provider
@@ -202,7 +202,7 @@ func (cmd *LoginCmd) Run(ctx context.Context, fullURL string, log log.Logger) er
 		}
 	}
 
-	log.Donef("Successfully configured DevPod Pro")
+	log.Donef("Successfully configured Kled Pro")
 	return nil
 }
 
@@ -214,7 +214,7 @@ func (cmd *LoginCmd) addLoftProvider(devPodConfig *config.Config, url string, lo
 	}
 
 	// add the provider
-	log.Infof("Add DevPod Pro provider...")
+	log.Infof("Add Kled Pro provider...")
 
 	// is development?
 	if cmd.ProviderSource == providerRepo+"@v0.0.0" {
@@ -286,10 +286,10 @@ func login(ctx context.Context, devPodConfig *config.Config, url string, provide
 	return nil
 }
 
-var fallbackProvider = `name: devpod-pro
+var fallbackProvider = `name: kled-pro
 version: v0.0.0
 icon: https://devpod.sh/assets/devpod.svg
-description: DevPod Pro
+description: Kled Pro
 options:
   LOFT_CONFIG:
     global: true
@@ -300,16 +300,16 @@ binaries:
   PRO_PROVIDER:
     - os: linux
       arch: amd64
-      path: /usr/local/bin/devpod
+      path: /usr/local/bin/kled
     - os: linux
       arch: arm64
-      path: /usr/local/bin/devpod
+      path: /usr/local/bin/kled
     - os: darwin 
       arch: amd64
-      path: /usr/local/bin/devpod
+      path: /usr/local/bin/kled
     - os: darwin
       arch: arm64
-      path: /usr/local/bin/devpod
+      path: /usr/local/bin/kled
     - os: windows
       arch: amd64
       path: "C:\\Users\\pasca\\workspace\\devpod\\desktop\\src-tauri\\bin\\devpod-cli-x86_64-pc-windows-msvc.exe"

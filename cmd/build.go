@@ -68,7 +68,7 @@ func NewBuildCmd(flags *flags.GlobalFlags) *cobra.Command {
 
 			// create a temporary workspace
 			exists := workspace2.Exists(ctx, devPodConfig, args, "", cmd.Owner, log.Default)
-			sshConfigFile, err := os.CreateTemp("", "devpodssh.config")
+			sshConfigFile, err := os.CreateTemp("", "kledssh.config")
 			if err != nil {
 				return err
 			}
@@ -128,7 +128,7 @@ func NewBuildCmd(flags *flags.GlobalFlags) *cobra.Command {
 	buildCmd.Flags().StringSliceVar(&cmd.Tag, "tag", []string{}, "Image Tag(s) in the form of a comma separated list --tag latest,arm64 or multiple flags --tag latest --tag arm64")
 	buildCmd.Flags().StringSliceVar(&cmd.Platforms, "platform", []string{}, "Set target platform for build")
 	buildCmd.Flags().BoolVar(&cmd.SkipPush, "skip-push", false, "If true will not push the image to the repository, useful for testing")
-	buildCmd.Flags().Var(&cmd.GitCloneStrategy, "git-clone-strategy", "The git clone strategy DevPod uses to checkout git based workspaces. Can be full (default), blobless, treeless or shallow")
+	buildCmd.Flags().Var(&cmd.GitCloneStrategy, "git-clone-strategy", "The git clone strategy Kled uses to checkout git based workspaces. Can be full (default), blobless, treeless or shallow")
 	buildCmd.Flags().BoolVar(&cmd.GitCloneRecursiveSubmodules, "git-clone-recursive-submodules", false, "If true will clone git submodule repositories recursively")
 
 	// TESTING
@@ -161,8 +161,8 @@ func (cmd *BuildCmd) build(ctx context.Context, workspaceClient client.Workspace
 		return err
 	}
 
-	log.Infof("Building devcontainer...")
-	defer log.Debugf("Done building devcontainer")
+	log.Infof("Building kledcontainer...")
+	defer log.Debugf("Done building kledcontainer")
 	_, err = buildAgentClient(ctx, workspaceClient, cmd.CLIOptions, "build", log)
 	return err
 }

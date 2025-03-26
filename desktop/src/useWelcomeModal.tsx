@@ -17,10 +17,10 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { useNavigate } from "react-router"
 import { client } from "./client"
 import { LoftOSSBadge, Step, Steps, useInstallCLI } from "./components"
-import { Briefcase, CommandLine, DevpodWordmark } from "./icons"
+import { Briefcase, CommandLine, KledWordmark } from "./icons"
 import { Routes } from "./routes"
 
-const IS_FIRST_VISIT_KEY = "devpod-is-first-visit"
+const IS_FIRST_VISIT_KEY = "kled-is-first-visit"
 
 export function useWelcomeModal() {
   const navigate = useNavigate()
@@ -83,22 +83,22 @@ export function useWelcomeModal() {
                       <Heading as="h1" size="lg">
                         Welcome to
                       </Heading>
-                      <DevpodWordmark width="40" height="16" />
+                      <KledWordmark width="40" height="16" />
                     </HStack>
                     <LoftOSSBadge />
                   </HStack>
 
                   <Text fontWeight="bold">
-                    DevPod is a tool to create reproducible developer environments.
+                    Kled is a tool to create reproducible developer environments.
                   </Text>
                   <Text>
                     Each developer environment runs in a separate container and is specified through
-                    a devcontainer.json. Through DevPod providers these containers can be created on
+                    a devcontainer.json. Through Kled providers these containers can be created on
                     the local computer, any reachable remote machine or in a public or private
-                    cloud. It&apos;s also possible to extend DevPod and write your own custom
+                    cloud. It&apos;s also possible to extend Kled and write your own custom
                     providers. <br />
                     For more information, head over to our{" "}
-                    <Link onClick={() => client.open("https://devpod.sh/docs")}>
+                    <Link onClick={() => client.open("https://kled.sh/docs")}>
                       documentation.
                     </Link>
                   </Text>
@@ -115,9 +115,9 @@ export function useWelcomeModal() {
                   </HStack>
 
                   <Text>
-                    DevPod ships with a powerful CLI that allows you to create, manage and connect
+                    Kled ships with a powerful CLI that allows you to create, manage and connect
                     to your workspaces and providers. You can either{" "}
-                    <Link onClick={() => client.open("https://github.com/loft-sh/devpod/releases")}>
+                    <Link onClick={() => client.open("https://github.com/loft-sh/kled/releases")}>
                       download the standalone binary
                     </Link>{" "}
                     or directly add it to your <Code>$PATH</Code>.

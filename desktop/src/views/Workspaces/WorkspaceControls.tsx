@@ -275,19 +275,19 @@ function useShareWorkspace(
   const toast = useToast()
 
   const handleShareClicked = useCallback(async () => {
-    const devpodProHost = proInstance?.host
+    const kledProHost = proInstance?.host
     const workspace_id = workspace?.id
     const workspace_uid = workspace?.uid
-    if (!devpodProHost || !workspace_id || !workspace_uid) {
+    if (!kledProHost || !workspace_id || !workspace_uid) {
       return
     }
 
     const searchParams = new URLSearchParams()
     searchParams.set("workspace-uid", workspace_uid)
     searchParams.set("workspace-id", workspace_id)
-    searchParams.set("devpod-pro-host", devpodProHost)
+    searchParams.set("kled-pro-host", kledProHost)
 
-    const link = `https://devpod.sh/import#${searchParams.toString()}`
+    const link = `https://kled.sh/import#${searchParams.toString()}`
     const res = await client.writeToClipboard(link)
     if (!res.ok) {
       toast({

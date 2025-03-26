@@ -13,7 +13,7 @@ import (
 func NewHelperCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 	helperCmd := &cobra.Command{
 		Use:   "helper",
-		Short: "DevPod Utility Commands",
+		Short: "Kled Utility Commands",
 		PersistentPreRunE: func(cobraCmd *cobra.Command, args []string) error {
 			return agent.AgentPersistentPreRunE(cobraCmd, args, globalFlags)
 		},

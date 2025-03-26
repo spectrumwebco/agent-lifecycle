@@ -54,7 +54,7 @@ func NewClusterCmd(globalFlags *proflags.GlobalFlags) *cobra.Command {
 
 	c := &cobra.Command{
 		Use:   "cluster <cluster-name>",
-		Short: "add current cluster to DevPod Pro",
+		Short: "add current cluster to Kled Pro",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cobraCmd *cobra.Command, args []string) error {
 			return cmd.Run(cobraCmd.Context(), args)
@@ -226,8 +226,8 @@ func (cmd *ClusterCmd) Run(ctx context.Context, args []string) error {
 		helmCmd.Stderr = cmd.Log.Writer(logrus.DebugLevel, true)
 		helmCmd.Stdin = os.Stdin
 
-		cmd.Log.Info("Installing agent...")
-		cmd.Log.Debugf("Running helm command: %v", helmCmd.Args)
+	cmd.Log.Info("Installing Kled agent...")
+	cmd.Log.Debugf("Running helm command: %v", helmCmd.Args)
 
 		err = helmCmd.Run()
 		if err != nil {
@@ -276,7 +276,7 @@ func ensureHost(devPodConfig *config.Config, host string, log log.Logger) (strin
 		options = append(options, pro.Host)
 	}
 	h, err := log.Question(&survey.QuestionOptions{
-		Question:     "Select Pro instance to connect your cluster to",
+		Question:     "Select Kled Pro instance to connect your cluster to",
 		Options:      options,
 		DefaultValue: options[0],
 	})

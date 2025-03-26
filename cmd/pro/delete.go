@@ -35,7 +35,7 @@ func NewDeleteCmd(flags *proflags.GlobalFlags) *cobra.Command {
 	}
 	deleteCmd := &cobra.Command{
 		Use:   "delete",
-		Short: "Delete or logout from a DevPod Pro Instance",
+		Short: "Delete or logout from a Kled Pro Instance",
 		RunE: func(_ *cobra.Command, args []string) error {
 			return cmd.Run(context.Background(), args)
 		},

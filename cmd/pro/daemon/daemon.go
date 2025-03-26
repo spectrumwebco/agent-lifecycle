@@ -16,7 +16,7 @@ import (
 func NewCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 	c := &cobra.Command{
 		Use:    "daemon",
-		Short:  "DevPod Pro Provider daemon commands",
+		Short:  "Kled Pro Provider daemon commands",
 		Args:   cobra.NoArgs,
 		Hidden: true,
 	}

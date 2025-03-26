@@ -1,7 +1,7 @@
 use crate::{
     commands::{
         list_pro_instances::ListProInstancesCommand, list_workspaces::ListWorkspacesCommand,
-        start_daemon::StartDaemonCommand, DevpodCommandError,
+        start_daemon::StartDaemonCommand, KledCommandError,
     },
     daemon,
     system_tray::{ToSystemTraySubmenu, SYSTEM_TRAY_ICON_BYTES, WARNING_SYSTEM_TRAY_ICON_BYTES},
@@ -76,7 +76,7 @@ impl WorkspacesState {
 
     pub async fn load_workspaces(
         app_handle: &AppHandle,
-    ) -> Result<Vec<Workspace>, DevpodCommandError> {
+    ) -> Result<Vec<Workspace>, KledCommandError> {
         let list_workspaces_cmd = ListWorkspacesCommand::new();
 
         return list_workspaces_cmd.exec(app_handle).await;
@@ -131,7 +131,7 @@ impl ProState {
 
     pub async fn load_pro_instances(
         app_handle: &AppHandle,
-    ) -> Result<Vec<ProInstance>, DevpodCommandError> {
+    ) -> Result<Vec<ProInstance>, KledCommandError> {
         let cmd = ListProInstancesCommand::new();
         let pro_instances = cmd.exec(app_handle).await?;
 
@@ -232,8 +232,8 @@ impl Daemon {
     fn get_socket_addr(
         context: Option<String>,
         provider: Option<String>,
-    ) -> Result<String, DevpodCommandError> {
-        let provider = provider.clone().ok_or(DevpodCommandError::Any(anyhow!(
+    ) -> Result<String, KledCommandError> {
+        let provider = provider.clone().ok_or(KledCommandError::Any(anyhow!(
             "provider not set for pro instance"
         )))?;
         #[cfg(unix)]
@@ -242,23 +242,23 @@ impl Daemon {
             let context = context.clone().unwrap_or("default".to_string());
 
             return Ok(format!(
-                "{}/contexts/{}/providers/{}/daemon/devpod.sock",
+                "{}/contexts/{}/providers/{}/daemon/kled.sock",
                 home, context, provider
             ));
         }
         #[cfg(windows)]
         {
-            return Ok(format!("\\\\.\\pipe\\devpod.{}", provider).to_string());
+            return Ok(format!("\\\\.\\pipe\\kled.{}", provider).to_string());
         }
     }
 
     fn get_home() -> anyhow::Result<String> {
-        if let Ok(devpod_home) = std::env::var("DEVPOD_HOME") {
-            return Ok(devpod_home);
+        if let Ok(kled_home) = std::env::var("KLED_HOME") {
+            return Ok(kled_home);
         }
 
         if let Some(mut home) = home_dir() {
-            home.push(".devpod");
+            home.push(".kled");
             if let Some(home) = home.to_str() {
                 return Ok(home.to_owned());
             }
@@ -338,7 +338,7 @@ impl Daemon {
         &mut self,
         host: String,
         app_handle: &AppHandle,
-    ) -> Result<(Receiver<CommandEvent>, CommandChild), DevpodCommandError> {
+    ) -> Result<(Receiver<CommandEvent>, CommandChild), KledCommandError> {
         let (mut rx, child) = StartDaemonCommand::new(host.clone(), self.should_debug())
             .command(app_handle)?
             .spawn()?;
@@ -353,7 +353,7 @@ impl Daemon {
                 }
             },
             _ = tokio::time::sleep(tokio::time::Duration::from_secs(30)) => {
-                return Err(DevpodCommandError::Any(anyhow!("Timed out waiting for daemon to start")));
+                return Err(KledCommandError::Any(anyhow!("Timed out waiting for daemon to start")));
             }
         }
 

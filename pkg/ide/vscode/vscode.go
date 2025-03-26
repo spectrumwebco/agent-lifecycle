@@ -9,11 +9,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/loft-sh/devpod/pkg/command"
-	"github.com/loft-sh/devpod/pkg/config"
-	copy2 "github.com/loft-sh/devpod/pkg/copy"
-	"github.com/loft-sh/devpod/pkg/ide"
-	"github.com/loft-sh/devpod/pkg/util"
+	"github.com/loft-sh/kled/pkg/command"
+	"github.com/loft-sh/kled/pkg/config"
+	copy2 "github.com/loft-sh/kled/pkg/copy"
+	"github.com/loft-sh/kled/pkg/ide"
+	"github.com/loft-sh/kled/pkg/util"
 	"github.com/loft-sh/log"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -53,7 +53,7 @@ func (f Flavor) DisplayName() string {
 var Options = ide.Options{
 	OpenNewWindow: {
 		Name:        OpenNewWindow,
-		Description: "If true, DevPod will open the project in a new window",
+		Description: "If true, Kled will open the project in a new window",
 		Default:     "true",
 		Enum: []string{
 			"false",

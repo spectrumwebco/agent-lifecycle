@@ -25,20 +25,20 @@ const (
 	PanicSeverity   ErrorSeverityType = "panic"
 )
 
-const UIEnvVar = "DEVPOD_UI"
+const UIEnvVar = "KLED_UI"
 
 var UIEventsExceptions []string = []string{
-	"devpod list",
-	"devpod status",
-	"devpod provider list",
-	"devpod pro list",
-	"devpod pro check-health",
-	"devpod pro check-update",
-	"devpod ide list",
-	"devpod ide use",
-	"devpod provider use",
-	"devpod version",
-	"devpod context options",
+	"kled list",
+	"kled status",
+	"kled provider list",
+	"kled pro list",
+	"kled pro check-health",
+	"kled pro check-update",
+	"kled ide list",
+	"kled ide use",
+	"kled provider use",
+	"kled version",
+	"kled context options",
 }
 
 // skip everything in pro mode
@@ -53,10 +53,10 @@ type CLICollector interface {
 }
 
 // StartCLI starts collecting events and sending them to the backend from the CLI
-func StartCLI(devPodConfig *config.Config, cmd *cobra.Command) {
-	telemetryOpt := devPodConfig.ContextOption(config.ContextOptionTelemetry)
+func StartCLI(kledConfig *config.Config, cmd *cobra.Command) {
+	telemetryOpt := kledConfig.ContextOption(config.ContextOptionTelemetry)
 	if telemetryOpt == "false" || version.GetVersion() == version.DevVersion ||
-		os.Getenv("DEVPOD_DISABLE_TELEMETRY") == "true" {
+		os.Getenv("KLED_DISABLE_TELEMETRY") == "true" {
 		return
 	}
 
@@ -154,13 +154,13 @@ func (d *cliCollector) RecordCLI(err error) {
 	isPro := false
 	wd, wdErr := os.Getwd()
 	if wdErr == nil {
-		if strings.HasPrefix(wd, "/var/lib/loft/devpod") {
+		if strings.HasPrefix(wd, "/var/lib/loft/kled") {
 			isPro = true
 		}
 	}
-	eventType := "devpod_cli"
+	eventType := "kled_cli"
 	if isPro {
-		eventType = "devpod_cli_runner"
+		eventType = "kled_cli_runner"
 	}
 
 	// build the event and record

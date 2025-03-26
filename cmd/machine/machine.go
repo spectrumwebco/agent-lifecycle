@@ -9,7 +9,7 @@ import (
 func NewMachineCmd(flags *flags.GlobalFlags) *cobra.Command {
 	machineCmd := &cobra.Command{
 		Use:   "machine",
-		Short: "DevPod Machine commands",
+		Short: "Kled Machine commands",
 	}
 
 	machineCmd.AddCommand(NewListCmd(flags))

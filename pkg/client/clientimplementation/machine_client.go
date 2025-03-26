@@ -8,17 +8,17 @@ import (
 	"strings"
 	"time"
 
-	"github.com/loft-sh/devpod/pkg/client"
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/options"
-	"github.com/loft-sh/devpod/pkg/provider"
-	"github.com/loft-sh/devpod/pkg/types"
+	"github.com/loft-sh/kled/pkg/client"
+	"github.com/loft-sh/kled/pkg/config"
+	"github.com/loft-sh/kled/pkg/options"
+	"github.com/loft-sh/kled/pkg/provider"
+	"github.com/loft-sh/kled/pkg/types"
 	"github.com/loft-sh/log"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
 
-func NewMachineClient(devPodConfig *config.Config, provider *provider.ProviderConfig, machine *provider.Machine, log log.Logger) (client.MachineClient, error) {
+func NewMachineClient(kledConfig *config.Config, provider *provider.ProviderConfig, machine *provider.Machine, log log.Logger) (client.MachineClient, error) {
 	if !provider.IsMachineProvider() {
 		return nil, fmt.Errorf("provider '%s' is not a machine provider. Please use another provider", provider.Name)
 	} else if machine == nil {
@@ -26,7 +26,7 @@ func NewMachineClient(devPodConfig *config.Config, provider *provider.ProviderCo
 	}
 
 	return &machineClient{
-		devPodConfig: devPodConfig,
+		kledConfig: kledConfig,
 		config:       provider,
 		machine:      machine,
 		log:          log,
@@ -34,7 +34,7 @@ func NewMachineClient(devPodConfig *config.Config, provider *provider.ProviderCo
 }
 
 type machineClient struct {
-	devPodConfig *config.Config
+	kledConfig *config.Config
 	config       *provider.ProviderConfig
 	machine      *provider.Machine
 	log          log.Logger
@@ -58,7 +58,7 @@ func (s *machineClient) RefreshOptions(ctx context.Context, userOptionsRaw []str
 		return errors.Wrap(err, "parse options")
 	}
 
-	machine, err := options.ResolveAndSaveOptionsMachine(ctx, s.devPodConfig, s.config, s.machine, userOptions, s.log)
+	machine, err := options.ResolveAndSaveOptionsMachine(ctx, s.kledConfig, s.config, s.machine, userOptions, s.log)
 	if err != nil {
 		return err
 	}
@@ -68,15 +68,15 @@ func (s *machineClient) RefreshOptions(ctx context.Context, userOptionsRaw []str
 }
 
 func (s *machineClient) AgentPath() string {
-	return options.ResolveAgentConfig(s.devPodConfig, s.config, nil, s.machine).Path
+	return options.ResolveAgentConfig(s.kledConfig, s.config, nil, s.machine).Path
 }
 
 func (s *machineClient) AgentLocal() bool {
-	return options.ResolveAgentConfig(s.devPodConfig, s.config, nil, s.machine).Local == "true"
+	return options.ResolveAgentConfig(s.kledConfig, s.config, nil, s.machine).Local == "true"
 }
 
 func (s *machineClient) AgentURL() string {
-	return options.ResolveAgentConfig(s.devPodConfig, s.config, nil, s.machine).DownloadURL
+	return options.ResolveAgentConfig(s.kledConfig, s.config, nil, s.machine).DownloadURL
 }
 
 func (s *machineClient) Context() string {
@@ -99,7 +99,7 @@ func (s *machineClient) Create(ctx context.Context, options client.CreateOptions
 		s.machine.Context,
 		nil,
 		s.machine,
-		s.devPodConfig.ProviderOptions(s.config.Name),
+		s.kledConfig.ProviderOptions(s.config.Name),
 		s.config,
 		nil,
 		nil,
@@ -130,7 +130,7 @@ func (s *machineClient) Start(ctx context.Context, options client.StartOptions) 
 		s.machine.Context,
 		nil,
 		s.machine,
-		s.devPodConfig.ProviderOptions(s.config.Name),
+		s.kledConfig.ProviderOptions(s.config.Name),
 		s.config,
 		nil,
 		nil,
@@ -161,7 +161,7 @@ func (s *machineClient) Stop(ctx context.Context, options client.StopOptions) er
 		s.machine.Context,
 		nil,
 		s.machine,
-		s.devPodConfig.ProviderOptions(s.config.Name),
+		s.kledConfig.ProviderOptions(s.config.Name),
 		s.config,
 		nil,
 		nil,
@@ -185,7 +185,7 @@ func (s *machineClient) Command(ctx context.Context, commandOptions client.Comma
 		s.machine.Context,
 		nil,
 		s.machine,
-		s.devPodConfig.ProviderOptions(s.config.Name),
+		s.kledConfig.ProviderOptions(s.config.Name),
 		s.config,
 		map[string]string{
 			provider.CommandEnv: commandOptions.Command,
@@ -207,7 +207,7 @@ func (s *machineClient) Status(ctx context.Context, options client.StatusOptions
 		s.machine.Context,
 		nil,
 		s.machine,
-		s.devPodConfig.ProviderOptions(s.config.Name),
+		s.kledConfig.ProviderOptions(s.config.Name),
 		s.config,
 		nil,
 		nil,
@@ -258,7 +258,7 @@ func (s *machineClient) Delete(ctx context.Context, options client.DeleteOptions
 		s.machine.Context,
 		nil,
 		s.machine,
-		s.devPodConfig.ProviderOptions(s.config.Name),
+		s.kledConfig.ProviderOptions(s.config.Name),
 		s.config,
 		nil,
 		nil,
@@ -294,7 +294,7 @@ func runCommand(ctx context.Context, name string, command types.StrArray, enviro
 
 	// set debug level
 	if log.GetLevel() == logrus.DebugLevel {
-		environ = append(environ, DevPodDebug+"=true")
+		environ = append(environ, KledDebug+"=true")
 	}
 
 	// run the command
@@ -302,7 +302,7 @@ func runCommand(ctx context.Context, name string, command types.StrArray, enviro
 }
 
 func printStillRunningLogMessagePeriodically(log log.Logger) chan struct{} {
-	return printLogMessagePeriodically("Please hang on, DevPod is still running, this might take a while...", log)
+	return printLogMessagePeriodically("Please hang on, Kled is still running, this might take a while...", log)
 }
 
 func printLogMessagePeriodically(message string, log log.Logger) chan struct{} {

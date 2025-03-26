@@ -13,15 +13,15 @@ import (
 	"time"
 
 	storagev1 "github.com/loft-sh/api/v4/pkg/apis/storage/v1"
-	clientpkg "github.com/loft-sh/devpod/pkg/client"
-	"github.com/loft-sh/devpod/pkg/config"
-	daemon "github.com/loft-sh/devpod/pkg/daemon/platform"
-	"github.com/loft-sh/devpod/pkg/options"
-	"github.com/loft-sh/devpod/pkg/platform"
-	platformclient "github.com/loft-sh/devpod/pkg/platform/client"
-	"github.com/loft-sh/devpod/pkg/provider"
-	sshServer "github.com/loft-sh/devpod/pkg/ssh/server"
-	"github.com/loft-sh/devpod/pkg/ts"
+	clientpkg "github.com/loft-sh/kled/pkg/client"
+	"github.com/loft-sh/kled/pkg/config"
+	daemon "github.com/loft-sh/kled/pkg/daemon/platform"
+	"github.com/loft-sh/kled/pkg/options"
+	"github.com/loft-sh/kled/pkg/platform"
+	platformclient "github.com/loft-sh/kled/pkg/platform/client"
+	"github.com/loft-sh/kled/pkg/provider"
+	sshServer "github.com/loft-sh/kled/pkg/ssh/server"
+	"github.com/loft-sh/kled/pkg/ts"
 	"github.com/loft-sh/log"
 	perrors "github.com/pkg/errors"
 	"github.com/skratchdot/open-golang/open"
@@ -31,16 +31,16 @@ import (
 )
 
 var (
-	DevPodDebug = "DEVPOD_DEBUG"
+	DevPodDebug = "KLED_DEBUG"
 
-	DevPodFlagsUp     = "DEVPOD_FLAGS_UP"
-	DevPodFlagsSsh    = "DEVPOD_FLAGS_SSH"
-	DevPodFlagsDelete = "DEVPOD_FLAGS_DELETE"
-	DevPodFlagsStatus = "DEVPOD_FLAGS_STATUS"
+	DevPodFlagsUp     = "KLED_FLAGS_UP"
+	DevPodFlagsSsh    = "KLED_FLAGS_SSH"
+	DevPodFlagsDelete = "KLED_FLAGS_DELETE"
+	DevPodFlagsStatus = "KLED_FLAGS_STATUS"
 )
 
-func New(devPodConfig *config.Config, prov *provider.ProviderConfig, workspace *provider.Workspace, log log.Logger) (clientpkg.DaemonClient, error) {
-	daemonDir, err := provider.GetDaemonDir(devPodConfig.DefaultContext, workspace.Provider.Name)
+func New(kledConfig *config.Config, prov *provider.ProviderConfig, workspace *provider.Workspace, log log.Logger) (clientpkg.DaemonClient, error) {
+	daemonDir, err := provider.GetDaemonDir(kledConfig.DefaultContext, workspace.Provider.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func New(devPodConfig *config.Config, prov *provider.ProviderConfig, workspace *
 	}
 
 	return &client{
-		devPodConfig: devPodConfig,
+		kledConfig: kledConfig,
 		config:       prov,
 		workspace:    workspace,
 		log:          log,
@@ -62,7 +62,7 @@ func New(devPodConfig *config.Config, prov *provider.ProviderConfig, workspace *
 type client struct {
 	m sync.Mutex
 
-	devPodConfig *config.Config
+	kledConfig *config.Config
 	config       *provider.ProviderConfig
 	workspace    *provider.Workspace
 	log          log.Logger
@@ -110,7 +110,7 @@ func (c *client) RefreshOptions(ctx context.Context, userOptionsRaw []string, re
 		return perrors.Wrap(err, "parse options")
 	}
 
-	workspace, err := options.ResolveAndSaveOptionsProxy(ctx, c.devPodConfig, c.config, c.workspace, userOptions, c.log)
+	workspace, err := options.ResolveAndSaveOptionsProxy(ctx, c.kledConfig, c.config, c.workspace, userOptions, c.log)
 	if err != nil {
 		return err
 	}
@@ -136,7 +136,7 @@ func (c *client) CheckWorkspaceReachable(ctx context.Context) error {
 		instance, getWorkspaceErr := c.localClient.GetWorkspace(ctx, c.workspace.UID)
 		// if we can't reach the daemon try to start the desktop app
 		if daemon.IsDaemonNotAvailableError(getWorkspaceErr) {
-			deeplink := fmt.Sprintf("devpod://open?workspace=%s&provider=%s&source=%s&ide=%s", c.workspace.ID, c.config.Name, c.workspace.Source.String(), c.workspace.IDE.Name)
+			deeplink := fmt.Sprintf("kled://open?workspace=%s&provider=%s&source=%s&ide=%s", c.workspace.ID, c.config.Name, c.workspace.Source.String(), c.workspace.IDE.Name)
 			openErr := open.Run(deeplink)
 			if openErr != nil {
 				return getWorkspaceErr // inform user about daemon state

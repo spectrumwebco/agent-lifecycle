@@ -24,7 +24,7 @@ func NewProCmd(flags *flags.GlobalFlags, streamLogger *log.StreamLogger) *cobra.
 	globalFlags := &proflags.GlobalFlags{GlobalFlags: flags}
 	proCmd := &cobra.Command{
 		Use:           "pro",
-		Short:         "DevPod Pro commands",
+		Short:         "Kled Pro commands",
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		Args:          cobra.NoArgs,
@@ -37,7 +37,7 @@ func NewProCmd(flags *flags.GlobalFlags, streamLogger *log.StreamLogger) *cobra.
 				streamLogger.SetLevel(logrus.DebugLevel)
 			}
 
-			if os.Getenv("DEVPOD_DEBUG") == "true" {
+			if os.Getenv("KLED_DEBUG") == "true" {
 				log.Default.SetLevel(logrus.DebugLevel)
 			}
 			if flags.LogOutput == "json" {
