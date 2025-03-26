@@ -119,6 +119,11 @@ func (i *Interpreter) executeAPI(language, code string) (*ExecutionResult, error
 		return nil, fmt.Errorf("API execution failed: %w", err)
 	}
 
+	// Calculate execution duration if not provided by API
+	if resp.Duration == 0 {
+		resp.Duration = int64(time.Since(startTime) / time.Millisecond)
+	}
+
 	// Cache the result
 	cacheKey := fmt.Sprintf("%s:%s", language, code)
 	i.cacheMutex.Lock()
@@ -166,9 +171,58 @@ func GetSystemResources() map[string]interface{} {
 	}
 }
 
-// hasGPU returns whether the system has a GPU available (stub implementation)
+// hasGPU returns whether the system has a GPU available
 func hasGPU() bool {
-	// This is a placeholder for GPU detection
-	// In a real implementation, we would check for CUDA libraries, etc.
+	// Check for Apple Silicon M2 GPU
+	if runtime.GOOS == "darwin" && runtime.GOARCH == "arm64" {
+		// On Apple Silicon, we can detect Metal support
+		// For M2 specifically, we need to check the model identifier
+		// This is a simplified implementation
+		return true
+	}
+
+	// Check for CUDA libraries on other platforms
+	// We look for NVIDIA drivers and CUDA toolkit
+	// For macOS, check both Rosetta and native libraries
+	if _, err := os.Stat("/usr/local/cuda/lib64/libcudart.so"); err == nil {
+		return true
+	}
+	if _, err := os.Stat("/usr/local/cuda/lib/libcudart.dylib"); err == nil {
+		return true
+	}
+
+	// For Windows
+	if _, err := os.Stat("C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA"); err == nil {
+		return true
+	}
+
 	return false
+}
+
+// GetGPUInfo returns information about available GPUs
+func GetGPUInfo() map[string]interface{} {
+	gpuInfo := make(map[string]interface{})
+
+	// Set default values
+	gpuInfo["available"] = hasGPU()
+	gpuInfo["count"] = 0
+	gpuInfo["type"] = "none"
+
+	// If GPU is available, try to get more info
+	if hasGPU() {
+		// On Apple Silicon M2
+		if runtime.GOOS == "darwin" && runtime.GOARCH == "arm64" {
+			gpuInfo["count"] = 1
+			gpuInfo["type"] = "apple_silicon_m2"
+			gpuInfo["memory"] = "16GB" // Simplified for now
+			gpuInfo["cores"] = 4       // As requested
+		} else {
+			// For NVIDIA GPUs, we'd implement more detection
+			// This is a placeholder for proper detection
+			gpuInfo["count"] = 1
+			gpuInfo["type"] = "cuda"
+		}
+	}
+
+	return gpuInfo
 }

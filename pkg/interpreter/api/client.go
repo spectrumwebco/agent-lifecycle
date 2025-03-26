@@ -90,7 +90,7 @@ type ExecutionResponse struct {
 	Error       string  `json:"error,omitempty"`
 	StartTime   string  `json:"startTime"`
 	EndTime     string  `json:"endTime"`
-	Duration    int     `json:"duration"`
+	Duration    int64   `json:"duration"`
 	MemoryUsage int64   `json:"memoryUsage,omitempty"`
 	CPUUsage    float64 `json:"cpuUsage,omitempty"`
 }

@@ -1,90 +1,80 @@
 # Kled.io Makefile
+# Build and deployment targets for Kled.io desktop and CLI
 
-# Go related variables
-GOBASE := $(shell pwd)
-GOBIN := $(GOBASE)/bin
-GO := go
+KLED_VERSION := 1.0.0
+GO_BUILD_FLAGS := -ldflags="-X main.Version=$(KLED_VERSION)"
+GO_FILES := $(shell find cmd -name "*.go")
 
-# Binary names
-CLI_NAME := kled
-CLI_BIN := $(GOBIN)/$(CLI_NAME)
+.PHONY: all clean cli desktop build test docker
 
-# Main packages
-CLI_PACKAGE := ./cmd/kled
+all: cli desktop
 
-# SpacetimeDB related variables
-SPACETIME_SERVER_DIR := desktop/server
-SPACETIME_CMD := spacetime
+# Build the CLI
+cli: bin/kled
 
-# Version information
-VERSION := 0.1.0
-COMMIT := $(shell git rev-parse --short HEAD 2>/dev/null || echo "unknown")
-BUILD_TIME := $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
+bin/kled: $(GO_FILES)
+	@echo "Building Kled CLI..."
+	@cd cmd/kled && go mod tidy
+	@cd cmd/kled && go build $(GO_BUILD_FLAGS) -o ../../bin/kled
+	@echo "Kled CLI built successfully!"
 
-# Build flags
-LDFLAGS := -ldflags "-X main.Version=$(VERSION) -X main.Commit=$(COMMIT) -X main.BuildTime=$(BUILD_TIME)"
+# Run the CLI
+run-cli: bin/kled
+	@./bin/kled
 
-.PHONY: all clean build build-cli build-server test fmt lint run-cli spacetime-init
+# Build the desktop app
+desktop:
+	@echo "Building Kled Desktop..."
+	@cd desktop && yarn install
+	@cd desktop && yarn build
+	@echo "Kled Desktop built successfully!"
 
-# Default target
-all: clean build test
+# Package the desktop app
+package-desktop: desktop
+	@echo "Packaging Kled Desktop..."
+	@cd desktop && yarn tauri build
+	@echo "Kled Desktop packaged successfully!"
+
+# Build the Docker image
+docker:
+	@echo "Building Docker image..."
+	@docker build -t spectrumwebco/kled:$(KLED_VERSION) .
+	@echo "Docker image built successfully!"
+
+# Run tests
+test:
+	@echo "Running tests..."
+	@cd cmd/kled && go test ./...
+	@cd desktop && yarn test
+	@echo "Tests completed successfully!"
+
+# Run the CLI with specific commands
+test-cli: bin/kled
+	@echo "Testing Kled CLI..."
+	@./bin/kled version
+	@./bin/kled workspace list
+	@./bin/kled gpu info
+	@./bin/kled mcp status
+	@./bin/kled interpreter status
 
 # Clean build artifacts
 clean:
 	@echo "Cleaning build artifacts..."
-	@rm -rf $(GOBIN)
-	@mkdir -p $(GOBIN)
+	@rm -rf bin/*
+	@cd desktop && yarn clean
+	@echo "Clean completed successfully!"
 
-# Build everything
-build: build-cli build-server
-
-# Build the CLI
-build-cli:
-	@echo "Building Kled.io CLI..."
-	@mkdir -p $(GOBIN)
-	@cd $(GOBASE) && $(GO) build $(LDFLAGS) -o $(CLI_BIN) $(CLI_PACKAGE)
-	@echo "CLI built successfully: $(CLI_BIN)"
-
-# Build the SpacetimeDB server
-build-server:
-	@echo "Building SpacetimeDB server..."
-	@cd $(SPACETIME_SERVER_DIR) && cargo build
-	@echo "SpacetimeDB server built successfully"
-
-# Run tests
-test: test-cli test-server
-
-# Test the CLI
-test-cli:
-	@echo "Testing Kled.io CLI..."
-	@cd $(GOBASE) && $(GO) test -v ./...
-
-# Test the SpacetimeDB server
-test-server:
-	@echo "Testing SpacetimeDB server..."
-	@cd $(SPACETIME_SERVER_DIR) && cargo test
-
-# Run the CLI
-run-cli:
-	@echo "Running Kled.io CLI..."
-	@$(CLI_BIN) $(ARGS)
-
-# Initialize SpacetimeDB
-spacetime-init:
-	@echo "Initializing SpacetimeDB..."
-	@$(SPACETIME_CMD) init --lang rust server
-
-# Test workspace resources
-test-resources:
-	@echo "Testing workspace resources..."
-	@$(CLI_BIN) test resources
-
-# Test CUDA support
-test-cuda:
-	@echo "Testing CUDA support..."
-	@$(CLI_BIN) test cuda
-
-# Test Code Interpreter API
-test-interpreter:
-	@echo "Testing Code Interpreter API..."
-	@$(CLI_BIN) test interpreter
+# Show help
+help:
+	@echo "Kled.io Makefile"
+	@echo ""
+	@echo "Targets:"
+	@echo "  all           - Build CLI and desktop app"
+	@echo "  cli           - Build the CLI"
+	@echo "  desktop       - Build the desktop app"
+	@echo "  package-desktop - Package the desktop app for distribution"
+	@echo "  docker        - Build the Docker image"
+	@echo "  test          - Run tests"
+	@echo "  test-cli      - Test the CLI commands"
+	@echo "  clean         - Clean build artifacts"
+	@echo "  help          - Show this help message"

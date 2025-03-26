@@ -99,13 +99,13 @@ function GitHubStar() {
   const iconColor = useStatusBarIconColor()
 
   return (
-    <Tooltip label="Loving DevPod? Give us a star on Github">
+    <Tooltip label="Loving Kled.io? Give us a star on Github">
       <IconButton
         variant="ghost"
         rounded="full"
         icon={<StarIcon color={iconColor} />}
-        aria-label="Loving DevPod? Give us a star on Github"
-        onClick={() => client.open("https://github.com/loft-sh/devpod")}
+        aria-label="Loving Kled.io? Give us a star on Github"
+        onClick={() => client.open("https://github.com/spectrumwebco/kled")}
       />
     </Tooltip>
   )
@@ -115,13 +115,13 @@ function OSSDocs() {
   const iconColor = useStatusBarIconColor()
 
   return (
-    <Tooltip label="How to DevPod - Docs">
+    <Tooltip label="Kled.io Documentation">
       <IconButton
         variant="ghost"
         rounded="full"
         icon={<Icon as={HiDocumentMagnifyingGlass} color={iconColor} />}
-        aria-label="How to DevPod - Docs"
-        onClick={() => client.open("https://devpod.sh/docs")}
+        aria-label="Kled.io Documentation"
+        onClick={() => client.open("https://www.docs.kled.io")}
       />
     </Tooltip>
   )
@@ -137,7 +137,7 @@ function OSSReportIssue() {
         rounded="full"
         icon={<Icon as={FaBug} color={iconColor} />}
         aria-label="Report an Issue"
-        onClick={() => client.open("https://github.com/loft-sh/devpod/issues/new/choose")}
+        onClick={() => client.open("https://github.com/spectrumwebco/kled/issues/new")}
       />
     </Tooltip>
   )

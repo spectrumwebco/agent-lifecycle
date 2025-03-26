@@ -26,7 +26,7 @@ export interface GPUConfiguration {
 }
 
 /**
- * Default GPU configuration with CUDA support for AI workloads
+ * Default GPU configuration with CUDA support for AI workloads on Apple Silicon
  */
 export const DEFAULT_GPU_CONFIG: GPUConfiguration = {
   enabled: true,
@@ -35,8 +35,29 @@ export const DEFAULT_GPU_CONFIG: GPUConfiguration = {
       type: 'cuda',
       dedicated: true,
       limits: {
-        memory: '8GB',
+        memory: '16GB',
+        cores: 4,
         utilization: 80,
+      },
+    },
+  ],
+  autoDetect: true,
+  fallbackToCPU: true,
+};
+
+/**
+ * Apple Silicon M2 specific configuration for AI workloads
+ */
+export const APPLE_SILICON_M2_CONFIG: GPUConfiguration = {
+  enabled: true,
+  resources: [
+    {
+      type: 'cuda',
+      dedicated: true,
+      limits: {
+        memory: '16GB',
+        cores: 4,
+        utilization: 90,
       },
     },
   ],
@@ -87,8 +108,13 @@ export function generateGPUEnvironment(config: GPUConfiguration): Record<string,
     env.NVIDIA_VISIBLE_DEVICES = 'all';
     env.NVIDIA_DRIVER_CAPABILITIES = 'compute,utility';
 
-    if (cudaResources[0].limits?.memory) {
-      env.NVIDIA_MEM_LIMIT = cudaResources[0].limits.memory;
+    const limits = cudaResources[0].limits;
+    if (limits && limits.memory) {
+      env.NVIDIA_MEM_LIMIT = limits.memory;
+    }
+
+    if (limits && limits.cores) {
+      env.NVIDIA_CORES = limits.cores.toString();
     }
   }
 
