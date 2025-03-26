@@ -18,7 +18,7 @@ func NewUpgradeCmd() *cobra.Command {
 	cmd := &UpgradeCmd{log: log.GetInstance()}
 	upgradeCmd := &cobra.Command{
 		Use:   "upgrade",
-		Short: "Upgrade the DevPod CLI to the newest version",
+		Short: "Upgrade the Kled CLI to the newest version",
 		Args:  cobra.NoArgs,
 		RunE:  cmd.Run,
 	}
