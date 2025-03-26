@@ -1,7 +1,7 @@
 package tunnelserver
 
 import (
-	"github.com/loft-sh/api/v4/pkg/kled"
+	"github.com/loft-sh/api/v4/pkg/devpod"
 	"github.com/loft-sh/devpod/pkg/devcontainer/config"
 	"github.com/loft-sh/devpod/pkg/netstat"
 	provider2 "github.com/loft-sh/devpod/pkg/provider"
@@ -51,7 +51,7 @@ func WithMounts(mounts []*config.Mount) Option {
 	}
 }
 
-func WithPlatformOptions(options *kled.PlatformOptions) Option {
+func WithPlatformOptions(options *devpod.PlatformOptions) Option {
 	return func(s *tunnelServer) *tunnelServer {
 		s.platformOptions = options
 		return s

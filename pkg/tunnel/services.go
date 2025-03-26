@@ -113,7 +113,7 @@ func RunServices(
 		writer := log.ErrorStreamOnly().Writer(logrus.DebugLevel, false)
 		defer writer.Close()
 
-		command := fmt.Sprintf("'%s' agent container credentials-server --user '%s'", agent.ContainerDevPodHelperLocation, user)
+		command := fmt.Sprintf("'%s' agent container credentials-server --user '%s'", agent.ContainerKledHelperLocation, user)
 		if configureGitCredentials {
 			command += " --configure-git-helper"
 		}

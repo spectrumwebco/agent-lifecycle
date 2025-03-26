@@ -388,7 +388,7 @@ func (s *workspaceClient) Delete(ctx context.Context, opt client.DeleteOptions) 
 		}
 	} else if s.machine != nil && s.workspace.Machine.ID != "" && len(s.config.Exec.Delete) > 0 {
 		// delete machine if config was found
-		machineClient, err := NewMachineClient(s.devPodConfig, s.config, s.machine, s.log)
+	machineClient, err := NewMachineClient(s.kledConfig, s.config, s.machine, s.log)
 		if err != nil {
 			if !opt.Force {
 				return err
@@ -410,7 +410,7 @@ func (s *workspaceClient) isMachineRunning(ctx context.Context) (bool, error) {
 	}
 
 	// delete machine if config was found
-	machineClient, err := NewMachineClient(s.devPodConfig, s.config, s.machine, s.log)
+	machineClient, err := NewMachineClient(s.kledConfig, s.config, s.machine, s.log)
 	if err != nil {
 		return false, err
 	}
@@ -434,7 +434,7 @@ func (s *workspaceClient) Start(ctx context.Context, options client.StartOptions
 		return nil
 	}
 
-	machineClient, err := NewMachineClient(s.devPodConfig, s.config, s.machine, s.log)
+	machineClient, err := NewMachineClient(s.kledConfig, s.config, s.machine, s.log)
 	if err != nil {
 		return err
 	}
@@ -481,7 +481,7 @@ func (s *workspaceClient) Stop(ctx context.Context, opt client.StopOptions) erro
 		return nil
 	}
 
-	machineClient, err := NewMachineClient(s.devPodConfig, s.config, s.machine, s.log)
+	machineClient, err := NewMachineClient(s.kledConfig, s.config, s.machine, s.log)
 	if err != nil {
 		return err
 	}
@@ -514,7 +514,7 @@ func (s *workspaceClient) Status(ctx context.Context, options client.StatusOptio
 			return client.StatusNotFound, nil
 		}
 
-		machineClient, err := NewMachineClient(s.devPodConfig, s.config, s.machine, s.log)
+	machineClient, err := NewMachineClient(s.kledConfig, s.config, s.machine, s.log)
 		if err != nil {
 			return client.StatusNotFound, err
 		}

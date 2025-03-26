@@ -11,7 +11,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/loft-sh/api/v4/pkg/kled"
+	"github.com/loft-sh/api/v4/pkg/devpod"
 	"github.com/loft-sh/devpod/pkg/agent/tunnel"
 	"github.com/loft-sh/devpod/pkg/devcontainer/config"
 	"github.com/loft-sh/devpod/pkg/dockercredentials"
@@ -93,7 +93,7 @@ type tunnelServer struct {
 	workspace              *provider2.Workspace
 	log                    log.Logger
 
-	platformOptions *kled.PlatformOptions
+	platformOptions *devpod.PlatformOptions
 }
 
 func (t *tunnelServer) RunWithResult(ctx context.Context, reader io.Reader, writer io.WriteCloser) (*config.Result, error) {
