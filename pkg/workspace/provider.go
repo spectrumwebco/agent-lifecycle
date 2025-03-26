@@ -23,7 +23,7 @@ import (
 
 var (
 	ErrNoWorkspaceFound    = errors.New("no workspace found")
-	errProvideWorkspaceArg = errors.New("please provide a workspace name. E.g. 'devpod up ./my-folder', 'devpod up github.com/my-org/my-repo' or 'devpod up ubuntu'")
+	errProvideWorkspaceArg = errors.New("please provide a workspace name. E.g. 'kled up ./my-folder', 'kled up github.com/my-org/my-repo' or 'kled up ubuntu'")
 )
 
 type ProviderWithOptions struct {
@@ -41,9 +41,9 @@ func LoadProviders(devPodConfig *config.Config, log log.Logger) (*ProviderWithOp
 
 	// get default provider
 	if defaultContext.DefaultProvider == "" {
-		return nil, nil, fmt.Errorf("no default provider found. Please make sure to run 'devpod provider use'")
+		return nil, nil, fmt.Errorf("no default provider found. Please make sure to run 'kled provider use'")
 	} else if retProviders[defaultContext.DefaultProvider] == nil {
-		return nil, nil, fmt.Errorf("couldn't find default provider %s. Please make sure to add the provider via 'devpod provider add'", defaultContext.DefaultProvider)
+		return nil, nil, fmt.Errorf("couldn't find default provider %s. Please make sure to add the provider via 'kled provider add'", defaultContext.DefaultProvider)
 	}
 
 	return retProviders[defaultContext.DefaultProvider], retProviders, nil
@@ -96,7 +96,7 @@ func AddProvider(devPodConfig *config.Config, providerName, providerSourceRaw st
 
 func UpdateProvider(devPodConfig *config.Config, providerName, providerSourceRaw string, log log.Logger) (*providerpkg.ProviderConfig, error) {
 	if devPodConfig.Current().Providers[providerName] == nil {
-		return nil, fmt.Errorf("provider %s doesn't exist. Please run 'devpod provider add %s' instead", providerName, providerSourceRaw)
+		return nil, fmt.Errorf("provider %s doesn't exist. Please run 'kled provider add %s' instead", providerName, providerSourceRaw)
 	}
 
 	if providerSourceRaw == "" {
@@ -137,7 +137,7 @@ func ResolveProviderSource(devPodConfig *config.Config, providerName string, log
 	} else if providerConfig.Config.Source.Github != "" {
 		source = providerConfig.Config.Source.Github
 	} else {
-		return "", fmt.Errorf("provider %s is missing a source. Please run `devpod provider update %s SOURCE`", providerName, providerName)
+		return "", fmt.Errorf("provider %s is missing a source. Please run `kled provider update %s SOURCE`", providerName, providerName)
 	}
 
 	return source, nil
@@ -207,7 +207,7 @@ func DownloadProviderGithub(originalPath string, log log.Logger) ([]byte, *provi
 	// split by separator
 	splitted := strings.Split(strings.TrimSuffix(path, "/"), "/")
 	if len(splitted) == 1 {
-		path = "loft-sh/devpod-provider-" + path
+		path = "loft-sh/kled-provider-" + path
 	} else if len(splitted) != 2 {
 		return nil, nil, nil
 	}
@@ -346,7 +346,7 @@ func FindProvider(devPodConfig *config.Config, name string, log log.Logger) (*Pr
 	if err != nil {
 		return nil, err
 	} else if retProviders[name] == nil {
-		return nil, fmt.Errorf("couldn't find provider with name %s. Please make sure to add the provider via 'devpod provider add'", name)
+		return nil, fmt.Errorf("couldn't find provider with name %s. Please make sure to add the provider via 'kled provider add'", name)
 	}
 
 	return retProviders[name], nil

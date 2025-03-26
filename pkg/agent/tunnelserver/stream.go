@@ -5,7 +5,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/loft-sh/devpod/pkg/agent/tunnel"
+	"github.com/loft-sh/kled/pkg/agent/tunnel"
 	"github.com/loft-sh/log"
 )
 

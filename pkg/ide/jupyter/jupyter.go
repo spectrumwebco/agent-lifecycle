@@ -5,10 +5,10 @@ import (
 	"os/exec"
 	"strconv"
 
-	"github.com/loft-sh/devpod/pkg/command"
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/ide"
-	"github.com/loft-sh/devpod/pkg/single"
+	"github.com/loft-sh/kled/pkg/command"
+	"github.com/loft-sh/kled/pkg/config"
+	"github.com/loft-sh/kled/pkg/ide"
+	"github.com/loft-sh/kled/pkg/single"
 	"github.com/loft-sh/log"
 )
 
@@ -25,7 +25,7 @@ var Options = ide.Options{
 	},
 	OpenOption: {
 		Name:        OpenOption,
-		Description: "If DevPod should automatically open the browser",
+		Description: "If Kled should automatically open the browser",
 		Default:     "true",
 		Enum: []string{
 			"true",

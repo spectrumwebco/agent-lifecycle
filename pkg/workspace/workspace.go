@@ -9,23 +9,22 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/huh"
-	"github.com/loft-sh/devpod/pkg/client"
-	"github.com/loft-sh/devpod/pkg/client/clientimplementation"
-	"github.com/loft-sh/devpod/pkg/client/clientimplementation/daemonclient"
-	"github.com/loft-sh/devpod/pkg/config"
-	"github.com/loft-sh/devpod/pkg/encoding"
-	"github.com/loft-sh/devpod/pkg/file"
-	"github.com/loft-sh/devpod/pkg/git"
-	"github.com/loft-sh/devpod/pkg/ide/ideparse"
-	"github.com/loft-sh/devpod/pkg/image"
-	"github.com/loft-sh/devpod/pkg/platform"
-	providerpkg "github.com/loft-sh/devpod/pkg/provider"
-	"github.com/loft-sh/devpod/pkg/types"
+	"github.com/loft-sh/kled/pkg/client"
+	"github.com/loft-sh/kled/pkg/client/clientimplementation"
+	"github.com/loft-sh/kled/pkg/client/clientimplementation/daemonclient"
+	"github.com/loft-sh/kled/pkg/config"
+	"github.com/loft-sh/kled/pkg/encoding"
+	"github.com/loft-sh/kled/pkg/file"
+	"github.com/loft-sh/kled/pkg/git"
+	"github.com/loft-sh/kled/pkg/ide/ideparse"
+	"github.com/loft-sh/kled/pkg/image"
+	"github.com/loft-sh/kled/pkg/platform"
+	providerpkg "github.com/loft-sh/kled/pkg/provider"
+	"github.com/loft-sh/kled/pkg/types"
 	"github.com/loft-sh/log"
 	"github.com/loft-sh/log/terminal"
 )
 
-// Resolve takes the `devpod up|build` CLI input and either finds an existing workspace or creates a new one
 func Resolve(
 	ctx context.Context,
 	devPodConfig *config.Config,
@@ -264,7 +263,7 @@ func createWorkspace(
 	if err != nil {
 		return nil, nil, nil, err
 	} else if provider.State == nil || !provider.State.Initialized {
-		return nil, nil, nil, fmt.Errorf("provider '%s' is not initialized, please make sure to run 'devpod provider use %s' at least once before using this provider", provider.Config.Name, provider.Config.Name)
+		return nil, nil, nil, fmt.Errorf("provider '%s' is not initialized, please make sure to run 'kled provider use %s' at least once before using this provider", provider.Config.Name, provider.Config.Name)
 	}
 
 	// resolve workspace

@@ -8,9 +8,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/loft-sh/devpod/pkg/devcontainer/config"
-	"github.com/loft-sh/devpod/pkg/driver"
-	provider2 "github.com/loft-sh/devpod/pkg/provider"
+	"github.com/loft-sh/kled/pkg/devcontainer/config"
+	"github.com/loft-sh/kled/pkg/driver"
+	provider2 "github.com/loft-sh/kled/pkg/provider"
 	"github.com/pkg/errors"
 	corev1 "k8s.io/api/core/v1"
 	kerrors "k8s.io/apimachinery/pkg/api/errors"
@@ -18,21 +18,21 @@ import (
 	"k8s.io/utils/ptr"
 )
 
-const DevContainerName = "devpod"
-const InitContainerName = "devpod-init"
+const DevContainerName = "kled"
+const InitContainerName = "kled-init"
 
 const (
-	DevPodCreatedLabel      = "devpod.sh/created"
-	DevPodWorkspaceLabel    = "devpod.sh/workspace"
-	DevPodWorkspaceUIDLabel = "devpod.sh/workspace-uid"
+	KledCreatedLabel      = "kled.sh/created"
+	KledWorkspaceLabel    = "kled.sh/workspace"
+	KledWorkspaceUIDLabel = "kled.sh/workspace-uid"
 
-	DevPodInfoAnnotation                   = "devpod.sh/info"
-	DevPodLastAppliedAnnotation            = "devpod.sh/last-applied-configuration"
+	KledInfoAnnotation                   = "kled.sh/info"
+	KledLastAppliedAnnotation            = "kled.sh/last-applied-configuration"
 	ClusterAutoscalerSaveToEvictAnnotation = "cluster-autoscaler.kubernetes.io/safe-to-evict"
 )
 
-var ExtraDevPodLabels = map[string]string{
-	DevPodCreatedLabel: "true",
+var ExtraKledLabels = map[string]string{
+	KledCreatedLabel: "true",
 }
 
 type DevContainerInfo struct {
@@ -179,7 +179,7 @@ func (k *KubernetesDriver) runContainer(
 	if err != nil {
 		return err
 	}
-	labels[DevPodWorkspaceUIDLabel] = options.UID
+	labels[KledWorkspaceUIDLabel] = options.UID
 
 	// node selector
 	nodeSelector, err := getNodeSelector(pod, k.options.NodeSelector)
@@ -272,7 +272,7 @@ func (k *KubernetesDriver) runPod(ctx context.Context, id string, pod *corev1.Po
 	if pod.Annotations == nil {
 		pod.Annotations = map[string]string{}
 	}
-	pod.Annotations[DevPodLastAppliedAnnotation] = string(lastAppliedConfigRaw)
+	pod.Annotations[KledLastAppliedAnnotation] = string(lastAppliedConfigRaw)
 	pod.Annotations[ClusterAutoscalerSaveToEvictAnnotation] = "false"
 
 	// marshal the pod
@@ -460,11 +460,11 @@ func (k *KubernetesDriver) StartDevContainer(ctx context.Context, workspaceId st
 }
 
 func getID(workspaceID string) string {
-	return "devpod-" + workspaceID
+	return "kled-" + workspaceID
 }
 
 func getPullSecretsName(workspaceID string) string {
-	return fmt.Sprintf("devpod-pull-secret-%s", workspaceID)
+	return fmt.Sprintf("kled-pull-secret-%s", workspaceID)
 }
 
 func optionsEqual(a, b *provider2.ProviderKubernetesDriverConfig) bool {

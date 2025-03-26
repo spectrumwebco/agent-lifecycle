@@ -14,12 +14,12 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/loft-sh/devpod/pkg/command"
-	"github.com/loft-sh/devpod/pkg/config"
-	copypkg "github.com/loft-sh/devpod/pkg/copy"
-	devpodhttp "github.com/loft-sh/devpod/pkg/http"
-	"github.com/loft-sh/devpod/pkg/ide"
-	"github.com/loft-sh/devpod/pkg/single"
+	"github.com/loft-sh/kled/pkg/command"
+	"github.com/loft-sh/kled/pkg/config"
+	copypkg "github.com/loft-sh/kled/pkg/copy"
+	kledhttp "github.com/loft-sh/kled/pkg/http"
+	"github.com/loft-sh/kled/pkg/ide"
+	"github.com/loft-sh/kled/pkg/single"
 	"github.com/loft-sh/log"
 )
 
@@ -36,7 +36,7 @@ var Options = ide.Options{
 	},
 	OpenOption: {
 		Name:        OpenOption,
-		Description: "If DevPod should automatically open the browser",
+		Description: "If Kled should automatically open the browser",
 		Default:     "true",
 		Enum: []string{
 			"true",
@@ -48,8 +48,8 @@ var Options = ide.Options{
 const (
 	DefaultServerPort = 8787
 
-	downloadFolder = "/var/devpod/rstudio-server"
-	dataFolder     = "/usr/local/share/devpod/rstudio-server/data"
+	downloadFolder = "/var/kled/rstudio-server"
+	dataFolder     = "/usr/local/share/kled/rstudio-server/data"
 	// rstudioConfigFolder is where RStudio expects configuration
 	rstudioConfigFolder = "/etc/rstudio"
 	preferencesFile     = "rstudio-prefs.json"
@@ -212,7 +212,7 @@ func download(targetFolder, downloadURL string, log log.Logger) (string, error) 
 
 	targetPath := filepath.Join(filepath.ToSlash(targetFolder), "rstudio-server.deb")
 
-	resp, err := devpodhttp.GetHTTPClient().Get(downloadURL)
+	resp, err := kledhttp.GetHTTPClient().Get(downloadURL)
 	if err != nil {
 		return "", fmt.Errorf("download deb: %w", err)
 	}

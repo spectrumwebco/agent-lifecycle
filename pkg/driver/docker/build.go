@@ -7,12 +7,12 @@ import (
 	"io"
 	"strings"
 
-	"github.com/loft-sh/devpod/pkg/devcontainer/build"
-	"github.com/loft-sh/devpod/pkg/devcontainer/buildkit"
-	"github.com/loft-sh/devpod/pkg/devcontainer/config"
-	"github.com/loft-sh/devpod/pkg/devcontainer/feature"
-	"github.com/loft-sh/devpod/pkg/docker"
-	"github.com/loft-sh/devpod/pkg/provider"
+	"github.com/loft-sh/kled/pkg/devcontainer/build"
+	"github.com/loft-sh/kled/pkg/devcontainer/buildkit"
+	"github.com/loft-sh/kled/pkg/devcontainer/config"
+	"github.com/loft-sh/kled/pkg/devcontainer/feature"
+	"github.com/loft-sh/kled/pkg/docker"
+	"github.com/loft-sh/kled/pkg/provider"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
@@ -49,7 +49,7 @@ func (d *dockerDriver) BuildDevContainer(
 
 	// check if we shouldn't build
 	if options.NoBuild {
-		return nil, fmt.Errorf("you cannot build in this mode. Please run 'devpod up' to rebuild the container")
+		return nil, fmt.Errorf("you cannot build in this mode. Please run 'kled up' to rebuild the container")
 	}
 
 	// get build options

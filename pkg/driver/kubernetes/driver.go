@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/loft-sh/devpod/pkg/driver"
-	provider2 "github.com/loft-sh/devpod/pkg/provider"
+	"github.com/loft-sh/kled/pkg/driver"
+	provider2 "github.com/loft-sh/kled/pkg/provider"
 	"github.com/loft-sh/log"
 	perrors "github.com/pkg/errors"
 	corev1 "k8s.io/api/core/v1"
@@ -29,8 +29,7 @@ func NewKubernetesDriver(workspaceInfo *provider2.AgentWorkspaceInfo, log log.Lo
 	if err != nil {
 		return nil, fmt.Errorf("failed to create kubernetes client: %w", err)
 	}
-	// Namespace can be defined in many ways, we first check the kube config, then the provider options KUBERNETES_NAMESPACE, then failing that the default "devpod"
-	if namespace == "" || namespace == "default" || options.KubernetesNamespace != "devpod" {
+	if namespace == "" || namespace == "default" || options.KubernetesNamespace != "kled" {
 		log.Debugf("Using Explicit Kubernetes Namespace")
 		namespace = options.KubernetesNamespace
 	}
@@ -67,13 +66,13 @@ func (k *KubernetesDriver) getDevContainerPvc(ctx context.Context, id string) (*
 		}
 
 		return nil, nil, err
-	} else if pvc.Annotations == nil || pvc.Annotations[DevPodInfoAnnotation] == "" {
+	} else if pvc.Annotations == nil || pvc.Annotations[KledInfoAnnotation] == "" {
 		return nil, nil, fmt.Errorf("pvc is missing dev container info annotation")
 	}
 
 	// get container info
 	containerInfo := &DevContainerInfo{}
-	err = json.Unmarshal([]byte(pvc.GetAnnotations()[DevPodInfoAnnotation]), containerInfo)
+	err = json.Unmarshal([]byte(pvc.GetAnnotations()[KledInfoAnnotation]), containerInfo)
 	if err != nil {
 		return nil, nil, perrors.Wrap(err, "decode dev container info")
 	}
@@ -152,7 +151,7 @@ func (k *KubernetesDriver) CommandDevContainer(ctx context.Context, workspaceId,
 	return k.client.Exec(ctx, &ExecStreamOptions{
 		Pod:       workspaceId,
 		Namespace: k.namespace,
-		Container: "devpod",
+		Container: "kled",
 		Command:   args,
 		Stdin:     stdin,
 		Stdout:    stdout,
@@ -163,7 +162,7 @@ func (k *KubernetesDriver) CommandDevContainer(ctx context.Context, workspaceId,
 func (k *KubernetesDriver) GetDevContainerLogs(ctx context.Context, workspaceID string, stdout io.Writer, stderr io.Writer) error {
 	workspaceID = getID(workspaceID)
 
-	logs, err := k.client.Logs(ctx, k.namespace, workspaceID, "devpod", true)
+	logs, err := k.client.Logs(ctx, k.namespace, workspaceID, "kled", true)
 	if err != nil {
 		return perrors.Wrap(err, "get logs")
 	}

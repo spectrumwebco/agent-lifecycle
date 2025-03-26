@@ -9,13 +9,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/loft-sh/devpod/pkg/agent"
-	"github.com/loft-sh/devpod/pkg/binaries"
-	"github.com/loft-sh/devpod/pkg/client/clientimplementation"
-	"github.com/loft-sh/devpod/pkg/devcontainer/config"
-	"github.com/loft-sh/devpod/pkg/driver"
-	provider2 "github.com/loft-sh/devpod/pkg/provider"
-	"github.com/loft-sh/devpod/pkg/types"
+	"github.com/loft-sh/kled/pkg/agent"
+	"github.com/loft-sh/kled/pkg/binaries"
+	"github.com/loft-sh/kled/pkg/client/clientimplementation"
+	"github.com/loft-sh/kled/pkg/devcontainer/config"
+	"github.com/loft-sh/kled/pkg/driver"
+	provider2 "github.com/loft-sh/kled/pkg/provider"
+	"github.com/loft-sh/kled/pkg/types"
 	"github.com/loft-sh/log"
 	"github.com/loft-sh/log/scanner"
 	"github.com/sirupsen/logrus"
@@ -82,8 +82,8 @@ func (c *customDriver) CommandDevContainer(ctx context.Context, workspaceId, use
 		stdout,
 		stderr,
 		[]string{
-			"DEVCONTAINER_USER=" + user,
-			"DEVCONTAINER_COMMAND=" + command,
+			"KLEDCONTAINER_USER=" + user,
+			"KLEDCONTAINER_COMMAND=" + command,
 		},
 		c.log,
 	)

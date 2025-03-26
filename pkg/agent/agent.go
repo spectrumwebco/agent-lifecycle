@@ -13,10 +13,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/loft-sh/devpod/pkg/command"
-	"github.com/loft-sh/devpod/pkg/compress"
-	provider2 "github.com/loft-sh/devpod/pkg/provider"
-	"github.com/loft-sh/devpod/pkg/version"
+	"github.com/loft-sh/kled/pkg/command"
+	"github.com/loft-sh/kled/pkg/compress"
+	provider2 "github.com/loft-sh/kled/pkg/provider"
+	"github.com/loft-sh/kled/pkg/version"
 	"github.com/loft-sh/log"
 	perrors "github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -30,7 +30,7 @@ const RemoteKledHelperLocation = "/tmp/kled"
 
 const ContainerActivityFile = "/tmp/kled.activity"
 
-const defaultAgentDownloadURL = "https://github.com/loft-sh/devpod/releases/download/"
+const defaultAgentDownloadURL = "https://github.com/loft-sh/kled/releases/download/"
 
 const EnvKledAgentURL = "KLED_AGENT_URL"
 
@@ -43,7 +43,7 @@ func DefaultAgentDownloadURL() string {
 	}
 
 	if version.GetVersion() == version.DevVersion {
-		return "https://github.com/loft-sh/devpod/releases/latest/download/"
+		return "https://github.com/loft-sh/kled/releases/latest/download/"
 	}
 
 	return defaultAgentDownloadURL + version.GetVersion()
