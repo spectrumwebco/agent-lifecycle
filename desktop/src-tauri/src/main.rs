@@ -191,6 +191,7 @@ fn main() -> anyhow::Result<()> {
 
     app.run(move |app_handle, event| {
         let exit_requested_tx = tx.clone();
+        #[cfg(target_os = "macos")]
         let reopen_tx = tx.clone();
 
         #[cfg(target_os = "macos")]
