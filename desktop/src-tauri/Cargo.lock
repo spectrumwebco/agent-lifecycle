@@ -101,6 +101,18 @@ name = "anyhow"
 version = "1.0.92"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "74f37166d7d48a0284b99dd824694c26119c700b53bf0d1540cdb147dbdaaf13"
+dependencies = [
+ "backtrace",
+]
+
+[[package]]
+name = "approx"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f0e60b75072ecd4168020818c0107f2857bb6c4e64252d8d3983f6263b40a5c3"
+dependencies = [
+ "num-traits",
+]
 
 [[package]]
 name = "arbitrary"
@@ -1124,6 +1136,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e8566979429cf69b49a5c740c60791108e86440e8be149bbea4fe54d2c32d6e2"
 
 [[package]]
+name = "decorum"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "281759d3c8a14f5c3f0c49363be56810fcd7f910422f97f2db850c2920fde5cf"
+dependencies = [
+ "approx",
+ "num-traits",
+]
+
+[[package]]
 name = "deranged"
 version = "0.3.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1183,6 +1205,7 @@ dependencies = [
  "http-body-util",
  "hyper",
  "interprocess",
+ "kled-spacetime-server",
  "lazy_static",
  "log",
  "nix 0.29.0",
@@ -1404,6 +1427,18 @@ name = "endi"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a3d8a32ae18130a3c84dd492d4215c3d913c3b07c6b63c2eb3eb7ff1101ab7bf"
+
+[[package]]
+name = "enum-as-inner"
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a1e6a265c649f3f5979b601d26f1d05ada116434c87741c9493cb56218f76cbc"
+dependencies = [
+ "heck 0.5.0",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.98",
+]
 
 [[package]]
 name = "enumflags2"
@@ -2186,6 +2221,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "df3b46402a9d5adb4c86a0cf463f42e19994e3ee891101b1841f30a545cb49a9"
 
 [[package]]
+name = "humantime"
+version = "2.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9b112acc8b3adf4b107a8ec20977da0273a8c386765a3ec0229bd500a1443f9f"
+
+[[package]]
 name = "hyper"
 version = "1.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2594,6 +2635,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "keccak"
+version = "0.1.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ecc2af9a1119c51f12a14607e783cb977bde58bc069ff0c3da1095e635d70654"
+dependencies = [
+ "cpufeatures",
+]
+
+[[package]]
 name = "keyboard-types"
 version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2602,6 +2652,15 @@ dependencies = [
  "bitflags 2.6.0",
  "serde",
  "unicode-segmentation",
+]
+
+[[package]]
+name = "kled-spacetime-server"
+version = "0.1.0"
+dependencies = [
+ "rand 0.8.5",
+ "serde",
+ "spacetimedb",
 ]
 
 [[package]]
@@ -3057,7 +3116,7 @@ version = "0.7.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "af1844ef2428cc3e1cb900be36181049ef3d3193c63e43026cfe202983b27a56"
 dependencies = [
- "proc-macro-crate 1.3.1",
+ "proc-macro-crate 3.2.0",
  "proc-macro2",
  "quote",
  "syn 2.0.98",
@@ -3825,6 +3884,27 @@ dependencies = [
  "quote",
  "syn 2.0.98",
 ]
+
+[[package]]
+name = "prometheus"
+version = "0.13.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3d33c28a30771f7f96db69893f78b857f7450d7e0237e9c8fc6427a81bae7ed1"
+dependencies = [
+ "cfg-if",
+ "fnv",
+ "lazy_static",
+ "memchr",
+ "parking_lot",
+ "protobuf",
+ "thiserror 1.0.66",
+]
+
+[[package]]
+name = "protobuf"
+version = "2.28.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "106dd99e98437432fed6519dedecfade6a06a73bb7b2a1e019fdd2bee5778d94"
 
 [[package]]
 name = "ptr_meta"
@@ -4712,6 +4792,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "sha3"
+version = "0.10.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "75872d278a8f37ef87fa0ddbda7802605cb18344497949862c0d4dcb291eba60"
+dependencies = [
+ "digest",
+ "keccak",
+]
+
+[[package]]
 name = "shared_child"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4834,6 +4924,110 @@ dependencies = [
  "gobject-sys",
  "libc",
  "system-deps",
+]
+
+[[package]]
+name = "spacetimedb"
+version = "0.8.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6974a67167b466b37ffdd04cd8af4377e71a2d923f7c53baf88287c4b9164043"
+dependencies = [
+ "derive_more",
+ "log",
+ "once_cell",
+ "scoped-tls",
+ "spacetimedb-bindings-macro",
+ "spacetimedb-bindings-sys",
+ "spacetimedb-lib",
+ "spacetimedb-primitives",
+]
+
+[[package]]
+name = "spacetimedb-bindings-macro"
+version = "0.8.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8af22fe62b60da99572b22e8a045d8261921fbab39df3d77b6efc2a7834a9cc0"
+dependencies = [
+ "bitflags 2.6.0",
+ "humantime",
+ "proc-macro2",
+ "quote",
+ "spacetimedb-primitives",
+ "syn 2.0.98",
+]
+
+[[package]]
+name = "spacetimedb-bindings-sys"
+version = "0.8.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1042e00dd6ad31709ba51857a813a5b15f262c493db3addc660a9bfcf1286805"
+dependencies = [
+ "spacetimedb-primitives",
+]
+
+[[package]]
+name = "spacetimedb-lib"
+version = "0.8.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0902442daf8dfb84446676de19a7514b87456d42793e6ed9a21062b2bef1833b"
+dependencies = [
+ "anyhow",
+ "bitflags 2.6.0",
+ "derive_more",
+ "enum-as-inner",
+ "hex",
+ "itertools",
+ "once_cell",
+ "prometheus",
+ "spacetimedb-bindings-macro",
+ "spacetimedb-metrics",
+ "spacetimedb-primitives",
+ "spacetimedb-sats",
+ "thiserror 1.0.66",
+ "tracing",
+]
+
+[[package]]
+name = "spacetimedb-metrics"
+version = "0.8.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b6b38ab7eb5cfb3247dabbfb7e112990ba0b83e92820ac91cbaca9c1fd54eb50"
+dependencies = [
+ "itertools",
+ "paste",
+ "prometheus",
+]
+
+[[package]]
+name = "spacetimedb-primitives"
+version = "0.8.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d36222c86c0997d8ebc68daecca4215d9b818b5f9fef7cd9517732410da84912"
+dependencies = [
+ "bitflags 2.6.0",
+ "either",
+]
+
+[[package]]
+name = "spacetimedb-sats"
+version = "0.8.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "71e2bca0b169677427a8c41729133b05712d5d1479183c3c7f17cfbd0ed5cf5c"
+dependencies = [
+ "arrayvec 0.7.6",
+ "bitflags 2.6.0",
+ "decorum",
+ "derive_more",
+ "enum-as-inner",
+ "hex",
+ "itertools",
+ "sha3",
+ "smallvec",
+ "spacetimedb-bindings-macro",
+ "spacetimedb-metrics",
+ "spacetimedb-primitives",
+ "thiserror 1.0.66",
+ "tracing",
 ]
 
 [[package]]
