@@ -3,6 +3,7 @@ use anyhow::Result;
 use log::{error, info};
 use std::path::PathBuf;
 use std::sync::Arc;
+use tauri::Manager;
 use tokio::sync::Mutex;
 
 pub struct SpacetimeServer {

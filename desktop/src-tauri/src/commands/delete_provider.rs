@@ -2,7 +2,7 @@ use tauri::AppHandle;
 
 use super::{
     config::{CommandConfig, DevpodCommandConfig, DevpodCommandError},
-    constants::{DEVPOD_BINARY_NAME, DEVPOD_COMMAND_DELETE, DEVPOD_COMMAND_PROVIDER},
+    constants::{KLED_BINARY_NAME, KLED_COMMAND_DELETE, KLED_COMMAND_PROVIDER},
 };
 
 pub struct DeleteProviderCommand {
@@ -16,10 +16,10 @@ impl DeleteProviderCommand {
 impl DevpodCommandConfig<()> for DeleteProviderCommand {
     fn config(&self) -> CommandConfig {
         CommandConfig {
-            binary_name: DEVPOD_BINARY_NAME,
+            binary_name: KLED_BINARY_NAME,
             args: vec![
-                DEVPOD_COMMAND_PROVIDER,
-                DEVPOD_COMMAND_DELETE,
+                KLED_COMMAND_PROVIDER,
+                KLED_COMMAND_DELETE,
                 &self.provider_id,
             ],
         }

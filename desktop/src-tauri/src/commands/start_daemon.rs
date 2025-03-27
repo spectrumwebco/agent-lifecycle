@@ -3,7 +3,7 @@ use tauri_plugin_shell::process::Command;
 
 use super::{
     config::{CommandConfig, DevpodCommandConfig, DevpodCommandError},
-    constants::{DEVPOD_BINARY_NAME, DEVPOD_COMMAND_PRO, DEVPOD_COMMAND_DAEMON, DEVPOD_COMMAND_START, FLAG_DEBUG, FLAG_HOST},
+    constants::{KLED_BINARY_NAME, KLED_COMMAND_PRO, KLED_COMMAND_DAEMON, KLED_COMMAND_START, FLAG_DEBUG, FLAG_HOST},
 };
 
 pub struct StartDaemonCommand {
@@ -36,11 +36,11 @@ impl DevpodCommandConfig<()> for StartDaemonCommand {
 
     fn config(&self) -> CommandConfig {
         return CommandConfig {
-            binary_name: DEVPOD_BINARY_NAME,
+            binary_name: KLED_BINARY_NAME,
             args: vec![
-                DEVPOD_COMMAND_PRO,
-                DEVPOD_COMMAND_DAEMON,
-                DEVPOD_COMMAND_START,
+                KLED_COMMAND_PRO,
+                KLED_COMMAND_DAEMON,
+                KLED_COMMAND_START,
                 &self.host_flag,
                 &self.debug_flag,
             ],
