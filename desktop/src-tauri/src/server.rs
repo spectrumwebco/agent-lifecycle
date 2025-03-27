@@ -249,7 +249,7 @@ async fn slack_auth_handler() -> impl IntoResponse {
 
 async fn slack_auth_callback_handler(
     Query(params): Query<HashMap<String, String>>,
-    AxumState(server): AxumState<ServerState>,
+    AxumState(_server): AxumState<ServerState>,
 ) -> impl IntoResponse {
     let code = match params.get("code") {
         Some(code) => code,
@@ -273,7 +273,7 @@ async fn slack_auth_callback_handler(
 }
 
 async fn auth_status_handler(
-    AxumState(server): AxumState<ServerState>,
+    AxumState(_server): AxumState<ServerState>,
 ) -> impl IntoResponse {
     
     let status = AuthStatus {

@@ -230,7 +230,7 @@ fn main() -> anyhow::Result<()> {
                 // Otherwise, we stay alive in the system tray.
                 api.prevent_exit();
             }
-            tauri::RunEvent::WindowEvent { event, label, .. } => {
+            tauri::RunEvent::WindowEvent { event, .. } => {
                 if let tauri::WindowEvent::Destroyed = event {
                     providers::check_dangling_provider(app_handle);
                     #[cfg(target_os = "macos")]

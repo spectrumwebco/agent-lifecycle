@@ -1,4 +1,4 @@
-use std::fmt::format;
+// use std::fmt::format;
 use std::process::Output;
 
 #[derive(Debug, thiserror::Error)]
