@@ -9,7 +9,7 @@ import {
   useColorModeValue,
   useToken,
 } from "@chakra-ui/react"
-import { ManagementV1DevPodEnvironmentTemplate } from "@loft-enterprise/client/gen/models/managementV1DevPodEnvironmentTemplate"
+import { ManagementV1DevPodEnvironmentTemplate } from "../api/v1/management_v1_typesDevPodEnvironmentTemplate"
 import { useEffect, useMemo, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { FieldName } from "./types"

@@ -8,7 +8,7 @@ import {
 } from "@/contexts"
 import { Failed, Result, Return } from "@/lib"
 import { Routes } from "@/routes"
-import { ManagementV1DevPodWorkspaceTemplate } from "@loft-enterprise/client/gen/models/managementV1DevPodWorkspaceTemplate"
+import { ManagementV1DevPodWorkspaceTemplate } from "../api/v1/management_v1_typesDevPodWorkspaceTemplate"
 import jsyaml from "js-yaml"
 import { useEffect, useMemo, useState } from "react"
 import { useNavigate } from "react-router"
