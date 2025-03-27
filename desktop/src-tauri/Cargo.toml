@@ -12,7 +12,7 @@ tauri-build = { version = "2", features = [] }
 
 [dependencies]
 # SpacetimeDB
-spacetimedb-sdk = "1.0"
+spacetimedb-sdk = "0.8.2"
 hex = "0.4"
 
 # Tauri
