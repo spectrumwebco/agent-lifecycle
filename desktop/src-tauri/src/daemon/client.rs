@@ -53,14 +53,14 @@ impl Client {
             .path_and_query()
             .map(|pq| pq.as_str())
             .unwrap_or("");
-        let new_uri = format!("http://localclient.kled{}", path_and_query);
+        let new_uri = format!("http://localclient.devpod{}", path_and_query);
         *req.uri_mut() = new_uri
             .parse::<Uri>()
             .map_err(|e| anyhow!("failed to parse new URI: {:?}", e))?;
 
         req.headers_mut().insert(
             header::HOST,
-            header::HeaderValue::from_static("sh.loft.kled.desktop"),
+            header::HeaderValue::from_static("sh.loft.devpod.desktop"),
         );
 
         let res = sender.send_request(req).await?;
@@ -80,8 +80,8 @@ impl Client {
         });
 
         let req = hyper::Request::builder()
-            .uri(format!("http://localclient.kled{}", target_path))
-            .header(hyper::header::HOST, "sh.loft.kled.desktop")
+            .uri(format!("http://localclient.devpod{}", target_path))
+            .header(hyper::header::HOST, "sh.loft.devpod.desktop")
             .body(Empty::<Bytes>::new())?;
 
         let res = sender.send_request(req).await?;
@@ -100,7 +100,7 @@ impl Client {
     }
 }
 
-const KLED_PREFIX_BYTE: u8 = 0x01;
+const DEVPOD_PREFIX_BYTE: u8 = 0x01;
 
 pub struct HandshakeStream {
     inner: InnerStream,
@@ -122,7 +122,8 @@ impl HandshakeStream {
             inner = tokio::net::windows::named_pipe::ClientOptions::new().open(p)?;
         }
         let mut hs = HandshakeStream { inner };
-        hs.inner.write_u8(KLED_PREFIX_BYTE).await?;
+        // send devpod prefix as first byte
+        hs.inner.write_u8(DEVPOD_PREFIX_BYTE).await?;
         Ok(hs)
     }
 }

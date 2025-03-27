@@ -68,7 +68,7 @@ export function useStoreTroubleshoot() {
 
       const out = await zip.generateAsync({ type: "uint8array" })
 
-      await client.writeFile([targetFolder, "kled_troubleshoot.zip"], out)
+      await client.writeFile([targetFolder, "devpod_troubleshoot.zip"], out)
 
       client.open(targetFolder)
     },

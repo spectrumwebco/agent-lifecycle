@@ -203,7 +203,7 @@ export type TSupportedIDE = (typeof SUPPORTED_IDES)[number]
 export type TImportWorkspaceConfig = Readonly<{
   workspaceID: string
   workspaceUID: string
-  kledProHost: string
+  devPodProHost: string
   project: string
   options: Record<string, string> | null
 }>
@@ -288,8 +288,8 @@ export type TPlatformUpdateCheck = Readonly<{
   newVersion: TMaybe<string>
 }>
 export const UserSecret = {
-  GIT_HTTP: "kled-git-http",
-  GIT_SSH: "kled-git-ssh",
+  GIT_HTTP: "devpod-git-http",
+  GIT_SSH: "devpod-git-ssh",
 } as const
 export type TUserSecretType = (typeof UserSecret)[keyof typeof UserSecret]
 export type TGitCredentialData = {

@@ -15,7 +15,7 @@ import { Release } from "../gen"
 import { useReleases, useVersion } from "../lib"
 import { Changelog } from "./Changelog"
 
-const LAST_INSTALLED_VERSION_KEY = "kled-last-installed-version"
+const LAST_INSTALLED_VERSION_KEY = "devpod-last-installed-version"
 
 export function useChangelogModal(isReady: boolean) {
   const currentVersion = useVersion()
