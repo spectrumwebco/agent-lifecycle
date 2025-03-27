@@ -19,9 +19,7 @@
     },
     "category": "DeveloperTool",
     "copyright": "",
-    "externalBin": [
-      "bin/kled-cli"
-    ],
+    "externalBin": [],
     "resources": [],
     "icon": [
       "icons/32x32.png",
