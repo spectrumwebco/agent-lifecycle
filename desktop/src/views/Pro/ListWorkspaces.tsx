@@ -11,7 +11,7 @@ import {
 } from "@/contexts"
 import { IWorkspaceStore } from "@/contexts/DevPodContext/workspaceStore"
 import { removeWorkspaceAction, stopWorkspaceAction } from "@/contexts/DevPodContext/workspaces"
-import { DevPodIcon } from "@/icons"
+import { KledIcon } from "@/icons"
 import EmptyImage from "@/images/empty_default.svg"
 import EmptyDarkImage from "@/images/empty_default.svg"
 import EmptyWorkspacesImage from "@/images/empty_workspaces.svg"
@@ -228,7 +228,7 @@ export function ListWorkspaces() {
 
               <Button
                 variant="primary"
-                leftIcon={<DevPodIcon boxSize={5} />}
+                leftIcon={<KledIcon boxSize={5} />}
                 onClick={handleCreateClicked}>
                 Create Workspace
               </Button>

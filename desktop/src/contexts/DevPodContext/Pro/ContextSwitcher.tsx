@@ -1,4 +1,4 @@
-import { Close, Connect, DevpodWordmark, Ellipsis, Folder } from "@/icons"
+import { Close, Connect, KledWordmark, Ellipsis, Folder } from "@/icons"
 import { Result, getDisplayName, useLoginProModal } from "@/lib"
 import { Routes } from "@/routes"
 import { TProInstance } from "@/types"
@@ -72,7 +72,7 @@ export function ContextSwitcher({
 
     p.push({
       host: HOST_OSS,
-      image: <DevpodWordmark w="20" h="6" />,
+      image: <KledWordmark w="20" h="6" />,
       authenticated: undefined,
       provider: undefined,
       creationTimestamp: undefined,

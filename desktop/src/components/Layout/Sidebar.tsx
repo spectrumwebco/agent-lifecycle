@@ -15,7 +15,7 @@ import {
 import { cloneElement, ReactElement, ReactNode } from "react"
 import { LinkProps, NavLink as RouterLink } from "react-router-dom"
 import { useSettings } from "../../contexts"
-import { DevpodWordmark } from "../../icons"
+import { KledWordmark } from "../../icons"
 import { useBorderColor } from "../../Theme"
 import { LoftOSSBadge } from "../LoftOSSBadge"
 
@@ -54,7 +54,7 @@ export function Sidebar({ children, ...boxProps }: TSidebarProps) {
         justify="flex-start"
         width="full">
         <Box width="8" />
-        <DevpodWordmark marginTop={2} width={32} height={10} color={wordmarkColor} />
+        <KledWordmark marginTop={2} width={32} height={10} color={wordmarkColor} />
       </Flex>
       <VStack marginTop="8" as="nav" align="start">
         {children}

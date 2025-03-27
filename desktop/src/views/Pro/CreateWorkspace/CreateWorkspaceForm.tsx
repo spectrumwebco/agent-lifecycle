@@ -252,7 +252,7 @@ export function CreateWorkspaceForm({
                 <VStack gap="1" align="start">
                   <FormLabel>
                     <Laptop boxSize={5} mr="1" />
-                    Devcontainer.json
+                    Container Configuration
                   </FormLabel>
                   <FormHelperText mt="0">
                     Set an external source or a relative path in the source code. Otherwise, we’ll

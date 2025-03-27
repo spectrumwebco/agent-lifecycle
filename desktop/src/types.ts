@@ -90,11 +90,9 @@ export type TProviderOption = Readonly<{
   displayName: TMaybe<string>
   // A description of the option displayed to the user by a supporting tool.
   description: TMaybe<string>
-  // If required is true and the user doesn't supply a value, devpod will ask the user
   required: TMaybe<boolean>
   // Allowed values for this option.
   enum: TMaybe<TOptionEnum[]>
-  // Suggestions are suggestions to show in the DevPod UI for this option
   suggestions: TMaybe<string[]>
   // Hidden specifies if the option should be hidden
   hidden: TMaybe<boolean>
