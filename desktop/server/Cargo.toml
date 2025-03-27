@@ -8,6 +8,6 @@ name = "kled_spacetime_server"
 crate-type = ["cdylib"]
 
 [dependencies]
-spacetimedb = "0.8.0"
+spacetimedb = { version = "0.8.0", features = ["serde"] }
 serde = { version = "1.0", features = ["derive"] }
 rand = "0.8.5"

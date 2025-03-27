@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use spacetimedb::{reducer, table, Identity, ReducerContext, Table, Timestamp};
+use spacetimedb::{reducer, table, Identity, ReducerContext, Table, Timestamp, TableType};
 
 // ========== Table Definitions ==========
 
@@ -70,7 +70,7 @@ pub fn create_workspace(
     let workspace_id = generate_id();
 
     // Insert workspace data
-    Workspace::insert(Workspace {
+    Workspace::insert(&Workspace {
         id: workspace_id.clone(),
         name,
         created_at: ctx.timestamp,
@@ -79,7 +79,7 @@ pub fn create_workspace(
     });
 
     // Insert resource allocation data
-    ResourceAllocation::insert(ResourceAllocation {
+    ResourceAllocation::insert(&ResourceAllocation {
         workspace_id: workspace_id.clone(),
         cpu_count,
         memory_mb,
@@ -95,15 +95,15 @@ pub fn create_workspace(
 #[reducer]
 pub fn update_workspace_activity(ctx: ReducerContext, workspace_id: String) -> bool {
     // Find the workspace
-    let workspace = match Workspace::filter_by_id(&workspace_id) {
+    let workspace = match Workspace::get(&workspace_id) {
         Some(w) => w,
         None => return false,
     };
 
     // Update the last activity timestamp
-    Workspace::update_by_id(
+    Workspace::update(
         &workspace_id,
-        Workspace {
+        &Workspace {
             id: workspace.id,
             name: workspace.name,
             created_at: workspace.created_at,
@@ -118,7 +118,7 @@ pub fn update_workspace_activity(ctx: ReducerContext, workspace_id: String) -> b
 #[reducer]
 pub fn create_code_interpreter_session(ctx: ReducerContext, workspace_id: String) -> String {
     // Find the workspace
-    if Workspace::filter_by_id(&workspace_id).is_none() {
+    if Workspace::get(&workspace_id).is_none() {
         return "error: workspace not found".to_string();
     }
 
@@ -126,7 +126,7 @@ pub fn create_code_interpreter_session(ctx: ReducerContext, workspace_id: String
     let session_id = generate_id();
 
     // Insert session data
-    CodeInterpreterSession::insert(CodeInterpreterSession {
+    CodeInterpreterSession::insert(&CodeInterpreterSession {
         id: session_id.clone(),
         workspace_id,
         created_at: ctx.timestamp,
@@ -151,7 +151,7 @@ pub fn record_code_execution(
     gpu_usage_percent: Option<f32>,
 ) -> String {
     // Find the session
-    let session = match CodeInterpreterSession::filter_by_id(&session_id) {
+    let session = match CodeInterpreterSession::get(&session_id) {
         Some(s) => s,
         None => return "error: session not found".to_string(),
     };
@@ -160,7 +160,7 @@ pub fn record_code_execution(
     let execution_id = generate_id();
 
     // Insert execution data
-    CodeExecution::insert(CodeExecution {
+    CodeExecution::insert(&CodeExecution {
         id: execution_id.clone(),
         session_id: session_id.clone(),
         code,
@@ -175,9 +175,9 @@ pub fn record_code_execution(
     });
 
     // Update session data
-    CodeInterpreterSession::update_by_id(
+    CodeInterpreterSession::update(
         &session_id,
-        CodeInterpreterSession {
+        &CodeInterpreterSession {
             id: session.id,
             workspace_id: session.workspace_id,
             created_at: session.created_at,
