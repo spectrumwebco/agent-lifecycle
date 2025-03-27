@@ -1,7 +1,7 @@
 mod config;
 pub mod constants;
 pub use config::{DevpodCommandConfig, DevpodCommandError};
-pub use constants::KLED_BINARY_NAME;
+pub use constants::{KLED_BINARY_NAME, DEVPOD_BINARY_NAME};
 
 pub mod delete_provider;
 pub mod delete_pro_instance;
