@@ -26,7 +26,7 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react"
-import { ManagementV1Self } from "@loft-enterprise/client/gen/models/managementV1Self"
+import { ManagementV1Self } from "../api/v1/management_v1_typesSelf"
 import { useQuery } from "@tanstack/react-query"
 import { ReactElement, ReactNode, cloneElement, useMemo } from "react"
 import { Outlet, Link as RouterLink, To } from "react-router-dom"

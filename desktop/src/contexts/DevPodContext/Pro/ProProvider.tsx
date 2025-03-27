@@ -4,7 +4,7 @@ import { TWorkspaceOwnerFilterState, ToolbarActions, ToolbarTitle } from "@/comp
 import { Annotations, Result } from "@/lib"
 import { Routes } from "@/routes"
 import { Text } from "@chakra-ui/react"
-import { ManagementV1Project } from "@loft-enterprise/client/gen/models/managementV1Project"
+import { ManagementV1Project } from "../api/v1/management_v1_typesProject"
 import { useQuery } from "@tanstack/react-query"
 import { ReactNode, useEffect, useMemo, useState } from "react"
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom"

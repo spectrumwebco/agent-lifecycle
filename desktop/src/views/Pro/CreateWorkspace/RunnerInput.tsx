@@ -1,7 +1,7 @@
 import { useFormContext } from "react-hook-form"
 import { FieldName, TFormValues } from "@/views/Pro/CreateWorkspace/types"
 import { Select } from "@chakra-ui/react"
-import { ManagementV1ProjectClusters } from "@loft-enterprise/client/gen/models/managementV1ProjectClusters"
+import { ManagementV1ProjectClusters } from "../api/v1/management_v1_typesProjectClusters"
 
 export function TargetInput({
   projectClusters,

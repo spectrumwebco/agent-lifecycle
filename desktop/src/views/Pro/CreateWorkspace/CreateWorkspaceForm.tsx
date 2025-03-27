@@ -25,7 +25,7 @@ import {
   VStack,
   useColorModeValue,
 } from "@chakra-ui/react"
-import { ManagementV1DevPodWorkspaceTemplate } from "@loft-enterprise/client/gen/models/managementV1DevPodWorkspaceTemplate"
+import { ManagementV1DevPodWorkspaceTemplate } from "../api/v1/management_v1_typesDevPodWorkspaceTemplate"
 import { ReactNode, useCallback, useEffect, useMemo, useRef } from "react"
 import { Controller, DefaultValues, FormProvider, useForm } from "react-hook-form"
 import { DevContainerInput } from "./DevContainerInput"
@@ -34,7 +34,7 @@ import { InfrastructureTemplateInput } from "./InfrastructureTemplateInput"
 import { SourceInput } from "./SourceInput"
 import { FieldName, TFormValues } from "./types"
 import { TargetInput } from "@/views/Pro/CreateWorkspace/RunnerInput"
-import { ManagementV1DevPodWorkspacePreset } from "@loft-enterprise/client/gen/models/managementV1DevPodWorkspacePreset"
+import { ManagementV1DevPodWorkspacePreset } from "../api/v1/management_v1_typesDevPodWorkspacePreset"
 import { Gold } from "@/icons/Gold"
 import { PresetInput } from "@/views/Pro/CreateWorkspace/PresetInput"
 

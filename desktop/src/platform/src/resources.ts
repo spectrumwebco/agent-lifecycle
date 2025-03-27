@@ -31,9 +31,14 @@ export const Resources = {
     version: "v1",
     kind: "HelmRelease",
   },
+  ManagementV1KledWorkspaceInstance: {
+    group: "management.loft.sh",
+    version: "v1",
+    kind: "DevPodWorkspaceInstance",
+  },
 }
 
-export function NewResource(
+export function createResourceFromApiVersion(
   apiVersion: string,
   kind: string,
   metadata: { name: string; namespace?: string }
@@ -42,10 +47,10 @@ export function NewResource(
   let group = ""
   let version = ""
   if (parts.length === 1) {
-    version = parts[0]
+    version = parts[0] || ""
   } else {
-    group = parts[0]
-    version = parts[1]
+    group = parts[0] || ""
+    version = parts[1] || ""
   }
 
   return {

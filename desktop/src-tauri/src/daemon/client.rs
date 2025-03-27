@@ -1,12 +1,12 @@
 use crate::daemon::DaemonStatus;
 use anyhow::anyhow;
 use bytes::{Buf, Bytes};
-use core::time;
+// use core::time;
 use http::Uri;
 use http_body_util::{BodyExt, Empty};
 use hyper::{
-    body::{Body, Incoming},
-    client::conn::http1::SendRequest,
+    // body::{Body, Incoming},
+    // client::conn::http1::SendRequest,
     header,
 };
 use log::error;
@@ -112,7 +112,7 @@ type InnerStream = tokio::net::windows::named_pipe::NamedPipeClient;
 
 impl HandshakeStream {
     pub async fn connect(p: &Path) -> tokio::io::Result<Self> {
-        let mut inner: InnerStream;
+        let inner: InnerStream;
         #[cfg(not(windows))]
         {
             inner = tokio::net::UnixStream::connect(p).await?;

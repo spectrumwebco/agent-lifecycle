@@ -1,14 +1,26 @@
 import { TIDE, TIdentifiable, TWorkspaceSource } from "@/types";
-import { ManagementV1DevPodWorkspaceInstance } from "@loft-enterprise/client/gen/models/managementV1DevPodWorkspaceInstance";
+import { 
+  DevPodWorkspaceInstance, 
+  DevPodWorkspaceInstanceStatus, 
+  WorkspaceStatus,
+  InstancePhase,
+  Condition,
+  DevPodWorkspaceTemplateDefinition,
+  ClusterRef
+} from "../../../api/v1/devpodworkspaceinstance_types";
 import { Labels, deepCopy } from "@/lib";
-import { Resources } from "@loft-enterprise/client";
-import { ManagementV1DevPodWorkspaceInstanceStatus } from "@loft-enterprise/client/gen/models/managementV1DevPodWorkspaceInstanceStatus";
+import { Resources } from "../../../platform/src";
 
-export class ProWorkspaceInstance
-  extends ManagementV1DevPodWorkspaceInstance
-  implements TIdentifiable
-{
-  public readonly status: ProWorkspaceInstanceStatus | undefined;
+export class ProWorkspaceInstance implements DevPodWorkspaceInstance, TIdentifiable {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: {
+    name: string;
+    namespace?: string;
+    [key: string]: any;
+  };
+  spec?: any;
+  status?: ProWorkspaceInstanceStatus;
 
   public get id(): string {
     const maybeID = this.metadata?.labels?.[Labels.WorkspaceID];
@@ -21,24 +33,54 @@ export class ProWorkspaceInstance
     return maybeID;
   }
 
-  constructor(instance: ManagementV1DevPodWorkspaceInstance) {
-    super();
-
-    this.apiVersion = `${Resources.ManagementV1DevPodWorkspaceInstance.group}/${Resources.ManagementV1DevPodWorkspaceInstance.version}`;
-    this.kind = Resources.ManagementV1DevPodWorkspaceInstance.kind;
+  constructor(instance: DevPodWorkspaceInstance) {
+    this.apiVersion = instance.apiVersion;
+    this.kind = instance.kind;
     this.metadata = deepCopy(instance.metadata);
     this.spec = deepCopy(instance.spec);
     this.status = deepCopy(instance.status) as ProWorkspaceInstanceStatus;
   }
 }
 
-class ProWorkspaceInstanceStatus extends ManagementV1DevPodWorkspaceInstanceStatus {
+class ProWorkspaceInstanceStatus implements DevPodWorkspaceInstanceStatus {
+  lastWorkspaceStatus?: WorkspaceStatus;
+  phase?: InstancePhase;
+  reason?: string;
+  message?: string;
+  conditions?: Condition[];
+  instance?: DevPodWorkspaceTemplateDefinition;
+  ignoreReconciliation?: boolean;
+  clusterRef?: ClusterRef;
+  kubernetes?: {
+    podStatus?: {
+      phase?: string;
+      reason?: string;
+      message?: string;
+      containerStatuses?: Array<{
+        name: string;
+        image?: string;
+        state?: {
+          waiting?: { reason?: string; message?: string };
+          terminated?: { reason?: string; message?: string; exitCode?: number };
+        }
+      }>;
+      containerResources?: Array<{ name: string; resources?: { limits?: Record<string, string> } }>;
+      containerMetrics?: Array<{ name: string; usage?: Record<string, string> }>;
+      conditions?: Array<{ status: string; reason?: string; message?: string }>;
+      events?: Array<{ type: string; reason?: string; message?: string }>;
+    };
+    persistentVolumeClaimStatus?: {
+      capacity?: Record<string, string>;
+      phase?: string;
+      conditions?: Array<{ status: string; reason?: string; message?: string }>;
+    };
+  };
+  
   "source"?: TWorkspaceSource;
   "ide"?: TIDE;
   "metrics"?: ProWorkspaceMetricsSummary;
 
   constructor() {
-    super();
   }
 }
 

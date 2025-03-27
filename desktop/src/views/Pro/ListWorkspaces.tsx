@@ -37,7 +37,7 @@ import {
   useColorMode,
   useDisclosure,
 } from "@chakra-ui/react"
-import { ManagementV1Self } from "@loft-enterprise/client/gen/models/managementV1Self"
+import { ManagementV1Self } from "../api/v1/management_v1_typesSelf"
 import { useCallback, useEffect, useId, useMemo, useState } from "react"
 import { useNavigate } from "react-router"
 import { WorkspaceInstanceCard } from "./Workspace"

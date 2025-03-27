@@ -40,7 +40,7 @@ import {
   useColorMode,
   useDisclosure,
 } from "@chakra-ui/react"
-import { ManagementV1UserProfile } from "@loft-enterprise/client/gen/models/managementV1UserProfile"
+import { ManagementV1UserProfile } from "../api/v1/management_v1_typesUserProfile"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useCallback, useMemo } from "react"
 import { BackToWorkspaces } from "../BackToWorkspaces"

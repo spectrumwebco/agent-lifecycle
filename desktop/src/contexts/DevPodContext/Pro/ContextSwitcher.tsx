@@ -28,7 +28,7 @@ import {
   VStack,
   useColorModeValue,
 } from "@chakra-ui/react"
-import { ManagementV1Project } from "@loft-enterprise/client/gen/models/managementV1Project"
+import { ManagementV1Project } from "../api/v1/management_v1_typesProject"
 import { ReactNode, useMemo } from "react"
 import { useNavigate } from "react-router"
 import { useProInstances } from "../proInstances"

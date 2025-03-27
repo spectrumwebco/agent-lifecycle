@@ -13,11 +13,11 @@ impl WindowHelper {
         Self { app_handle }
     }
 
-    pub fn setup(&self, window: &WebviewWindow<Wry>) {
+    pub fn setup(&self, _window: &WebviewWindow<Wry>) {
         // open browser devtools automatically during development
         #[cfg(debug_assertions)]
         {
-            window.open_devtools();
+            _window.open_devtools();
         }
 
         // Window vibrancy
