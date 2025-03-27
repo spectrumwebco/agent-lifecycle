@@ -144,9 +144,7 @@ function GeneralSettings() {
       <SettingSection
         title="Slack Authentication"
         description="Connect your Kled.io account with Slack to access our community and get support">
-        <Button variant="outline" onClick={() => client.initiateSlackAuth()}>
-          Connect with Slack
-        </Button>
+        <SlackSettings />
       </SettingSection>
 
       <SettingSection

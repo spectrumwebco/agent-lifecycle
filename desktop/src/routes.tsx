@@ -12,7 +12,9 @@ export const Routes = {
   WORKSPACES: "/workspaces",
   ACTIONS: "/actions",
   AUTH: "/auth",
-  AUTH_SUCCESS: "/auth-success",
+  AUTH_SUCCESS: "/auth/success",
+  AUTH_CALLBACK: "/auth/callback",
+  AUTH_SLACK: "/auth/slack",
   get ACTION(): string {
     return `${Routes.ACTIONS}/:action`
   },
@@ -200,6 +202,14 @@ export const router = createBrowserRouter([
       {
         path: Routes.AUTH_SUCCESS,
         element: <Auth.AuthSuccess />,
+      },
+      {
+        path: Routes.AUTH_CALLBACK,
+        element: <Auth.AuthCallback />,
+      },
+      {
+        path: Routes.AUTH_SLACK,
+        element: <Auth.SlackAuth />,
       },
     ],
   },

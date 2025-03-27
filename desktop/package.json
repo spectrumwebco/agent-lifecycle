@@ -30,7 +30,7 @@
     "@emotion/styled": "11.11.0",
     "@headlessui/react": "^2.2.0",
     "@hookform/resolvers": "^3.3.4",
-    "@loft-enterprise/client": "https://github.com/loft-sh/loft-javascript-client#v4.3.0-devpod.alpha.11",
+    "@loft-enterprise/client": "https://github.com/loft-sh/loft-javascript-client#v4.3.0-devpod.alpha.22",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-aspect-ratio": "^1.0.3",
