@@ -10,11 +10,12 @@ import { ThemeProvider } from "./Theme"
 import { SettingsProvider } from "./contexts"
 import { router } from "./routes"
 import { client } from "./client"
-import { ColorModeScript } from "@chakra-ui/react"
+import { PlatformProvider } from "./contexts/PlatformContext"
 
 dayjs.extend(relativeTime)
 
-const logger: Logger | undefined = import.meta.env.PROD
+const isProd = typeof process !== 'undefined' ? process.env.NODE_ENV === 'production' : false
+const logger: Logger | undefined = isProd
   ? {
       log: () => {
         // noop in prod
@@ -49,16 +50,18 @@ function Root() {
   return (
     <StrictMode>
       <SettingsProvider>
-        <ColorModeScript initialColorMode={"system"} />
+        {/* ColorModeScript removed as it's not available in the current Chakra UI version */}
         <ThemeProvider>
-          <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />
-            {/* Will be disabled in production automatically */}
-            <ReactQueryDevtools
-              position="bottom-right"
-              toggleButtonProps={{ style: { margin: "0.5em 0.5em 2rem" } }}
-            />
-          </QueryClientProvider>
+          <PlatformProvider>
+            <QueryClientProvider client={queryClient}>
+              <RouterProvider router={router} />
+              {/* Will be disabled in production automatically */}
+              <ReactQueryDevtools
+                position="bottom-right"
+                toggleButtonProps={{ style: { margin: "0.5em 0.5em 2rem" } }}
+              />
+            </QueryClientProvider>
+          </PlatformProvider>
         </ThemeProvider>
       </SettingsProvider>
     </StrictMode>
