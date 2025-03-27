@@ -1,8 +1,8 @@
 [package]
-name = "devpod-desktop"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["loft.sh"]
+name = "kled-beta"
+version = "0.0.5"
+description = "Kled Desktop Application"
+authors = ["Spectrum Web Co"]
 license = ""
 repository = ""
 edition = "2021"
