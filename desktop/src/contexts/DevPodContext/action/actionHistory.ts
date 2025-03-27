@@ -1,6 +1,6 @@
 import { Action, TActionObj, TActions } from "./action"
 
-const HISTORY_KEY = "kled-workspace-action-history"
+const HISTORY_KEY = "devpod-workspace-action-history"
 const MAX_HISTORY_ENTRIES = 50
 
 export class ActionHistory {

@@ -99,18 +99,6 @@ interface PodStatus {
   containerMetrics?: ContainerMetric[];
 }
 
-interface ContainerResource {
-  name: string;
-  resources?: {
-    limits?: Record<string, string>;
-  };
-}
-
-interface ContainerMetric {
-  name: string;
-  usage?: Record<string, string>;
-}
-
 type ManagementV1DevPodWorkspaceInstanceKubernetesStatus = ManagementV1KledWorkspaceInstanceKubernetesStatus;
 type ManagementV1DevPodWorkspaceInstancePodStatus = ManagementV1KledWorkspaceInstancePodStatus;
 type ManagementV1DevPodWorkspaceInstancePodStatusPhaseEnum = ManagementV1KledWorkspaceInstancePodStatusPhaseEnum;
@@ -142,7 +130,7 @@ export function WorkspaceDetails({
   const mainContainerImage = useMemo(
     () =>
       instance?.status?.kubernetes?.podStatus?.containerStatuses?.find(
-        ({ name }) => name === "kled"
+        ({ name }) => name === "devpod"
       )?.image,
     [instance.status?.kubernetes]
   )
@@ -428,14 +416,14 @@ function KubernetesDetails({ status }: TKubernetesDetailsProps) {
   const storageCapacity = status.persistentVolumeClaimStatus?.capacity?.["storage"]
   const resources = useMemo(() => {
     const mainContainerResources = status.podStatus?.containerResources?.find(
-      ({ name }) => name === "kled"
+      ({ name }) => name === "devpod"
     )
     if (!mainContainerResources) {
       return []
     }
 
     const mainContainerMetrics = status.podStatus?.containerMetrics?.find(
-      ({ name }) => name === "kled"
+      ({ name }) => name === "devpod"
     )
     const indexedMetrics: Record<string, string> = {}
     if (mainContainerMetrics?.usage) {
@@ -503,21 +491,21 @@ function KubernetesDetails({ status }: TKubernetesDetailsProps) {
   )
 }
 
-function PodStatus({ podStatus }: { podStatus: ManagementV1KledWorkspaceInstancePodStatus }) {
+function PodStatus({ podStatus }: { podStatus: ManagementV1DevPodWorkspaceInstancePodStatus }) {
   const phase = podStatus.phase
   const phaseColor = {
-    [ManagementV1KledWorkspaceInstancePodStatusPhaseEnum.Pending]: "yellow.500",
-    [ManagementV1KledWorkspaceInstancePodStatusPhaseEnum.Running]: "",
-    [ManagementV1KledWorkspaceInstancePodStatusPhaseEnum.Succeeded]: "red.400",
-    [ManagementV1KledWorkspaceInstancePodStatusPhaseEnum.Failed]: "red.400",
-    [ManagementV1KledWorkspaceInstancePodStatusPhaseEnum.Unknown]: "red.400",
+    "Pending": "yellow.500",
+    "Running": "",
+    "Succeeded": "red.400",
+    "Failed": "red.400",
+    "Unknown": "red.400",
   }
 
   let reason = podStatus.reason
   let message = podStatus.message
-  if (phase !== ManagementV1KledWorkspaceInstancePodStatusPhaseEnum.Running) {
+  if (phase !== "Running") {
     // check container status first
-    const containerStatus = podStatus.containerStatuses?.find((container) => container.name === "kled" && (container.state?.waiting?.reason || container.state?.terminated?.reason))
+    const containerStatus = podStatus.containerStatuses?.find((container) => container.name === "devpod" && (container.state?.waiting?.reason || container.state?.terminated?.reason))
     if (containerStatus) {
       if (containerStatus.state?.waiting) {
         reason = containerStatus.state.waiting.reason
@@ -573,17 +561,17 @@ function PodStatus({ podStatus }: { podStatus: ManagementV1KledWorkspaceInstance
 }
 
 
-function PvcStatus({ pvcStatus }: { pvcStatus: ManagementV1KledWorkspaceInstancePersistentVolumeClaimStatus }) {
+function PvcStatus({ pvcStatus }: { pvcStatus: ManagementV1DevPodWorkspaceInstancePersistentVolumeClaimStatus }) {
   const phase = pvcStatus.phase
   const phaseColor = {
-    [ManagementV1KledWorkspaceInstancePersistentVolumeClaimStatusPhaseEnum.Pending]: "yellow.500",
-    [ManagementV1KledWorkspaceInstancePersistentVolumeClaimStatusPhaseEnum.Bound]: "",
-    [ManagementV1KledWorkspaceInstancePersistentVolumeClaimStatusPhaseEnum.Lost]: "red.400",
+    "Pending": "yellow.500",
+    "Bound": "",
+    "Lost": "red.400",
   }
 
   let reason: string | undefined = ""
   let message: string | undefined = ""
-  if (phase !== ManagementV1KledWorkspaceInstancePersistentVolumeClaimStatusPhaseEnum.Bound) {
+  if (phase !== "Bound") {
     reason = pvcStatus.conditions?.find((condition) => condition.status === "False")?.reason
     message = pvcStatus.conditions?.find((condition) => condition.status === "False")?.message
 

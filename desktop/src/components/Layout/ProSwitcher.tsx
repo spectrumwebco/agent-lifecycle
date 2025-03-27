@@ -1,6 +1,6 @@
 import { client } from "@/client"
 import { useProInstances, useProviders, useSettings } from "@/contexts"
-import { CheckCircle, CircleWithArrow, KledProBadge, ExclamationTriangle } from "@/icons"
+import { CheckCircle, CircleWithArrow, DevPodProBadge, ExclamationTriangle } from "@/icons"
 import {
   exists,
   canHealthCheck as isNewProProvider,
@@ -49,17 +49,17 @@ export function ProSwitcher() {
 
   const backgroundColor = useColorModeValue("white", "gray.900")
   const handleAnnouncementClicked = () => {
-    client.open("https://kled.sh/pro")
+    client.open("https://devpod.sh/pro")
   }
-  const { experimental_kledPro } = useSettings()
+  const { experimental_devPodPro } = useSettings()
   const isProUnauthenticated = proInstances?.some(({ authenticated }) => !authenticated)
-  if (!experimental_kledPro) {
+  if (!experimental_devPodPro) {
     return (
       <Button
         variant="outline"
-        leftIcon={<KledProBadge width="9" height="8" />}
+        leftIcon={<DevPodProBadge width="9" height="8" />}
         onClick={handleAnnouncementClicked}>
-        Try Kled Pro
+        Try DevPod Pro
       </Button>
     )
   }
@@ -74,7 +74,7 @@ export function ProSwitcher() {
             {...(isProUnauthenticated && {
               leftIcon: <ExclamationTriangle boxSize={4} color="orange.300" />,
             })}>
-            Kled Pro
+            DevPod Pro
           </Button>
         </PopoverTrigger>
         <Portal>
@@ -162,7 +162,7 @@ function ProPopoverContent({
           <Heading size="sm" as="h3">
             Your Pro Instances
           </Heading>
-          <Text fontSize="xs">Manage Kled Pro</Text>
+          <Text fontSize="xs">Manage DevPod Pro</Text>
         </VStack>
         <ButtonGroup variant="outline">
           <Tooltip label="Connect to Pro instance">
@@ -248,7 +248,7 @@ function EmptyProInstances({ onConnect }: TEmptyProInstancesProps) {
       <Text lineHeight={"1.2rem"} fontSize="sm" color="gray.500">
         You don&apos;t have any Pro instances set up. Connect to an existing Instance or create a
         new one. <br />
-        <Link color="primary.600" onClick={() => client.open("https://kled.sh/pro")}>
+        <Link color="primary.600" onClick={() => client.open("https://devpod.sh/pro")}>
           Learn more
         </Link>
       </Text>

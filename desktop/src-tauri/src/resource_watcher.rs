@@ -242,23 +242,23 @@ impl Daemon {
             let context = context.clone().unwrap_or("default".to_string());
 
             return Ok(format!(
-                "{}/contexts/{}/providers/{}/daemon/kled.sock",
+                "{}/contexts/{}/providers/{}/daemon/devpod.sock",
                 home, context, provider
             ));
         }
         #[cfg(windows)]
         {
-            return Ok(format!("\\\\.\\pipe\\kled.{}", provider).to_string());
+            return Ok(format!("\\\\.\\pipe\\devpod.{}", provider).to_string());
         }
     }
 
     fn get_home() -> anyhow::Result<String> {
-        if let Ok(kled_home) = std::env::var("KLED_HOME") {
-            return Ok(kled_home);
+        if let Ok(devpod_home) = std::env::var("DEVPOD_HOME") {
+            return Ok(devpod_home);
         }
 
         if let Some(mut home) = home_dir() {
-            home.push(".kled");
+            home.push(".devpod");
             if let Some(home) = home.to_str() {
                 return Ok(home.to_owned());
             }

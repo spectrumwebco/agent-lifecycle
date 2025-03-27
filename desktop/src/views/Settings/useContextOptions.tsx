@@ -6,7 +6,7 @@ import { QueryKeys } from "../../queryKeys"
 import { TContextOptionName } from "../../types"
 import { ClearableInput } from "./ClearableInput"
 
-const DEFAULT_KLED_AGENT_URL = "https://github.com/loft-sh/kled/releases/latest/download/"
+const DEFAULT_DEVPOD_AGENT_URL = "https://github.com/loft-sh/devpod/releases/latest/download/"
 
 export function useContextOptions() {
   const queryClient = useQueryClient()
@@ -58,7 +58,7 @@ export function useAgentURLOption() {
     () => (
       <>
         Set the Agent URL. If you leave this empty, it will be pulled from{" "}
-        <Code>{DEFAULT_KLED_AGENT_URL}</Code>
+        <Code>{DEFAULT_DEVPOD_AGENT_URL}</Code>
       </>
     ),
     []
@@ -83,10 +83,10 @@ export function useTelemetryOption() {
   const helpText = useMemo(
     () => (
       <>
-        Telemetry plays an important role in improving Kled for everyone.{" "}
+        Telemetry plays an important role in improving DevPod for everyone.{" "}
         <strong>We never collect any actual values, only anonymized metadata!</strong> For an
         in-depth explanation, please refer to the{" "}
-        <Link onClick={() => client.open("https://kled.sh/docs/other-topics/telemetry")}>
+        <Link onClick={() => client.open("https://devpod.sh/docs/other-topics/telemetry")}>
           documentation
         </Link>
       </>

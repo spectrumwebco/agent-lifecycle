@@ -1,5 +1,5 @@
 {
-  "identifier": "sh.loft.kled.for.kled.devs",
+  "identifier": "sh.loft.devpod.for.devpod.devs",
   "plugins": {
     "updater": {
       "active": false

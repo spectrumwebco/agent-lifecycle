@@ -49,7 +49,7 @@ export class LocalStorageBackend<T extends TBaseStore> implements TStorageBacken
   constructor(private storageKey: string) {}
 
   private getKey(key: keyof TBaseStore): string {
-    return `kled-${this.storageKey}-${key.toString()}`
+    return `devpod-${this.storageKey}-${key.toString()}`
   }
 
   public async set<TKey extends keyof T>(key: TKey, value: T[TKey]): Promise<void> {

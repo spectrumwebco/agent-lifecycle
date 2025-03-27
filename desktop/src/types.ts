@@ -201,7 +201,7 @@ export type TSupportedIDE = (typeof SUPPORTED_IDES)[number]
 export type TImportWorkspaceConfig = Readonly<{
   workspaceID: string
   workspaceUID: string
-  kledProHost: string
+  devPodProHost: string
   project: string
   options: Record<string, string> | null
 }>

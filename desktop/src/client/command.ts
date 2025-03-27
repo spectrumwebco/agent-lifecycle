@@ -5,7 +5,7 @@ import {
   Command as ShellCommand,
 } from "@tauri-apps/plugin-shell"
 import { debug, ErrorTypeCancelled, isError, Result, ResultError, Return, sleep } from "../lib"
-import { KLED_BINARY, KLED_FLAG_OPTION, KLED_UI_ENV_VAR } from "./constants"
+import { DEVPOD_BINARY, DEVPOD_FLAG_OPTION, DEVPOD_UI_ENV_VAR } from "./constants"
 import { TStreamEvent } from "./types"
 import { TAURI_SERVER_URL } from "./tauriClient"
 
@@ -40,7 +40,7 @@ export class Command implements TCommand<ChildProcess<string>> {
   public static NO_PROXY: string = ""
 
   constructor(args: string[]) {
-    debug("commands", "Creating Kled command with args: ", args)
+    debug("commands", "Creating Devpod command with args: ", args)
     const extraEnvVars = Command.ADDITIONAL_ENV_VARS.split(",")
       .map((envVarStr) => envVarStr.split("="))
       .reduce(
@@ -67,14 +67,14 @@ export class Command implements TCommand<ChildProcess<string>> {
     }
 
     // allows the CLI to detect if commands have been invoked from the UI
-    extraEnvVars[KLED_UI_ENV_VAR] = "true"
+    extraEnvVars[DEVPOD_UI_ENV_VAR] = "true"
 
     if (import.meta.env.TAURI_IS_FLATPAK === "true") {
-      this.sidecarCommand = ShellCommand.create("run-path-kled-wrapper", args, {
-        env: { ...extraEnvVars, ["FLATPAK_ID"]: "sh.loft.kled" },
+      this.sidecarCommand = ShellCommand.create("run-path-devpod-wrapper", args, {
+        env: { ...extraEnvVars, ["FLATPAK_ID"]: "sh.loft.devpod" },
       })
     } else {
-      this.sidecarCommand = ShellCommand.sidecar(KLED_BINARY, args, { env: extraEnvVars })
+      this.sidecarCommand = ShellCommand.sidecar(DEVPOD_BINARY, args, { env: extraEnvVars })
     }
     this.args = args
   }
@@ -228,7 +228,7 @@ export function toFlagArg(flag: string, arg: string) {
 
 export function serializeRawOptions(
   rawOptions: Record<string, unknown>,
-  flag: string = KLED_FLAG_OPTION
+  flag: string = DEVPOD_FLAG_OPTION
 ): string[] {
   return Object.entries(rawOptions).map(([key, value]) => flag + `=${key}=${value}`)
 }

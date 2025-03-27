@@ -11,6 +11,10 @@ edition = "2021"
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
+# SpacetimeDB
+spacetimedb-sdk = "1.0"
+hex = "0.4"
+
 # Tauri
 tauri = { version = "2", features = [
         "macos-private-api",

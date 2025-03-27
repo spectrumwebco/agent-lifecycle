@@ -218,7 +218,7 @@ export function useAppReady() {
 
         await getCurrentWebviewWindow().setFocus()
         // ensure pro is enabled
-        setSetting("experimental_kledPro", true)
+        setSetting("experimental_devPodPro", true)
         handleProLogin(data)
 
         return

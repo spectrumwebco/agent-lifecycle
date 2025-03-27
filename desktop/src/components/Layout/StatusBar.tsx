@@ -99,13 +99,13 @@ function GitHubStar() {
   const iconColor = useStatusBarIconColor()
 
   return (
-    <Tooltip label="Loving Kled? Give us a star on Github">
+    <Tooltip label="Loving Kled.io? Give us a star on Github">
       <IconButton
         variant="ghost"
         rounded="full"
         icon={<StarIcon color={iconColor} />}
-        aria-label="Loving Kled? Give us a star on Github"
-        onClick={() => client.open("https://github.com/loft-sh/kled")}
+        aria-label="Loving Kled.io? Give us a star on Github"
+        onClick={() => client.open("https://github.com/spectrumwebco/kled")}
       />
     </Tooltip>
   )
@@ -115,13 +115,13 @@ function OSSDocs() {
   const iconColor = useStatusBarIconColor()
 
   return (
-    <Tooltip label="How to Kled - Docs">
+    <Tooltip label="Kled.io Documentation">
       <IconButton
         variant="ghost"
         rounded="full"
         icon={<Icon as={HiDocumentMagnifyingGlass} color={iconColor} />}
-        aria-label="How to Kled - Docs"
-        onClick={() => client.open("https://kled.sh/docs")}
+        aria-label="Kled.io Documentation"
+        onClick={() => client.open("https://www.docs.kled.io")}
       />
     </Tooltip>
   )
@@ -137,7 +137,7 @@ function OSSReportIssue() {
         rounded="full"
         icon={<Icon as={FaBug} color={iconColor} />}
         aria-label="Report an Issue"
-        onClick={() => client.open("https://github.com/loft-sh/kled/issues/new/choose")}
+        onClick={() => client.open("https://github.com/spectrumwebco/kled/issues/new")}
       />
     </Tooltip>
   )
@@ -166,7 +166,7 @@ function DebugMenu() {
     const url = new URL(rawLink.replace(/#/g, "?"))
     const workspaceUID = url.searchParams.get("workspace-uid")
     const workspaceID = url.searchParams.get("workspace-id")
-    const host = url.searchParams.get("kled-pro-host")
+    const host = url.searchParams.get("devpod-pro-host")
     const project = url.searchParams.get("project")
     if (!workspaceUID || !workspaceID || !host || !project) {
       console.error(
@@ -181,7 +181,7 @@ function DebugMenu() {
       type: "ImportWorkspace",
       workspace_uid: workspaceUID,
       workspace_id: workspaceID,
-      kled_pro_host: host,
+      devpod_pro_host: host,
       project,
       options: {},
     })
