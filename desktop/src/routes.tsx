@@ -4,13 +4,15 @@ import { ProRoot } from "./ProRoot"
 import { TActionID } from "./contexts"
 import { TProInstanceDetail, exists } from "./lib"
 import { TProviderID, TSupportedIDE, TWorkspaceID } from "./types"
-import { Actions, Pro, Providers, Settings, Workspaces } from "./views"
+import { Actions, Auth, Pro, Providers, Settings, Workspaces } from "./views"
 
 export const Routes = {
   ROOT: "/",
   SETTINGS: "/settings",
   WORKSPACES: "/workspaces",
   ACTIONS: "/actions",
+  AUTH: "/auth",
+  AUTH_SUCCESS: "/auth-success",
   get ACTION(): string {
     return `${Routes.ACTIONS}/:action`
   },
@@ -195,6 +197,10 @@ export const router = createBrowserRouter([
         children: [{ path: Routes.ACTION, element: <Actions.Action /> }],
       },
       { path: Routes.SETTINGS, element: <Settings.Settings /> },
+      {
+        path: Routes.AUTH_SUCCESS,
+        element: <Auth.AuthSuccess />,
+      },
     ],
   },
 ])

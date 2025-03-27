@@ -287,9 +287,25 @@ export type TPlatformUpdateCheck = Readonly<{
   available: TMaybe<boolean>
   newVersion: TMaybe<string>
 }>
+
+export type TUserInfo = Readonly<{
+  id: string
+  name: string
+  email?: string
+  avatar?: string
+  provider?: string
+}>
+
+export type TAuthStatus = Readonly<{
+  authenticated: boolean
+  provider?: string
+  userInfo?: TUserInfo
+}>
+
 export const UserSecret = {
   GIT_HTTP: "kled-git-http",
   GIT_SSH: "kled-git-ssh",
+  SLACK: "kled-slack",
 } as const
 export type TUserSecretType = (typeof UserSecret)[keyof typeof UserSecret]
 export type TGitCredentialData = {

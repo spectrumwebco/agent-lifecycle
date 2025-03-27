@@ -113,7 +113,7 @@ function GeneralSettings() {
         title="Debug mode"
         description={
           <>
-            Run all DevPod commands with the <Code>--debug</Code> flag, making it easier to
+            Run all Kled.io commands with the <Code>--debug</Code> flag, making it easier to
             troubleshoot
           </>
         }>
@@ -123,7 +123,7 @@ function GeneralSettings() {
         />
       </SettingSection>
 
-      <SettingSection title="Logs" description={"Open the logs for DevPod Desktop"}>
+      <SettingSection title="Logs" description={"Open the logs for Kled.io Desktop"}>
         <Button variant="outline" onClick={() => client.openDir("AppLog")}>
           Open Logs
         </Button>
@@ -142,9 +142,17 @@ function GeneralSettings() {
       </SettingSection>
 
       <SettingSection
+        title="Slack Authentication"
+        description="Connect your Kled.io account with Slack to access our community and get support">
+        <Button variant="outline" onClick={() => client.initiateSlackAuth()}>
+          Connect with Slack
+        </Button>
+      </SettingSection>
+
+      <SettingSection
         showDivider={false}
         title="Show Intro"
-        description="Show the introduction to DevPod again">
+        description="Show the introduction to Kled.io again">
         <Button variant="outline" onClick={() => showWelcomeModal({ cancellable: true })}>
           Open
         </Button>
@@ -155,7 +163,7 @@ function GeneralSettings() {
           Danger Zone
         </Heading>
         <Button variant="outline" colorScheme="red" onClick={() => client.quit()}>
-          Quit DevPod
+          Quit Kled.io
         </Button>
       </VStack>
 
@@ -327,7 +335,7 @@ function UpdateSettings() {
       </SettingSection>
       <SettingSection
         title="Versions"
-        description="Manage and explore DevPod versions"
+        description="Manage and explore Kled.io versions"
         showDivider={false}>
         <>
           <VStack align="start" width="full" marginBottom="4">
@@ -393,7 +401,7 @@ function ExperimentalSettings() {
 
       <SettingSection
         title="Experimental IDEs"
-        description=" Enable experimental IDEs. These IDEs are not officially supported by DevPod and might be unstable. We are working on making them generally available">
+        description=" Enable experimental IDEs. These IDEs are not officially supported by Kled.io and might be unstable. We are working on making them generally available">
         <HStack>
           <Switch
             isChecked={settings.experimental_fleet}
@@ -483,7 +491,7 @@ function ExperimentalSettings() {
         {extraEnvVarsInput}
       </SettingSection>
 
-      <SettingSection title="DevPod Pro (beta)" description="Enable DevPod Pro login and creation">
+      <SettingSection title="Kled.io Pro (beta)" description="Enable Kled.io Pro login and creation">
         <Switch
           isChecked={settings.experimental_devPodPro}
           onChange={(e) => set("experimental_devPodPro", e.target.checked)}

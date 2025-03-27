@@ -14,7 +14,7 @@ import * as updater from "@tauri-apps/plugin-updater"
 import { TSettings } from "../contexts"
 import { Release } from "../gen"
 import { Result, Return, hasCapability, isError, noop } from "../lib"
-import { TCommunityContributions, TProInstance, TUnsubscribeFn } from "../types"
+import { TCommunityContributions, TProInstance, TUnsubscribeFn, TUserInfo, TAuthStatus } from "../types"
 import { Command as KledCommand } from "./command"
 import { ContextClient } from "./context"
 import { IDEsClient } from "./ides"
@@ -410,6 +410,60 @@ class Client {
       return new DaemonClient(proInstance.host!)
     } else {
       return new ProClient(proInstance.host!)
+    }
+  }
+
+  public async initiateSlackAuth(): Promise<void> {
+    this.open(`${TAURI_SERVER_URL}/auth/slack`)
+  }
+
+  public async getAuthStatus(): Promise<Result<TAuthStatus>> {
+    try {
+      const res = await fetch(`${TAURI_SERVER_URL}/auth/status`)
+      if (!res.ok) {
+        return Return.Failed(`Failed to fetch auth status: ${res.statusText}`)
+      }
+      const authStatus = await res.json() as TAuthStatus
+
+      return Return.Value(authStatus)
+    } catch (e) {
+      if (isError(e)) {
+        return Return.Failed(e.message)
+      }
+
+      const errMsg = "Unable to fetch authentication status"
+      if (typeof e === "string") {
+        return Return.Failed(`${errMsg}: ${e}`)
+      }
+
+      return Return.Failed(errMsg)
+    }
+  }
+
+  public async getSpacetimeStatus(): Promise<Result<{ running: boolean; version: string; connectedUsers: number }>> {
+    try {
+      const res = await fetch(`${TAURI_SERVER_URL}/spacetime/status`)
+      if (!res.ok) {
+        return Return.Failed(`Failed to fetch SpacetimeDB status: ${res.statusText}`)
+      }
+      const status = await res.json()
+
+      return Return.Value({
+        running: status.running,
+        version: status.version,
+        connectedUsers: status.connected_users
+      })
+    } catch (e) {
+      if (isError(e)) {
+        return Return.Failed(e.message)
+      }
+
+      const errMsg = "Unable to fetch SpacetimeDB status"
+      if (typeof e === "string") {
+        return Return.Failed(`${errMsg}: ${e}`)
+      }
+
+      return Return.Failed(errMsg)
     }
   }
 }
