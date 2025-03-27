@@ -1,10 +1,10 @@
-use crate::{ui_messages, util, AppHandle, AppState};
+use crate::{spacetime_server, ui_messages, util, AppHandle, AppState};
 use axum::{
     body::Body,
     extract::{
         connect_info::ConnectInfo,
         ws::{Message, WebSocket, WebSocketUpgrade},
-        Path, Request, State as AxumState,
+        Path, Query, Request, State as AxumState,
     },
     http::{HeaderMap, StatusCode},
     response::{IntoResponse, Response},
@@ -12,8 +12,9 @@ use axum::{
     Json, Router,
 };
 use http::Method;
-use log::{info, warn};
+use log::{error, info, warn};
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use std::net::SocketAddr;
 use tauri::Manager;
 use tower_http::cors::{Any, CorsLayer};
@@ -40,6 +41,10 @@ pub async fn setup(app_handle: &AppHandle) -> anyhow::Result<()> {
         .route("/daemon/:pro_id/status", get(daemon_status_handler))
         .route("/daemon/:pro_id/restart", get(daemon_restart_handler))
         .route("/daemon-proxy/:pro_id/*path", any(daemon_proxy_handler))
+        .route("/auth/slack", get(slack_auth_handler))
+        .route("/auth/slack/callback", get(slack_auth_callback_handler))
+        .route("/auth/status", get(auth_status_handler))
+        .route("/spacetime/status", get(spacetime_status_handler))
         .with_state(state)
         .layer(cors);
 
@@ -200,4 +205,112 @@ async fn handle_socket(mut socket: WebSocket, who: SocketAddr, app_handle: AppHa
             return;
         }
     }
+}
+
+
+#[derive(Debug, Serialize, Deserialize)]
+struct SlackAuthResponse {
+    ok: bool,
+    access_token: Option<String>,
+    error: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct AuthStatus {
+    authenticated: bool,
+    provider: Option<String>,
+    user_info: Option<UserInfo>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct UserInfo {
+    id: String,
+    name: String,
+    email: Option<String>,
+    avatar: Option<String>,
+}
+
+async fn slack_auth_handler() -> impl IntoResponse {
+    let client_id = "your_slack_client_id";
+    let redirect_uri = "http://localhost:25842/auth/slack/callback";
+    let scope = "identity.basic,identity.email,identity.avatar";
+    
+    let auth_url = format!(
+        "https://slack.com/oauth/v2/authorize?client_id={}&redirect_uri={}&scope={}",
+        client_id, redirect_uri, scope
+    );
+    
+    Response::builder()
+        .status(StatusCode::FOUND)
+        .header("Location", auth_url)
+        .body(Body::empty())
+        .unwrap()
+}
+
+async fn slack_auth_callback_handler(
+    Query(params): Query<HashMap<String, String>>,
+    AxumState(server): AxumState<ServerState>,
+) -> impl IntoResponse {
+    let code = match params.get("code") {
+        Some(code) => code,
+        None => {
+            error!("No authorization code provided in Slack callback");
+            return Response::builder()
+                .status(StatusCode::BAD_REQUEST)
+                .body(Body::from("No authorization code provided"))
+                .unwrap();
+        }
+    };
+    
+    info!("Received Slack authorization code: {}", code);
+    
+    
+    Response::builder()
+        .status(StatusCode::FOUND)
+        .header("Location", "/#/auth-success")
+        .body(Body::empty())
+        .unwrap()
+}
+
+async fn auth_status_handler(
+    AxumState(server): AxumState<ServerState>,
+) -> impl IntoResponse {
+    
+    let status = AuthStatus {
+        authenticated: true,
+        provider: Some("slack".to_string()),
+        user_info: Some(UserInfo {
+            id: "U12345678".to_string(),
+            name: "Test User".to_string(),
+            email: Some("test@example.com".to_string()),
+            avatar: Some("https://secure.gravatar.com/avatar/test".to_string()),
+        }),
+    };
+    
+    Json(status)
+}
+
+
+#[derive(Debug, Serialize, Deserialize)]
+struct SpacetimeStatus {
+    running: bool,
+    version: String,
+    connected_users: u32,
+}
+
+async fn spacetime_status_handler(
+    AxumState(server): AxumState<ServerState>,
+) -> impl IntoResponse {
+    let spacetime_running = match spacetime_server::setup(&server.app_handle).await {
+        Ok(_) => true,
+        Err(_) => false,
+    };
+    
+    let status = SpacetimeStatus {
+        running: spacetime_running,
+        version: "0.1.0".to_string(),
+        connected_users: 0,
+    };
+    
+    Json(status)
 }

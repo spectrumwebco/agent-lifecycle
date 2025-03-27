@@ -21,6 +21,7 @@ mod providers;
 mod resource_watcher;
 mod server;
 mod settings;
+mod spacetime_server;
 mod system_tray;
 mod ui_messages;
 mod ui_ready;
@@ -135,6 +136,13 @@ fn main() -> anyhow::Result<()> {
             tauri::async_runtime::spawn(async move {
                 if let Err(err) = server::setup(&app_handle).await {
                     error!("Failed to start server: {}", err);
+                }
+            });
+
+            let app_handle = app.handle().clone();
+            tauri::async_runtime::spawn(async move {
+                if let Err(err) = spacetime_server::setup(&app_handle).await {
+                    error!("Failed to start SpacetimeDB server: {}", err);
                 }
             });
 

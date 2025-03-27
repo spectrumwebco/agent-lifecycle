@@ -16,23 +16,94 @@ import {
 } from "@/icons"
 import { Annotations, Source, TParameterWithValue, getDisplayName, getLastActivity } from "@/lib"
 import { ManagementV1Runner } from "@/runner"
-import {
-  ComponentWithAs,
-  HStack,
-  IconProps,
-  Text,
-  Tooltip,
-  VStack,
-  useColorModeValue,
-} from "@chakra-ui/react"
+import { HStack, IconProps, Text, Tooltip, VStack } from "@chakra-ui/react"
+
+const useColorMode = () => ({ colorMode: 'light', setColorMode: () => {} });
+const useColorModeValue = (lightValue: any, darkValue: any) => lightValue;
+
+type ComponentWithAs<T = any, P = {}> = React.ComponentType<P>;
 import { ManagementV1Cluster } from "@loft-enterprise/client/gen/models/managementV1Cluster"
 import { ManagementV1DevPodWorkspaceTemplate } from "@loft-enterprise/client/gen/models/managementV1DevPodWorkspaceTemplate"
 import dayjs from "dayjs"
 import { ReactElement, ReactNode, cloneElement, useMemo } from "react"
 import { WorkspaceStatus } from "./WorkspaceStatus"
-import { ManagementV1DevPodWorkspaceInstanceKubernetesStatus } from "@loft-enterprise/client/gen/models/managementV1DevPodWorkspaceInstanceKubernetesStatus"
-import { ManagementV1DevPodWorkspaceInstancePodStatus, ManagementV1DevPodWorkspaceInstancePodStatusPhaseEnum } from "@loft-enterprise/client/gen/models/managementV1DevPodWorkspaceInstancePodStatus"
-import { ManagementV1DevPodWorkspaceInstancePersistentVolumeClaimStatus, ManagementV1DevPodWorkspaceInstancePersistentVolumeClaimStatusPhaseEnum } from "@loft-enterprise/client/gen/models/managementV1DevPodWorkspaceInstancePersistentVolumeClaimStatus"
+type ManagementV1KledWorkspaceInstanceKubernetesStatus = {
+  persistentVolumeClaimStatus?: {
+    capacity?: Record<string, string>;
+    phase?: string;
+    conditions?: Array<{ status: string; reason?: string; message?: string }>;
+  };
+  podStatus?: {
+    phase?: string;
+    reason?: string;
+    message?: string;
+    containerResources?: Array<{ name: string; resources?: { limits?: Record<string, string> } }>;
+    containerMetrics?: Array<{ name: string; usage?: Record<string, string> }>;
+    containerStatuses?: Array<{
+      name: string;
+      state?: {
+        waiting?: { reason?: string; message?: string };
+        terminated?: { reason?: string; message?: string }
+      }
+    }>;
+  };
+};
+
+enum ManagementV1KledWorkspaceInstancePodStatusPhaseEnum {
+  Running = "Running",
+  Pending = "Pending",
+  Failed = "Failed",
+  Succeeded = "Succeeded",
+  Unknown = "Unknown"
+}
+
+type ManagementV1KledWorkspaceInstancePodStatus = {
+  phase?: ManagementV1KledWorkspaceInstancePodStatusPhaseEnum;
+  reason?: string;
+  message?: string;
+  containerStatuses?: Array<{
+    name: string;
+    state?: {
+      waiting?: { reason?: string; message?: string };
+      terminated?: { reason?: string; message?: string }
+    }
+  }>;
+};
+
+enum ManagementV1KledWorkspaceInstancePersistentVolumeClaimStatusPhaseEnum {
+  Bound = "Bound",
+  Pending = "Pending",
+  Lost = "Lost"
+}
+
+type ManagementV1KledWorkspaceInstancePersistentVolumeClaimStatus = {
+  phase?: ManagementV1KledWorkspaceInstancePersistentVolumeClaimStatusPhaseEnum;
+  capacity?: Record<string, string>;
+  conditions?: Array<{ status: string; reason?: string; message?: string }>;
+};
+
+interface ContainerResource {
+  name: string;
+  resources?: {
+    limits?: Record<string, string>;
+  };
+}
+
+interface ContainerMetric {
+  name: string;
+  usage?: Record<string, string>;
+}
+
+interface PodStatus {
+  containerResources?: ContainerResource[];
+  containerMetrics?: ContainerMetric[];
+}
+
+type ManagementV1DevPodWorkspaceInstanceKubernetesStatus = ManagementV1KledWorkspaceInstanceKubernetesStatus;
+type ManagementV1DevPodWorkspaceInstancePodStatus = ManagementV1KledWorkspaceInstancePodStatus;
+type ManagementV1DevPodWorkspaceInstancePodStatusPhaseEnum = ManagementV1KledWorkspaceInstancePodStatusPhaseEnum;
+type ManagementV1DevPodWorkspaceInstancePersistentVolumeClaimStatus = ManagementV1KledWorkspaceInstancePersistentVolumeClaimStatus;
+type ManagementV1DevPodWorkspaceInstancePersistentVolumeClaimStatusPhaseEnum = ManagementV1KledWorkspaceInstancePersistentVolumeClaimStatusPhaseEnum;
 import { quantityToScalar } from "@kubernetes/client-node/dist/util"
 
 type TWorkspaceDetailsProps = Readonly<{
@@ -423,16 +494,16 @@ function KubernetesDetails({ status }: TKubernetesDetailsProps) {
 function PodStatus({ podStatus }: { podStatus: ManagementV1DevPodWorkspaceInstancePodStatus }) {
   const phase = podStatus.phase
   const phaseColor = {
-    [ManagementV1DevPodWorkspaceInstancePodStatusPhaseEnum.Pending]: "yellow.500",
-    [ManagementV1DevPodWorkspaceInstancePodStatusPhaseEnum.Running]: "",
-    [ManagementV1DevPodWorkspaceInstancePodStatusPhaseEnum.Succeeded]: "red.400",
-    [ManagementV1DevPodWorkspaceInstancePodStatusPhaseEnum.Failed]: "red.400",
-    [ManagementV1DevPodWorkspaceInstancePodStatusPhaseEnum.Unknown]: "red.400",
+    "Pending": "yellow.500",
+    "Running": "",
+    "Succeeded": "red.400",
+    "Failed": "red.400",
+    "Unknown": "red.400",
   }
 
   let reason = podStatus.reason
   let message = podStatus.message
-  if (phase !== ManagementV1DevPodWorkspaceInstancePodStatusPhaseEnum.Running) {
+  if (phase !== "Running") {
     // check container status first
     const containerStatus = podStatus.containerStatuses?.find((container) => container.name === "devpod" && (container.state?.waiting?.reason || container.state?.terminated?.reason))
     if (containerStatus) {
@@ -493,14 +564,14 @@ function PodStatus({ podStatus }: { podStatus: ManagementV1DevPodWorkspaceInstan
 function PvcStatus({ pvcStatus }: { pvcStatus: ManagementV1DevPodWorkspaceInstancePersistentVolumeClaimStatus }) {
   const phase = pvcStatus.phase
   const phaseColor = {
-    [ManagementV1DevPodWorkspaceInstancePersistentVolumeClaimStatusPhaseEnum.Pending]: "yellow.500",
-    [ManagementV1DevPodWorkspaceInstancePersistentVolumeClaimStatusPhaseEnum.Bound]: "",
-    [ManagementV1DevPodWorkspaceInstancePersistentVolumeClaimStatusPhaseEnum.Lost]: "red.400",
-  } 
+    "Pending": "yellow.500",
+    "Bound": "",
+    "Lost": "red.400",
+  }
 
   let reason: string | undefined = ""
   let message: string | undefined = ""
-  if (phase !== ManagementV1DevPodWorkspaceInstancePersistentVolumeClaimStatusPhaseEnum.Bound) {
+  if (phase !== "Bound") {
     reason = pvcStatus.conditions?.find((condition) => condition.status === "False")?.reason
     message = pvcStatus.conditions?.find((condition) => condition.status === "False")?.message
 

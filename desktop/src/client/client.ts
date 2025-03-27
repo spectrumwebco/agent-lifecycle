@@ -1,4 +1,11 @@
-import { UseToastOptions } from "@chakra-ui/react"
+type UseToastOptions = {
+  status?: 'info' | 'warning' | 'success' | 'error';
+  title?: string;
+  description?: string;
+  duration?: number;
+  isClosable?: boolean;
+  position?: string;
+}
 import { app, event, path } from "@tauri-apps/api"
 import { invoke } from "@tauri-apps/api/core"
 import { Theme as TauriTheme, getCurrentWindow } from "@tauri-apps/api/window"
@@ -14,8 +21,8 @@ import * as updater from "@tauri-apps/plugin-updater"
 import { TSettings } from "../contexts"
 import { Release } from "../gen"
 import { Result, Return, hasCapability, isError, noop } from "../lib"
-import { TCommunityContributions, TProInstance, TUnsubscribeFn } from "../types"
-import { Command as DevPodCommand } from "./command"
+import { TCommunityContributions, TProInstance, TUnsubscribeFn, TUserInfo, TAuthStatus } from "../types"
+import { Command as KledCommand } from "./command"
 import { ContextClient } from "./context"
 import { IDEsClient } from "./ides"
 import { ProClient } from "./pro"
@@ -110,16 +117,16 @@ class Client {
       this.workspaces.setSSHKeyPath(value as string)
     }
     if (name === "additionalEnvVars") {
-      DevPodCommand.ADDITIONAL_ENV_VARS = value as string
+      KledCommand.ADDITIONAL_ENV_VARS = value as string
     }
     if (name === "httpProxyUrl") {
-      DevPodCommand.HTTP_PROXY = value as string
+      KledCommand.HTTP_PROXY = value as string
     }
     if (name === "httpsProxyUrl") {
-      DevPodCommand.HTTPS_PROXY = value as string
+      KledCommand.HTTPS_PROXY = value as string
     }
     if (name === "noProxy") {
-      DevPodCommand.NO_PROXY = value as string
+      KledCommand.NO_PROXY = value as string
     }
   }
 
@@ -309,7 +316,8 @@ class Client {
   public async isCLIInstalled(): Promise<Result<boolean>> {
     try {
       // we're in a flatpak, we need to check in other paths.
-      if (import.meta.env.TAURI_IS_FLATPAK === "true") {
+      const isFlatpak = false; // For now, assume we're not in flatpak
+      if (isFlatpak) {
         const home_dir = await this.getEnv("HOME")
         // this will throw if doesn't exist
         const exists = await invoke<boolean>("file_exists", {
@@ -410,6 +418,60 @@ class Client {
       return new DaemonClient(proInstance.host!)
     } else {
       return new ProClient(proInstance.host!)
+    }
+  }
+
+  public async initiateSlackAuth(): Promise<void> {
+    this.open(`${TAURI_SERVER_URL}/auth/slack`)
+  }
+
+  public async getAuthStatus(): Promise<Result<TAuthStatus>> {
+    try {
+      const res = await fetch(`${TAURI_SERVER_URL}/auth/status`)
+      if (!res.ok) {
+        return Return.Failed(`Failed to fetch auth status: ${res.statusText}`)
+      }
+      const authStatus = await res.json() as TAuthStatus
+
+      return Return.Value(authStatus)
+    } catch (e) {
+      if (isError(e)) {
+        return Return.Failed(e.message)
+      }
+
+      const errMsg = "Unable to fetch authentication status"
+      if (typeof e === "string") {
+        return Return.Failed(`${errMsg}: ${e}`)
+      }
+
+      return Return.Failed(errMsg)
+    }
+  }
+
+  public async getSpacetimeStatus(): Promise<Result<{ running: boolean; version: string; connectedUsers: number }>> {
+    try {
+      const res = await fetch(`${TAURI_SERVER_URL}/spacetime/status`)
+      if (!res.ok) {
+        return Return.Failed(`Failed to fetch SpacetimeDB status: ${res.statusText}`)
+      }
+      const status = await res.json()
+
+      return Return.Value({
+        running: status.running,
+        version: status.version,
+        connectedUsers: status.connected_users
+      })
+    } catch (e) {
+      if (isError(e)) {
+        return Return.Failed(e.message)
+      }
+
+      const errMsg = "Unable to fetch SpacetimeDB status"
+      if (typeof e === "string") {
+        return Return.Failed(`${errMsg}: ${e}`)
+      }
+
+      return Return.Failed(errMsg)
     }
   }
 }

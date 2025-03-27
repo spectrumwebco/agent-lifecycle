@@ -267,7 +267,7 @@ export function useAppReady() {
         const importResult = await client.pro.importWorkspace({
           workspaceID: event.workspace_id,
           workspaceUID: event.workspace_uid,
-          devPodProHost: event.devpod_pro_host,
+          kledProHost: event.kled_pro_host,
           project: event.project,
           options: event.options,
         })
