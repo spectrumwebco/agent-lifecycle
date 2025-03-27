@@ -37,8 +37,8 @@ export const AuthSuccess: React.FC = () => {
 
   return (
     <Center h="100vh">
-      <VStack spacing={6} p={8} borderRadius="md" boxShadow="lg" bg="white" maxW="md" w="full">
-        <Heading size="lg">Authentication {loading ? "Processing" : authStatus?.authenticated ? "Successful" : "Failed"}</Heading>
+      <Box p={8} borderRadius="md" boxShadow="lg" bg="white" maxWidth="md" width="full">
+        <Heading size="lg" marginBottom={6}>Authentication {loading ? "Processing" : authStatus?.authenticated ? "Successful" : "Failed"}</Heading>
         
         {loading ? (
           <Text>Verifying your authentication status...</Text>
@@ -53,10 +53,10 @@ export const AuthSuccess: React.FC = () => {
           <Box textAlign="center">
             <Text>You have successfully authenticated with {authStatus.provider}.</Text>
             {authStatus.userInfo && (
-              <VStack mt={4} spacing={2}>
+              <Box mt={4}>
                 <Text>Welcome, {authStatus.userInfo.name}!</Text>
-                {authStatus.userInfo.email && <Text fontSize="sm">Email: {authStatus.userInfo.email}</Text>}
-              </VStack>
+                {authStatus.userInfo.email && <Text fontSize="sm" marginTop={2}>Email: {authStatus.userInfo.email}</Text>}
+              </Box>
             )}
             <Button mt={6} colorScheme="blue" onClick={handleContinue}>
               Continue to Kled
@@ -73,7 +73,7 @@ export const AuthSuccess: React.FC = () => {
             </Button>
           </Box>
         )}
-      </VStack>
+      </Box>
     </Center>
   )
 }
