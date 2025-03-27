@@ -34,7 +34,7 @@ pub fn create_user(
     let user_id = generate_id();
     let current_time = get_current_time();
 
-    User::insert(User {
+    let _ = User::insert(User {
         id: user_id,
         name,
         email,
@@ -54,7 +54,7 @@ pub fn create_auth_token(_ctx: spacetimedb::ReducerContext, user_id: String) -> 
     let current_time = get_current_time();
     let expires_at = current_time + 30 * 24 * 60 * 60; // 30 days
 
-    AuthToken::insert(AuthToken {
+    let _ = AuthToken::insert(AuthToken {
         token,
         user_id,
         created_at: current_time,
@@ -63,7 +63,7 @@ pub fn create_auth_token(_ctx: spacetimedb::ReducerContext, user_id: String) -> 
 }
 
 #[spacetimedb(reducer)]
-pub fn verify_token(_ctx: spacetimedb::ReducerContext, token: String) -> () {
+pub fn verify_token(_ctx: spacetimedb::ReducerContext, _token: String) -> () {
 }
 
 fn generate_id() -> String {
