@@ -30,7 +30,7 @@
     "@emotion/styled": "11.11.0",
     "@headlessui/react": "^2.2.0",
     "@hookform/resolvers": "^3.3.4",
-    "@loft-enterprise/client": "https://github.com/loft-sh/loft-javascript-client#v4.3.0-devpod.alpha.22",
+    // Local platform implementation replaces @loft-enterprise/client
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-aspect-ratio": "^1.0.3",
@@ -103,6 +103,8 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@babel/plugin-syntax-flow": "7.26.0",
+    "@babel/plugin-transform-react-jsx": "7.25.9",
     "@eslint/compat": "1.2.7",
     "@eslint/eslintrc": "3.3.0",
     "@eslint/js": "9.22.0",
@@ -110,6 +112,7 @@
     "@rsbuild/plugin-node-polyfill": "^1.3.0",
     "@rsbuild/plugin-react": "^0.5.1",
     "@rspack/cli": "^0.5.1",
+    "@rspack/core": "0.5.9",
     "@tanstack/eslint-plugin-query": "4.36.1",
     "@tauri-apps/cli": "2.2.2",
     "@types/node": "18.15.3",
@@ -126,6 +129,7 @@
     "eslint-plugin-react-hooks": "5.2.0",
     "eslint-plugin-react-refresh": "0.4.19",
     "globals": "16.0.0",
+    "next": "15.2.4",
     "postcss": "^8.4.35",
     "prettier": "3.0.3",
     "rsbuild-plugin-tailwindcss": "^0.2.0",

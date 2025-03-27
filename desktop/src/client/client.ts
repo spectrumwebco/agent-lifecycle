@@ -27,6 +27,7 @@ import { ContextClient } from "./context"
 import { IDEsClient } from "./ides"
 import { ProClient } from "./pro"
 import { DaemonClient } from "./pro/client"
+import { KledApiClient } from "./api/apiClient"
 import { ProvidersClient } from "./providers"
 import { TAURI_SERVER_URL } from "./tauriClient"
 import { WorkspacesClient } from "./workspaces"
@@ -95,6 +96,7 @@ class Client {
   public readonly ides = new IDEsClient()
   public readonly context = new ContextClient()
   public readonly pro = new ProClient("")
+  public readonly api = new KledApiClient("")
 
   public setSetting<TSettingName extends keyof TClientSettings>(
     name: TSettingName,
@@ -106,6 +108,7 @@ class Client {
       this.providers.setDebug(debug)
       this.ides.setDebug(debug)
       this.pro.setDebug(debug)
+      this.api.setDebug(debug)
     }
     if (name === "additionalCliFlags") {
       this.workspaces.setAdditionalFlags(value as string)
