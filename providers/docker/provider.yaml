@@ -3,7 +3,7 @@ version: v0.0.1
 icon: https://devpod.sh/assets/docker.svg
 home: https://github.com/loft-sh/devpod
 description: |-
-  DevPod on Docker
+  Kled on Docker
 optionGroups:
   - options:
       - DOCKER_PATH

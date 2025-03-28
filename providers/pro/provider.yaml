@@ -2,7 +2,7 @@ name: devpod-pro
 version: v0.0.1
 icon: https://devpod.sh/assets/devpod.svg
 home: https://github.com/loft-sh/devpod
-description: DevPod Pro
+description: Kled Pro
 options:
   LOFT_CONFIG:
     global: true

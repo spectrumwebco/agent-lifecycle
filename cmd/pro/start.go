@@ -230,7 +230,7 @@ func (cmd *StartCmd) upgrade() error {
 	err := upgradeRelease(chartName, chartRepo, cmd.Context, cmd.Namespace, extraArgs, cmd.Log)
 	if err != nil {
 		if !cmd.Reset {
-			return errors.New(err.Error() + fmt.Sprintf("\n\nIf want to purge and reinstall DevPod Pro, run: %s\n", ansi.Color("devpod pro start --reset", "green+b")))
+			return errors.New(err.Error() + fmt.Sprintf("\n\nIf want to purge and reinstall Kled Pro, run: %s\n", ansi.Color("devpod pro start --reset", "green+b")))
 		}
 
 		// Try to purge Loft and retry install
@@ -352,9 +352,9 @@ Follow this guide to add a valid certificate: %s
 
 #################################################################
 
-DevPod Pro was successfully installed and can now be reached at: %s
+Kled Pro was successfully installed and can now be reached at: %s
 
-Thanks for using DevPod Pro!
+Thanks for using Kled Pro!
 `,
 			ansi.Color(url, "green+b"),
 			ansi.Color("devpod pro login "+url, "green+b"),
@@ -387,11 +387,11 @@ EXTERNAL-IP may be 'pending' for a while until your cloud provider has created a
 
 #########################################################################################################
 
-The command will wait until DevPod Pro is reachable under the host.
+The command will wait until Kled Pro is reachable under the host.
 
 `)
 
-	cmd.Log.Info("Waiting for you to configure DNS, so DevPod Pro can be reached on https://" + host)
+	cmd.Log.Info("Waiting for you to configure DNS, so Kled Pro can be reached on https://" + host)
 	err = wait.PollUntilContextTimeout(ctx, 5*time.Second, platform.Timeout(), true, func(ctx context.Context) (done bool, err error) {
 		return isHostReachable(ctx, host)
 	})
@@ -443,7 +443,7 @@ Thanks for using Kled Pro!
 }
 
 func (cmd *StartCmd) startDocker(ctx context.Context) error {
-	cmd.Log.Infof("Starting DevPod Pro in Docker...")
+	cmd.Log.Infof("Starting Kled Pro in Docker...")
 	name := "devpod-pro"
 
 	// prepare installation
@@ -481,7 +481,7 @@ func (cmd *StartCmd) startDocker(ctx context.Context) error {
 	}
 
 	// Install Loft
-	cmd.Log.Info("Welcome to DevPod Pro!")
+	cmd.Log.Info("Welcome to Kled Pro!")
 	cmd.Log.Info("This installer will help you get started.")
 
 	// make sure we are ready for installing
@@ -507,7 +507,7 @@ func (cmd *StartCmd) successDocker(ctx context.Context, containerID string) erro
 	}
 
 	// wait for domain to become reachable
-	cmd.Log.Infof("Wait for DevPod Pro to become available at %s...", host)
+	cmd.Log.Infof("Wait for Kled Pro to become available at %s...", host)
 	err = wait.PollUntilContextTimeout(ctx, time.Second, time.Minute*10, true, func(ctx context.Context) (bool, error) {
 		containerDetails, err := cmd.inspectContainer(ctx, containerID)
 		if err != nil {
@@ -520,7 +520,7 @@ func (cmd *StartCmd) successDocker(ctx context.Context, containerID string) erro
 		return isHostReachable(ctx, host)
 	})
 	if err != nil {
-		return fmt.Errorf("error waiting for DevPod Pro: %w", err)
+		return fmt.Errorf("error waiting for Kled Pro: %w", err)
 	}
 
 	// print success message
@@ -543,9 +543,9 @@ Login via CLI: %s
 
 #################################################################
 
-DevPod Pro was successfully installed and can now be reached at: %s
+Kled Pro was successfully installed and can now be reached at: %s
 
-Thanks for using DevPod Pro!
+Thanks for using Kled Pro!
 `,
 		ansi.Color(url, "green+b"),
 		ansi.Color("devpod pro login"+" "+url, "green+b"),
@@ -554,7 +554,7 @@ Thanks for using DevPod Pro!
 }
 
 func (cmd *StartCmd) waitForLoftDocker(ctx context.Context, containerID string) (string, error) {
-	cmd.Log.Info("Wait for DevPod Pro to become available...")
+	cmd.Log.Info("Wait for Kled Pro to become available...")
 
 	// check for local port
 	containerDetails, err := cmd.inspectContainer(ctx, containerID)
@@ -566,7 +566,7 @@ func (cmd *StartCmd) waitForLoftDocker(ctx context.Context, containerID string) 
 
 	// check if no tunnel
 	if cmd.NoTunnel {
-		return "", fmt.Errorf("%w: %s", ErrLoftNotReachable, "cannot connect to DevPod Pro as it has no exposed port and --no-tunnel is enabled")
+		return "", fmt.Errorf("%w: %s", ErrLoftNotReachable, "cannot connect to Kled Pro as it has no exposed port and --no-tunnel is enabled")
 	}
 
 	// wait for router
@@ -660,7 +660,7 @@ func (cmd *StartCmd) runInDocker(ctx context.Context, name string) (string, erro
 		args = append(args, "ghcr.io/loft-sh/devpod-pro:latest")
 	}
 
-	cmd.Log.Infof("Start DevPod Pro via 'docker %s'", strings.Join(args, " "))
+	cmd.Log.Infof("Start Kled Pro via 'docker %s'", strings.Join(args, " "))
 	runCmd := cmd.buildDockerCmd(ctx, args...)
 	runCmd.Stdout = os.Stdout
 	runCmd.Stderr = os.Stderr
@@ -929,7 +929,7 @@ func (cmd *StartCmd) handleAlreadyExistingInstallation(ctx context.Context) erro
 
 func (cmd *StartCmd) waitForDeployment(ctx context.Context) (*corev1.Pod, error) {
 	// wait for loft pod to start
-	cmd.Log.Info("Waiting for DevPod Pro pod to be running...")
+	cmd.Log.Info("Waiting for Kled Pro pod to be running...")
 	loftPod, err := platform.WaitForPodReady(ctx, cmd.KubeClient, cmd.Namespace, cmd.Log)
 	cmd.Log.Donef("Release Pod successfully started")
 	if err != nil {
@@ -973,7 +973,7 @@ func (cmd *StartCmd) pingLoftRouter(ctx context.Context, loftPod *corev1.Pod) (s
 			},
 		},
 	}
-	cmd.Log.Infof("Waiting until DevPod Pro is reachable at https://%s", loftRouterDomain)
+	cmd.Log.Infof("Waiting until Kled Pro is reachable at https://%s", loftRouterDomain)
 	err = wait.PollUntilContextTimeout(ctx, time.Second*3, time.Minute*5, true, func(ctx context.Context) (bool, error) {
 		req, err := http.NewRequestWithContext(ctx, http.MethodGet, "https://"+loftRouterDomain+"/version", nil)
 		if err != nil {
@@ -1022,9 +1022,9 @@ Login via CLI: %s
 
 #################################################################
 
-DevPod Pro was successfully installed and can now be reached at: %s
+Kled Pro was successfully installed and can now be reached at: %s
 
-Thanks for using DevPod Pro!
+Thanks for using Kled Pro!
 `,
 		ansi.Color(url, "green+b"),
 		ansi.Color("devpod pro login"+" "+url, "green+b"),
@@ -1213,7 +1213,7 @@ func uninstall(ctx context.Context, kubeClient kubernetes.Interface, restConfig 
 	}
 
 	log.WriteString(logrus.InfoLevel, "\n")
-	log.Done("Successfully uninstalled DevPod Pro")
+	log.Done("Successfully uninstalled Kled Pro")
 	log.WriteString(logrus.InfoLevel, "\n")
 
 	return nil
@@ -1266,7 +1266,7 @@ func isInstalledLocally(ctx context.Context, kubeClient kubernetes.Interface, na
 
 func enterHostNameQuestion(log log.Logger) (string, error) {
 	return log.Question(&survey.QuestionOptions{
-		Question: fmt.Sprintf("Enter a hostname for your %s instance (e.g. loft.my-domain.tld): \n ", "DevPod Pro"),
+		Question: fmt.Sprintf("Enter a hostname for your %s instance (e.g. loft.my-domain.tld): \n ", "Kled Pro"),
 		ValidationFunc: func(answer string) error {
 			u, err := netUrl.Parse("https://" + answer)
 			if err != nil || u.Path != "" || u.Port() != "" || len(strings.Split(answer, ".")) < 2 {
@@ -1562,7 +1562,7 @@ func upgradeRelease(chartName, chartRepo, kubeContext, namespace string, extraAr
 		return fmt.Errorf("error during helm command: %s (%w)", string(output), err)
 	}
 
-	log.Donef("DevPod Pro has been deployed to your cluster!")
+	log.Donef("Kled Pro has been deployed to your cluster!")
 	return nil
 }
 
@@ -1621,7 +1621,7 @@ func getHelmWorkdir(chartName string) (string, error) {
 
 var (
 	ErrMissingContainer = errors.New("missing container")
-	ErrLoftNotReachable = errors.New("DevPod Pro is not reachable")
+	ErrLoftNotReachable = errors.New("Kled Pro is not reachable")
 )
 
 type ContainerDetails struct {

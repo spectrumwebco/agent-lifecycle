@@ -1,7 +1,7 @@
 package add
 
 import (
-	proflags "github.com/loft-sh/devpod/cmd/pro/flags"
+	proflags "github.com/loft-sh/devpod/cmd/pro/flags" // Maintain import path per requirements
 	"github.com/spf13/cobra"
 )
 

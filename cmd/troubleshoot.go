@@ -153,7 +153,7 @@ func (cmd *TroubleshootCmd) Run(ctx context.Context, args []string) {
 	}
 }
 
-// collectProWorkspaceInfo collects troubleshooting information for a DevPod Pro instance.
+// collectProWorkspaceInfo collects troubleshooting information for a Kled Pro instance.
 // It initializes a client from the host, finds the workspace instance in the project, and retrieves
 // troubleshooting information using the management client.
 func collectProWorkspaceInfo(

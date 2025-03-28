@@ -3,7 +3,7 @@ version: v0.0.1
 icon: https://devpod.sh/assets/kubernetes.svg
 home: https://github.com/loft-sh/devpod
 description: |-
-  DevPod on Kubernetes
+  Kled on Kubernetes
 optionGroups:
   - options:
       - KUBERNETES_NAMESPACE
@@ -39,7 +39,7 @@ options:
   KUBERNETES_CONFIG:
     description: The kubernetes config to use. E.g. /path/to/my/kube/config.yaml
   KUBERNETES_PULL_SECRETS_ENABLED:
-    description: If true, DevPod will try to use the pull secrets from the current context.
+    description: If true, Kled will try to use the pull secrets from the current context.
     default: "true"
     type: boolean
     global: true
@@ -47,15 +47,15 @@ options:
     description: The kubernetes namespace to use. Defaults to devpod.
     default: "devpod"
   CREATE_NAMESPACE:
-    description: If true, DevPod will try to create the namespace.
+    description: If true, Kled will try to create the namespace.
     default: "true"
     type: boolean
     global: true
   CLUSTER_ROLE:
-    description: If defined, DevPod will create a role binding for the given cluster role.
+    description: If defined, Kled will create a role binding for the given cluster role.
     global: true
   SERVICE_ACCOUNT:
-    description: If defined, DevPod will use the given service account for the dev container.
+    description: If defined, Kled will use the given service account for the dev container.
     global: true
   INACTIVITY_TIMEOUT:
     description: "If defined, will automatically stop the pod after the inactivity period. Examples: 10m, 1h"
@@ -63,13 +63,13 @@ options:
     description: "Determines how long the provider waits for the workspace pod to come up. Examples: 10m, 1h"
     default: 10m
   STORAGE_CLASS:
-    description: If defined, DevPod will use the given storage class to create the persistent volume claim. You will need to ensure the storage class exists in your cluster!
+    description: If defined, Kled will use the given storage class to create the persistent volume claim. You will need to ensure the storage class exists in your cluster!
     global: true
   PVC_ACCESS_MODE:
-    description: If defined, DevPod will use the given access mode to create the persistent volume claim. You will need to ensure the storage class support the given access mode!. E.g. RWO or ROX or RWX or RWOP
+    description: If defined, Kled will use the given access mode to create the persistent volume claim. You will need to ensure the storage class support the given access mode!. E.g. RWO or ROX or RWX or RWOP
     global: true
   PVC_ANNOTATIONS:
-    description: If defined, DevPod will use add the given annotations to the main workspace pvc
+    description: If defined, Kled will use add the given annotations to the main workspace pvc
     global: true
   NODE_SELECTOR:
     description: The node selector to use for the workspace pod. E.g. my-label=value,my-label-2=value-2
@@ -88,7 +88,7 @@ options:
     description: The dockerless image to use.
     global: true
   DOCKERLESS_DISABLED:
-    description: If dockerless should be disabled. Dockerless is the way DevPod uses to build images directly within Kubernetes. If dockerless is disabled and no image is specified, DevPod will fail instead.
+    description: If dockerless should be disabled. Dockerless is the way Kled uses to build images directly within Kubernetes. If dockerless is disabled and no image is specified, Kled will fail instead.
     global: true
     default: "false"
   STRICT_SECURITY:
