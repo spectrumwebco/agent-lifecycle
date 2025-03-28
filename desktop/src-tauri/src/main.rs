@@ -35,7 +35,7 @@ use log::{error, info};
 use resource_watcher::{ProState, WorkspacesState};
 use std::sync::{Arc, Mutex};
 use system_tray::{SystemTray, SYSTEM_TRAY_ICON_BYTES};
-use tauri::{image::Image, tray::TrayIconBuilder, Manager, Wry};
+use tauri::{image::Image, tray::TrayIconBuilder, Manager};
 use tokio::sync::{
     mpsc::{self, Sender},
     RwLock,
@@ -43,7 +43,7 @@ use tokio::sync::{
 use ui_messages::UiMessage;
 use util::{kill_child_processes, QUIT_EXIT_CODE};
 
-pub type AppHandle = tauri::AppHandle<Wry>;
+pub type AppHandle = tauri::AppHandle;
 
 pub struct AppState {
     workspaces: Arc<RwLock<WorkspacesState>>,
@@ -164,7 +164,7 @@ fn main() -> anyhow::Result<()> {
                         .menu_on_left_click(true)
                         .on_menu_event(system_tray.get_menu_event_handler())
                         .on_tray_icon_event(system_tray.get_tray_icon_event_handler())
-                        .build(app);
+                        .build();
                 }
             });
 
@@ -230,7 +230,7 @@ fn main() -> anyhow::Result<()> {
                 // Otherwise, we stay alive in the system tray.
                 api.prevent_exit();
             }
-            tauri::RunEvent::WindowEvent { event, .. } => {
+            tauri::RunEvent::WindowEvent { event, label: _, .. } => {
                 if let tauri::WindowEvent::Destroyed = event {
                     providers::check_dangling_provider(app_handle);
                     #[cfg(target_os = "macos")]

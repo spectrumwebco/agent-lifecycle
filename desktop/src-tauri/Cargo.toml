@@ -8,7 +8,7 @@ repository = ""
 edition = "2021"
 
 [build-dependencies]
-tauri-build = { version = "2", features = [] }
+tauri-build = { version = "2.0.0-alpha.20", features = [] }
 
 [dependencies]
 # SpacetimeDB
@@ -16,11 +16,13 @@ spacetimedb-sdk = "0.8.2"
 hex = "0.4"
 
 # Tauri
-tauri = { version = "2", features = [
+tauri = { version = "2.0.0-alpha.20", features = [
         "macos-private-api",
+        "wry",
+        "tray-icon",
         "image-ico",
         "image-png",
-        "tray-icon",
+        "custom-protocol"
 ] }
 # Serde
 serde_json = "1.0"
@@ -32,17 +34,17 @@ serde_urlencoded = "0.7.1"
 kled-spacetime-server = { path = "../server" }
 
 # Tauri plugins
-tauri-plugin-deep-link = { version = "0.1.0" }
-tauri-plugin-store = { version = "2.1.0" }
-tauri-plugin-dialog = "2"
-tauri-plugin-shell = "2"
-tauri-plugin-clipboard-manager = "2"
-tauri-plugin-fs = "2"
-tauri-plugin-os = "2"
-tauri-plugin-process = "2"
-tauri-plugin-updater = "2"
-tauri-plugin-notification = "2"
-tauri-plugin-single-instance = "2"
+tauri-plugin-deep-link = "2.0.0-alpha.20"
+tauri-plugin-store = "2.0.0-alpha.20"
+tauri-plugin-dialog = "2.0.0-alpha.20"
+tauri-plugin-shell = "2.0.0-alpha.20"
+tauri-plugin-clipboard-manager = "2.0.0-alpha.20"
+tauri-plugin-fs = "2.0.0-alpha.20"
+tauri-plugin-os = "2.0.0-alpha.20"
+tauri-plugin-process = "2.0.0-alpha.20"
+tauri-plugin-updater = "2.0.0-alpha.20"
+tauri-plugin-notification = "2.0.0-alpha.20"
+tauri-plugin-single-instance = "2.0.0-alpha.20"
 
 # Logging
 log = { version = "0.4" }

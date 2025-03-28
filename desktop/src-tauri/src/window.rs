@@ -1,7 +1,7 @@
 use crate::AppHandle;
 use anyhow::{Context, Result};
 use log::error;
-use tauri::{WebviewWindow, WebviewWindowBuilder, Wry, WebviewUrl};
+use tauri::{WebviewWindow, WebviewWindowBuilder, WebviewUrl};
 
 #[derive(Clone, Debug)]
 pub struct WindowHelper {
@@ -13,7 +13,7 @@ impl WindowHelper {
         Self { app_handle }
     }
 
-    pub fn setup(&self, _window: &WebviewWindow<Wry>) {
+    pub fn setup(&self, _window: &WebviewWindow) {
         // open browser devtools automatically during development
         #[cfg(debug_assertions)]
         {

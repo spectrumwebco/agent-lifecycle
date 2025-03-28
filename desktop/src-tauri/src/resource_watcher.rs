@@ -17,7 +17,7 @@ use tauri::{
     async_runtime::Receiver,
     image::Image,
     menu::{IconMenuItem, MenuItem, Submenu, SubmenuBuilder},
-    Manager, Wry,
+    Manager,
 };
 use tauri_plugin_notification::NotificationExt;
 use tauri_plugin_shell::process::{CommandChild, CommandEvent};
@@ -30,14 +30,14 @@ pub trait Identifiable {
 #[derive(Default)]
 pub struct WorkspacesState {
     workspaces: Vec<Workspace>,
-    submenu: Option<Submenu<Wry>>,
+    submenu: Option<Submenu>,
 }
 
 #[derive(Deserialize, Clone)]
 pub struct Workspace {
     id: String,
     #[serde(skip)]
-    menu_item: Option<MenuItem<Wry>>,
+    menu_item: Option<MenuItem>,
 }
 impl Identifiable for Workspace {
     type ID = String;
@@ -51,7 +51,7 @@ impl PartialEq for Workspace {
     }
 }
 impl Workspace {
-    fn new_menu_item(&self, app_handle: &AppHandle) -> tauri::Result<MenuItem<Wry>> {
+    fn new_menu_item(&self, app_handle: &AppHandle) -> tauri::Result<MenuItem> {
         return MenuItem::with_id(
             app_handle,
             WorkspacesState::item_id(&self.id()),
@@ -70,7 +70,7 @@ impl WorkspacesState {
         format!("{}{}", Self::IDENTIFIER_PREFIX, id)
     }
 
-    pub fn set_submenu(&mut self, submenu: Submenu<Wry>) {
+    pub fn set_submenu(&mut self, submenu: Submenu) {
         self.submenu = Some(submenu);
     }
 
@@ -84,7 +84,7 @@ impl WorkspacesState {
 }
 
 impl ToSystemTraySubmenu for WorkspacesState {
-    fn to_submenu(&self, app_handle: &AppHandle) -> anyhow::Result<tauri::menu::Submenu<Wry>> {
+    fn to_submenu(&self, app_handle: &AppHandle) -> anyhow::Result<tauri::menu::Submenu> {
         let mut submenu = SubmenuBuilder::with_id(app_handle, "workspace", "Workspaces");
 
         let create_workspace = MenuItem::with_id(
@@ -107,7 +107,7 @@ static RETRY_DEBUG_THRESHOLD: i64 = 7;
 #[derive(Default)]
 pub struct ProState {
     instances: Vec<ProInstance>,
-    submenu: Option<Submenu<tauri::Wry>>,
+    submenu: Option<Submenu>,
     all_ready: bool,
 }
 impl Identifiable for ProInstance {
@@ -138,7 +138,7 @@ impl ProState {
         Ok(pro_instances)
     }
 
-    pub fn set_submenu(&mut self, submenu: Submenu<Wry>) {
+    pub fn set_submenu(&mut self, submenu: Submenu) {
         self.submenu = Some(submenu);
     }
 
@@ -159,7 +159,7 @@ pub struct ProInstance {
     context: Option<String>,
     capabilities: Option<Vec<String>>,
     #[serde(skip)]
-    menu_item: Option<IconMenuItem<Wry>>,
+    menu_item: Option<IconMenuItem>,
     #[serde(skip)]
     daemon: Option<Daemon>,
 }
@@ -183,7 +183,7 @@ impl ProInstance {
         return self.daemon.as_mut();
     }
 
-    fn new_menu_item(&self, app_handle: &AppHandle) -> tauri::Result<IconMenuItem<Wry>> {
+    fn new_menu_item(&self, app_handle: &AppHandle) -> tauri::Result<IconMenuItem> {
         return IconMenuItem::with_id(
             app_handle,
             ProState::item_id(&self.id()),
@@ -416,7 +416,7 @@ impl Daemon {
 }
 
 impl ToSystemTraySubmenu for ProState {
-    fn to_submenu(&self, app_handle: &AppHandle) -> anyhow::Result<tauri::menu::Submenu<Wry>> {
+    fn to_submenu(&self, app_handle: &AppHandle) -> anyhow::Result<tauri::menu::Submenu> {
         return Ok(SubmenuBuilder::with_id(app_handle, "pro", "Pro").build()?);
     }
 }
