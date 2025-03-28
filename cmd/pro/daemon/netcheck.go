@@ -10,7 +10,7 @@ import (
 	proflags "github.com/loft-sh/devpod/cmd/pro/flags"
 	"github.com/loft-sh/devpod/pkg/config"
 	daemon "github.com/loft-sh/devpod/pkg/daemon/platform"
-	providerpkg "github.com/loft-sh/devpod/pkg/provider"
+	providerpkg "github.com/spectrumwebco/kled-pro/pkg/provider"
 	"github.com/loft-sh/log"
 	"github.com/spf13/cobra"
 	"tailscale.com/client/tailscale"
