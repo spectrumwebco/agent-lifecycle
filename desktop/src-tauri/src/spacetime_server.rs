@@ -7,6 +7,7 @@ use tauri::Manager;
 use tokio::sync::Mutex;
 
 pub struct SpacetimeServer {
+    #[allow(dead_code)]
     app_handle: AppHandle,
     server_path: PathBuf,
     is_running: Arc<Mutex<bool>>,
@@ -47,6 +48,7 @@ impl SpacetimeServer {
         Ok(())
     }
 
+    #[allow(dead_code)]
     pub async fn stop(&self) -> Result<()> {
         let mut is_running = self.is_running.lock().await;
         if !*is_running {
@@ -63,6 +65,7 @@ impl SpacetimeServer {
         Ok(())
     }
 
+    #[allow(dead_code)]
     pub async fn is_running(&self) -> bool {
         *self.is_running.lock().await
     }
@@ -85,6 +88,7 @@ pub async fn setup(app_handle: &AppHandle) -> Result<()> {
     }
 }
 
+#[allow(dead_code)]
 pub async fn shutdown(app_handle: &AppHandle) -> Result<()> {
     info!("Shutting down SpacetimeDB server");
     

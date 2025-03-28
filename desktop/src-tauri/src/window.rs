@@ -67,6 +67,7 @@ impl WindowHelper {
             .context("Failed to create main window")
     }
 
+    #[allow(dead_code)]
     pub fn new_update_ready_window(&self) -> Result<()> {
         let handle = self.app_handle.clone();
 

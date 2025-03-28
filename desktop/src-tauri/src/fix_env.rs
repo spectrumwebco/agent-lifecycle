@@ -6,6 +6,7 @@ pub enum Error {
     #[error(transparent)]
     Shell(#[from] std::io::Error),
     #[error("invalid output from shell echo: {0}")]
+    #[allow(dead_code)]
     InvalidOutput(String),
     #[error("failed to run shell echo: {0}")]
     EchoFailed(String),
