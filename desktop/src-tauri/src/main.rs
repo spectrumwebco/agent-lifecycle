@@ -158,10 +158,10 @@ fn main() -> anyhow::Result<()> {
             tauri::async_runtime::block_on(async move {
                 if let Ok(menu) = system_tray.init(&app_handle).await {
                     let _tray = TrayIconBuilder::with_id("main")
-                        .icon(Image::from_bytes(SYSTEM_TRAY_ICON_BYTES).unwrap(),)
+                        .icon(Image::new(SYSTEM_TRAY_ICON_BYTES, 16, 16),)
                         .icon_as_template(true)
                         .menu(&menu)
-                        .menu_on_left_click(true)
+                        .show_menu_on_left_click(true)
                         .on_menu_event(system_tray.get_menu_event_handler())
                         .on_tray_icon_event(system_tray.get_tray_icon_event_handler())
                         .build(app);
@@ -236,8 +236,8 @@ fn main() -> anyhow::Result<()> {
                     #[cfg(target_os = "macos")]
                     {
                         let window_helper = window::WindowHelper::new(app_handle.clone());
-                        let window_count = app_handle.webview_windows().len();
-                        info!("Window \"{}\" destroyed, {} remaining", label, window_count);
+                        let window_count = app_handle.windows().len();
+                        info!("Window destroyed, {} remaining", window_count);
                         if window_count == 0 {
                             window_helper.set_dock_icon_visibility(false);
                         }

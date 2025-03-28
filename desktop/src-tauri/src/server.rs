@@ -383,7 +383,7 @@ async fn get_slack_user_info(access_token: &str) -> Result<UserInfo, reqwest::Er
 async fn auth_status_handler(
     AxumState(server): AxumState<ServerState>,
 ) -> impl IntoResponse {
-    let state = server.app_handle.state::<AppState>();
+    let _state = server.app_handle.state::<AppState>();
     
     let status = AuthStatus {
         authenticated: true,
@@ -426,11 +426,11 @@ async fn generate_api_key_handler(
     AxumState(server): AxumState<ServerState>,
     Json(payload): Json<GenerateApiKeyRequest>,
 ) -> impl IntoResponse {
-    let state = server.app_handle.state::<AppState>();
+    let _state = server.app_handle.state::<AppState>();
     
     let user_id = "U12345678".to_string();
     let user_email = "test@example.com".to_string();
-    let workspace_id = "W12345678".to_string();
+    let _workspace_id = "W12345678".to_string();
     
     let api_key = format!("kled_{}", uuid::Uuid::new_v4().to_string().replace("-", ""));
     let id = uuid::Uuid::new_v4().to_string();
@@ -454,7 +454,7 @@ async fn generate_api_key_handler(
 }
 
 async fn list_api_keys_handler(
-    AxumState(server): AxumState<ServerState>,
+    AxumState(_server): AxumState<ServerState>,
 ) -> impl IntoResponse {
     
     let keys = vec![
@@ -476,7 +476,7 @@ async fn list_api_keys_handler(
 
 async fn delete_api_key_handler(
     Path(id): Path<String>,
-    AxumState(server): AxumState<ServerState>,
+    AxumState(_server): AxumState<ServerState>,
 ) -> impl IntoResponse {
     
     info!("Deleted API key: {}", id);
@@ -484,6 +484,7 @@ async fn delete_api_key_handler(
     StatusCode::OK
 }
 
+#[derive(Debug, Serialize, Deserialize)]
 struct SpacetimeStatus {
     running: bool,
     version: String,
