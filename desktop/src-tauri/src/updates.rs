@@ -1,8 +1,8 @@
-use crate::{settings::Settings, window::WindowHelper, AppHandle, AppState};
+use crate::{settings::Settings, AppHandle, AppState};
 use anyhow::Context;
 use chrono::{DateTime, Utc};
 use lazy_static::lazy_static;
-use log::{debug, error, info, warn};
+use log::{debug, error, info};
 use regex::Regex;
 use reqwest::{Client, Method};
 use serde::{Deserialize, Serialize};
