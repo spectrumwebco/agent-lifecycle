@@ -1,8 +1,8 @@
-use crate::{settings::Settings, window::WindowHelper, AppHandle, AppState};
+use crate::{AppHandle, AppState};
 use anyhow::Context;
 use chrono::{DateTime, Utc};
 use lazy_static::lazy_static;
-use log::{debug, error, info, warn};
+use log::{debug, error, info};
 use regex::Regex;
 use reqwest::{Client, Method};
 use serde::{Deserialize, Serialize};
@@ -14,6 +14,7 @@ use thiserror::Error;
 use tokio::fs::File;
 use ts_rs::TS;
 
+#[allow(dead_code)]
 const UPDATE_POLL_INTERVAL: std::time::Duration = std::time::Duration::from_secs(60 * 10);
 const RELEASES_URL: &str = "https://update-server.devpod.sh/releases";
 const FALLBACK_RELEASES_URL: &str = "https://api.github.com/repos/loft-sh/devpod/releases";
@@ -21,6 +22,7 @@ const FALLBACK_RELEASES_URL: &str = "https://api.github.com/repos/loft-sh/devpod
 #[derive(Error, Debug)]
 pub enum UpdateError {
     #[error("unable to get latest release {0}")]
+    #[allow(dead_code)]
     NoReleaseFound(String),
     #[error("failed to check for updates {0}")]
     CheckUpdate(#[from] tauri_plugin_updater::Error),
@@ -151,6 +153,7 @@ pub async fn check_updates(app_handle: AppHandle) -> Result<bool, UpdateError> {
 
 #[derive(Clone, Debug)]
 pub struct UpdateHelper<'a> {
+    #[allow(dead_code)]
     app_handle: &'a AppHandle,
 }
 
@@ -167,6 +170,7 @@ impl<'a> UpdateHelper<'a> {
             return;
         }
 
+        #[cfg(not(debug_assertions))]
         loop {
             // check if we have updated the app recently
             // if so, show changelog in app
@@ -248,6 +252,7 @@ impl<'a> UpdateHelper<'a> {
         }
     }
 
+    #[allow(dead_code)]
     pub async fn update_app_releases(&self, new_version: &str) -> Result<Release, UpdateError> {
         let releases = self
             .fetch_releases()
@@ -332,6 +337,7 @@ impl<'a> UpdateHelper<'a> {
         Ok(releases)
     }
 
+    #[allow(dead_code)]
     async fn notify_update_available(&self, release: &Release) -> anyhow::Result<()> {
         if let Ok(mut target) = self.app_handle.path().app_cache_dir() {
             target.push(format!("update_{}", release.tag_name.clone()));
