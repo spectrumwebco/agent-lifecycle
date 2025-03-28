@@ -171,7 +171,8 @@ impl<'a> UpdateHelper<'a> {
         }
 
         #[cfg(not(debug_assertions))]
-        loop {
+        {
+            loop {
             // check if we have updated the app recently
             // if so, show changelog in app
 
@@ -249,6 +250,7 @@ impl<'a> UpdateHelper<'a> {
                 }
             }
             tokio::time::sleep(UPDATE_POLL_INTERVAL).await;
+            }
         }
     }
 
