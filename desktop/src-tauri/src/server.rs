@@ -8,7 +8,7 @@ use axum::{
     },
     http::{HeaderMap, StatusCode},
     response::{IntoResponse, Response},
-    routing::{any, get, post},
+    routing::{any, get, post, delete},
     Json, Router,
 };
 use http::Method;
@@ -258,7 +258,7 @@ async fn slack_auth_handler() -> impl IntoResponse {
 
 async fn slack_auth_callback_handler(
     Query(params): Query<HashMap<String, String>>,
-    AxumState(server): AxumState<ServerState>,
+    AxumState(_server): AxumState<ServerState>,
 ) -> impl IntoResponse {
     let code = match params.get("code") {
         Some(code) => code,
@@ -374,10 +374,7 @@ async fn get_slack_user_info(access_token: &str) -> Result<UserInfo, reqwest::Er
         });
     }
     
-    Err(reqwest::Error::from(std::io::Error::new(
-        std::io::ErrorKind::Other, 
-        "Could not parse user info from Slack response"
-    )))
+    Err(anyhow::anyhow!("Could not parse user info from Slack response"))
 }
 
 async fn auth_status_handler(
@@ -401,7 +398,6 @@ async fn auth_status_handler(
 }
 
 
-#[derive(Debug, Serialize, Deserialize)]
 #[derive(Debug, Serialize, Deserialize)]
 struct GenerateApiKeyRequest {
     name: String,
