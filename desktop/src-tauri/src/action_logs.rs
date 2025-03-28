@@ -22,6 +22,7 @@ pub enum ActionLogError {
     #[error("unable to write to file")]
     Write(#[source] std::io::Error),
     #[error("unable to delete to file")]
+    #[allow(dead_code)]
     FileDelete(#[source] std::io::Error),
 }
 impl serde::Serialize for ActionLogError {
