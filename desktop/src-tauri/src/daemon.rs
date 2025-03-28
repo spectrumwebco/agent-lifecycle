@@ -26,21 +26,21 @@ impl DaemonState {
     pub fn running_icon() -> Image<'static> {
         lazy_static! {
             static ref RUNNING_ICON: Image<'static> =
-                Image::from_bytes(include_bytes!("../icons/running.png")).unwrap();
+                Image::new(include_bytes!("../icons/running.png"), 16, 16);
         }
         return RUNNING_ICON.clone();
     }
     pub fn stopped_icon() -> Image<'static> {
         lazy_static! {
             static ref STOPPED_ICON: Image<'static> =
-                Image::from_bytes(include_bytes!("../icons/stopped.png")).unwrap();
+                Image::new(include_bytes!("../icons/stopped.png"), 16, 16);
         }
         return STOPPED_ICON.clone();
     }
     pub fn pending_icon() -> Image<'static> {
         lazy_static! {
             static ref PENDING_ICON: Image<'static> =
-                Image::from_bytes(include_bytes!("../icons/pending.png")).unwrap();
+                Image::new(include_bytes!("../icons/pending.png"), 16, 16);
         }
         return PENDING_ICON.clone();
     }

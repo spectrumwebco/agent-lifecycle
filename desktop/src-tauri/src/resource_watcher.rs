@@ -554,8 +554,8 @@ async fn watch_daemons(app_handle: &AppHandle) -> anyhow::Result<()> {
         // update main system tray icon
         if let Some(main_tray) = app_handle.tray_by_id("main") {
             let icon = match pro_state.all_ready {
-                true => Image::from_bytes(SYSTEM_TRAY_ICON_BYTES).unwrap(),
-                false => Image::from_bytes(WARNING_SYSTEM_TRAY_ICON_BYTES).unwrap(),
+                true => Image::new(SYSTEM_TRAY_ICON_BYTES, 16, 16),
+                false => Image::new(WARNING_SYSTEM_TRAY_ICON_BYTES, 16, 16),
             };
             let _ = main_tray.set_icon(Some(icon));
             let _ = main_tray.set_icon_as_template(true);

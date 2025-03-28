@@ -1,6 +1,8 @@
 module github.com/loft-sh/devpod
 
-go 1.21
+go 1.23.1
+
+toolchain go1.24.1
 
 require (
 	github.com/PaesslerAG/jsonpath v0.1.1
