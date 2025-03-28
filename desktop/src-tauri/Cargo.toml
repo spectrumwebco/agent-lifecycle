@@ -8,7 +8,7 @@ repository = ""
 edition = "2021"
 
 [build-dependencies]
-tauri-build = { version = "1.5.0", features = [] }
+tauri-build = { version = "2.0.0", features = [] }
 
 [dependencies]
 # SpacetimeDB
@@ -16,18 +16,11 @@ spacetimedb-sdk = "0.8.2"
 hex = "0.4"
 
 # Tauri
-tauri = { version = "1.5.0", features = [
-        "macos-private-api",
-        "icon-ico",
-        "icon-png",
-        "system-tray",
-        "shell-open",
-        "dialog",
-        "fs-all",
-        "http-all",
-        "path-all",
-        "process-all",
-        "window-all"
+tauri = { version = "2.0.0", default-features = false, features = [
+    "macos-private-api",
+    "tray-icon",
+    "custom-protocol",
+    "devtools"
 ] }
 # Serde
 serde_json = "1.0"
@@ -39,21 +32,21 @@ serde_urlencoded = "0.7.1"
 kled-spacetime-server = { path = "../server" }
 
 # Tauri plugins
-tauri-plugin-deep-link = { version = "0.1.0" }
-tauri-plugin-store = { version = "1.0.0-beta" }
-tauri-plugin-dialog = { version = "1.0.0-beta" }
-tauri-plugin-shell = { version = "1.0.0-beta" }
-tauri-plugin-clipboard-manager = { version = "1.0.0-beta" }
-tauri-plugin-fs = { version = "1.0.0-beta" }
-tauri-plugin-os = { version = "1.0.0-beta" }
-tauri-plugin-process = { version = "1.0.0-beta" }
-tauri-plugin-updater = { version = "1.0.0-beta" }
-tauri-plugin-notification = { version = "1.0.0-beta" }
-tauri-plugin-single-instance = { version = "1.0.0-beta" }
+tauri-plugin-deep-link = { version = "2.0.0", git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
+tauri-plugin-store = { version = "2.0.0", git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
+tauri-plugin-dialog = { version = "2.0.0", git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
+tauri-plugin-shell = { version = "2.0.0", git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
+tauri-plugin-clipboard-manager = { version = "2.0.0", git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
+tauri-plugin-fs = { version = "2.0.0", git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
+tauri-plugin-os = { version = "2.0.0", git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
+tauri-plugin-process = { version = "2.0.0", git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
+tauri-plugin-updater = { version = "2.0.0", git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
+tauri-plugin-notification = { version = "2.0.0", git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
+tauri-plugin-single-instance = { version = "2.0.0", git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
 
 # Logging
 log = { version = "0.4" }
-tauri-plugin-log = { version = "2" }
+tauri-plugin-log = { version = "2.0.0", git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
 # Datetime
 chrono = { version = "0.4.23", features = ["serde"] }
 

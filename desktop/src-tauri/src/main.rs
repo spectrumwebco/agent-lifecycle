@@ -35,7 +35,7 @@ use log::{error, info};
 use resource_watcher::{ProState, WorkspacesState};
 use std::sync::{Arc, Mutex};
 use system_tray::{SystemTray, SYSTEM_TRAY_ICON_BYTES};
-use tauri::{image::Image, tray::TrayIconBuilder, Manager, Wry};
+use tauri::{image::Image, tray::TrayIconBuilder, Manager};
 use tokio::sync::{
     mpsc::{self, Sender},
     RwLock,
@@ -43,7 +43,7 @@ use tokio::sync::{
 use ui_messages::UiMessage;
 use util::{kill_child_processes, QUIT_EXIT_CODE};
 
-pub type AppHandle = tauri::AppHandle<Wry>;
+pub type AppHandle = tauri::AppHandle;
 
 pub struct AppState {
     workspaces: Arc<RwLock<WorkspacesState>>,
@@ -94,7 +94,7 @@ fn main() -> anyhow::Result<()> {
             resources_handles: Arc::new(Mutex::new(vec![])),
         })
         .plugin(logging::build_plugin())
-        .plugin(tauri_plugin_store::Builder::default().build())
+        .plugin(tauri_plugin_store::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_fs::init())
@@ -102,15 +102,16 @@ fn main() -> anyhow::Result<()> {
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_notification::init())
-        .plugin(tauri_plugin_updater::Builder::new().build())
+        .plugin(tauri_plugin_updater::init())
         .setup(move |app| {
             info!("Setup application");
 
             providers::check_dangling_provider(&app.handle());
             let window_helper = window::WindowHelper::new(app.handle().clone());
 
-            let window = app.get_webview_window("main").unwrap();
-            window_helper.setup(&window);
+            if let Some(window) = app.get_webview_window("main") {
+                window_helper.setup(&window);
+            }
 
             let app_handle = app.handle().clone();
             resource_watcher::setup(&app_handle);
@@ -164,7 +165,7 @@ fn main() -> anyhow::Result<()> {
                         .menu_on_left_click(true)
                         .on_menu_event(system_tray.get_menu_event_handler())
                         .on_tray_icon_event(system_tray.get_tray_icon_event_handler())
-                        .build(app);
+                        .build(&app.app_handle());
                 }
             });
 
@@ -236,8 +237,8 @@ fn main() -> anyhow::Result<()> {
                     #[cfg(target_os = "macos")]
                     {
                         let window_helper = window::WindowHelper::new(app_handle.clone());
-                        let window_count = app_handle.webview_windows().len();
-                        info!("Window \"{}\" destroyed, {} remaining", label, window_count);
+                        let window_count = app_handle.windows().len();
+                        info!("Window destroyed, {} remaining", window_count);
                         if window_count == 0 {
                             window_helper.set_dock_icon_visibility(false);
                         }

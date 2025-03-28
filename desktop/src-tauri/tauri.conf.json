@@ -1,26 +1,16 @@
 {
+
   "build": {
-    "beforeDevCommand": "yarn dev",
     "beforeBuildCommand": "yarn build",
-    "frontendDist": "../dist",
-    "devUrl": "http://localhost:1420"
+    "beforeDevCommand": "yarn dev",
+    "devUrl": "http://localhost:1420",
+    "frontendDist": "../dist"
   },
   "bundle": {
     "active": true,
-    "windows": {
-      "certificateThumbprint": null,
-      "digestAlgorithm": "sha256",
-      "timestampUrl": "",
-      "nsis": {
-        "displayLanguageSelector": false,
-        "installMode": "currentUser"
-      },
-      "signCommand": ".\\sign.bat %1"
-    },
     "category": "DeveloperTool",
     "copyright": "",
     "externalBin": [],
-    "resources": [],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -28,9 +18,23 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
-    "shortDescription": "Build AI-powered development environments with GPU acceleration",
     "longDescription": "Kled.io provides AI-ready development environments with full CUDA support for your AI Agent. Built by Spectrum Web Co, Kled.io offers development environments that work with any IDE and support any cloud, kubernetes, or local docker setup.",
+    "resources": [],
+    "shortDescription": "Build AI-powered development environments with GPU acceleration",
     "targets": "all",
+    "windows": {
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "nsis": {
+        "displayLanguageSelector": false,
+        "installMode": "currentUser"
+      },
+      "signCommand": ".\\sign.bat %1",
+      "timestampUrl": "",
+      "wix": {
+        "language": "en-US"
+      }
+    },
     "macOS": {
       "entitlements": "./entitlements.plist",
       "exceptionDomain": "",
@@ -57,27 +61,26 @@
       "deb": {
         "depends": []
       }
-    },
-    "createUpdaterArtifacts": "v1Compatible"
+    }
   },
-  "productName": "Kled.io",
-  "mainBinaryName": "Kled Desktop",
-  "version": "../package.json",
   "identifier": "au.com.spectrumwebco.kled",
   "plugins": {
     "updater": {
+      "active": true,
+      "dialog": true,
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEY1NDg1NDE4MzA1NDI3QjcKUldTM0oxUXdHRlJJOVhyNUtFc2xkNFZyTmE2R2w0dTRXTFF6OUVMSW03ekphejlPM3U1M2FHUCsK",
-      "windows": {
-        "installMode": "passive"
-      },
       "endpoints": [
         "https://update.kled.io/latest",
         "https://github.com/spectrumwebco/kled/releases/latest/download/latest.json"
-      ]
+      ],
+      "windows": {
+        "installMode": "passive"
+      }
     }
   },
+  "productName": "Kled.io",
+  "version": "../package.json",
   "app": {
-    "withGlobalTauri": false,
     "macOSPrivateApi": true,
     "security": {
       "csp": null
@@ -92,10 +95,9 @@
         "x": 0,
         "y": 0,
         "focus": false,
-        "titleBarStyle": "Overlay",
+        "titleBarStyle": "overlay",
         "fullscreen": false,
         "resizable": true,
-        "hiddenTitle": true,
         "transparent": true,
         "visible": false
       }
