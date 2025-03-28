@@ -350,7 +350,7 @@ async fn slack_auth_callback_handler(
         .unwrap()
 }
 
-async fn get_slack_user_info(access_token: &str) -> Result<UserInfo, reqwest::Error> {
+async fn get_slack_user_info(access_token: &str) -> Result<UserInfo, anyhow::Error> {
     let client = reqwest::Client::new();
     let response = client
         .get("https://slack.com/api/users.identity")
