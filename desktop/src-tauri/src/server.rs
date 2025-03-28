@@ -8,7 +8,7 @@ use axum::{
     },
     http::{HeaderMap, StatusCode},
     response::{IntoResponse, Response},
-    routing::{any, get, post},
+    routing::{any, delete, get, post},
     Json, Router,
 };
 use http::Method;
@@ -92,9 +92,9 @@ async fn releases_handler(AxumState(server): AxumState<ServerState>) -> impl Int
 
 async fn daemon_status_handler(
     Path(pro_id): Path<String>,
-    AxumState(server): AxumState<ServerState>,
+    AxumState(_server): AxumState<ServerState>,
 ) -> impl IntoResponse {
-    let state = server.app_handle.state::<AppState>();
+    let state = _server.app_handle.state::<AppState>();
     let pro = state.pro.read().await;
     return match pro.find_instance(pro_id) {
         Some(pro_instance) => match pro_instance.daemon() {
@@ -107,9 +107,9 @@ async fn daemon_status_handler(
 
 async fn daemon_restart_handler(
     Path(pro_id): Path<String>,
-    AxumState(server): AxumState<ServerState>,
+    AxumState(_server): AxumState<ServerState>,
 ) -> impl IntoResponse {
-    let state = server.app_handle.state::<AppState>();
+    let state = _server.app_handle.state::<AppState>();
     let mut pro = state.pro.write().await;
     return match pro.find_instance_mut(pro_id) {
         Some(pro_instance) => match pro_instance.daemon_mut() {
@@ -126,10 +126,10 @@ async fn daemon_restart_handler(
 
 async fn daemon_proxy_handler(
     Path((pro_id, path)): Path<(String, String)>,
-    AxumState(server): AxumState<ServerState>,
+    AxumState(_server): AxumState<ServerState>,
     mut req: Request<Body>,
 ) -> impl IntoResponse {
-    let state = server.app_handle.state::<AppState>();
+    let state = _server.app_handle.state::<AppState>();
     let pro = state.pro.read().await;
     return match pro.find_instance(pro_id) {
         Some(pro_instance) => match pro_instance.daemon() {
@@ -160,9 +160,9 @@ async fn ws_handler(
     ws: WebSocketUpgrade,
     headers: HeaderMap,
     ConnectInfo(addr): ConnectInfo<SocketAddr>,
-    AxumState(server): AxumState<ServerState>,
+    AxumState(_server): AxumState<ServerState>,
 ) -> Response {
-    let app_handle = server.app_handle;
+    let app_handle = _server.app_handle;
     let user_agent = if let Some(user_agent) = headers.get("user-agent") {
         user_agent.to_str().unwrap_or("Unknown browser")
     } else {
@@ -258,7 +258,7 @@ async fn slack_auth_handler() -> impl IntoResponse {
 
 async fn slack_auth_callback_handler(
     Query(params): Query<HashMap<String, String>>,
-    AxumState(server): AxumState<ServerState>,
+    AxumState(_server): AxumState<ServerState>,
 ) -> impl IntoResponse {
     let code = match params.get("code") {
         Some(code) => code,
@@ -336,7 +336,7 @@ async fn slack_auth_callback_handler(
         Ok(user_info) => {
             info!("Retrieved user info for: {}", user_info.name);
             
-            // let state = server.app_handle.state::<AppState>();
+            // let state = _server.app_handle.state::<AppState>();
         },
         Err(e) => {
             error!("Failed to get user info: {}", e);
@@ -350,7 +350,7 @@ async fn slack_auth_callback_handler(
         .unwrap()
 }
 
-async fn get_slack_user_info(access_token: &str) -> Result<UserInfo, reqwest::Error> {
+async fn get_slack_user_info(access_token: &str) -> anyhow::Result<UserInfo> {
     let client = reqwest::Client::new();
     let response = client
         .get("https://slack.com/api/users.identity")
@@ -374,16 +374,13 @@ async fn get_slack_user_info(access_token: &str) -> Result<UserInfo, reqwest::Er
         });
     }
     
-    Err(reqwest::Error::from(std::io::Error::new(
-        std::io::ErrorKind::Other, 
-        "Could not parse user info from Slack response"
-    )))
+    Err(anyhow::anyhow!("Could not parse user info from Slack response"))
 }
 
 async fn auth_status_handler(
-    AxumState(server): AxumState<ServerState>,
+    AxumState(_server): AxumState<ServerState>,
 ) -> impl IntoResponse {
-    let state = server.app_handle.state::<AppState>();
+    let _state = _server.app_handle.state::<AppState>();
     
     let status = AuthStatus {
         authenticated: true,
@@ -401,7 +398,6 @@ async fn auth_status_handler(
 }
 
 
-#[derive(Debug, Serialize, Deserialize)]
 #[derive(Debug, Serialize, Deserialize)]
 struct GenerateApiKeyRequest {
     name: String,
@@ -423,14 +419,14 @@ struct ApiKeyListResponse {
 }
 
 async fn generate_api_key_handler(
-    AxumState(server): AxumState<ServerState>,
+    AxumState(_server): AxumState<ServerState>,
     Json(payload): Json<GenerateApiKeyRequest>,
 ) -> impl IntoResponse {
-    let state = server.app_handle.state::<AppState>();
+    let _state = _server.app_handle.state::<AppState>();
     
     let user_id = "U12345678".to_string();
     let user_email = "test@example.com".to_string();
-    let workspace_id = "W12345678".to_string();
+    let _workspace_id = "W12345678".to_string();
     
     let api_key = format!("kled_{}", uuid::Uuid::new_v4().to_string().replace("-", ""));
     let id = uuid::Uuid::new_v4().to_string();
@@ -454,7 +450,7 @@ async fn generate_api_key_handler(
 }
 
 async fn list_api_keys_handler(
-    AxumState(server): AxumState<ServerState>,
+    AxumState(_server): AxumState<ServerState>,
 ) -> impl IntoResponse {
     
     let keys = vec![
@@ -476,7 +472,7 @@ async fn list_api_keys_handler(
 
 async fn delete_api_key_handler(
     Path(id): Path<String>,
-    AxumState(server): AxumState<ServerState>,
+    AxumState(_server): AxumState<ServerState>,
 ) -> impl IntoResponse {
     
     info!("Deleted API key: {}", id);
@@ -484,6 +480,7 @@ async fn delete_api_key_handler(
     StatusCode::OK
 }
 
+#[derive(Debug, Serialize, Deserialize)]
 struct SpacetimeStatus {
     running: bool,
     version: String,
@@ -491,9 +488,9 @@ struct SpacetimeStatus {
 }
 
 async fn spacetime_status_handler(
-    AxumState(server): AxumState<ServerState>,
+    AxumState(_server): AxumState<ServerState>,
 ) -> impl IntoResponse {
-    let spacetime_running = match spacetime_server::setup(&server.app_handle).await {
+    let spacetime_running = match spacetime_server::setup(&_server.app_handle).await {
         Ok(_) => true,
         Err(_) => false,
     };

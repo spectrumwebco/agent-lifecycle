@@ -1,6 +1,7 @@
 import { defineConfig } from '@rsbuild/core';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
+import path from 'path';
 // import tailwindcssPlugin from 'rsbuild-plugin-tailwindcss';
 
 const pluginLynx = (options: { platforms: string[], configPath: string }) => {
@@ -40,7 +41,11 @@ export default defineConfig({
   },
   tools: {
     rspack: {
-      // Add any rspack-specific options here if needed
+      resolve: {
+        alias: {
+          '@emotion/is-prop-valid': path.resolve(__dirname, './src/shims/emotion-is-prop-valid-shim.js')
+        }
+      }
     }
   },
 
