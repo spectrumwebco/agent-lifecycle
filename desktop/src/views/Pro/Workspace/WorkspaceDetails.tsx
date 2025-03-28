@@ -16,14 +16,16 @@ import {
 } from "@/icons"
 import { Annotations, Source, TParameterWithValue, getDisplayName, getLastActivity } from "@/lib"
 import { ManagementV1Runner } from "@/runner"
-import { HStack, IconProps, Text, VStack } from "@chakra-ui/react"
-
-const useColorMode = () => ({ colorMode: 'light', setColorMode: () => {} });
-const useColorModeValue = (lightValue: any, darkValue: any) => lightValue;
-
-type ComponentWithAs<T = any, P = {}> = React.ComponentType<P>;
-
-const Tooltip = ({ label, children }: { label: string, children: React.ReactNode }) => children;
+import {
+  ComponentWithAs,
+  HStack,
+  IconProps,
+  Text,
+  Tooltip,
+  VStack,
+  useColorModeValue,
+} from "@chakra-ui/react"
+import { KledProCard } from "@/components/ui/adapters"
 import { ManagementV1Cluster } from "../../../api/v1/management_v1_types"
 import { ManagementV1DevPodWorkspaceTemplate } from "../../../api/v1/management_v1_types"
 import { 
@@ -204,16 +206,14 @@ export function WorkspaceDetails({
         </HStack>
 
         {parameters.length > 0 && (
-          <HStack
+          <KledProCard
             py="2"
             px="4"
-            gap="6"
-            wrap="wrap"
-            bg="gray.50"
-            borderRadius="md"
-            borderWidth={"thin"}
-            borderColor={"gray.200"}
-            _dark={{ bg: "whiteAlpha.50", borderColor: "gray.700" }}>
+            variant="outlined"
+            borderRadius="md">
+            <HStack
+              gap="6"
+              wrap="wrap">
             {parameters.map((param) => {
               let label = param.label
               if (!label) {
@@ -239,6 +239,7 @@ export function WorkspaceDetails({
               )
             })}
           </HStack>
+          </KledProCard>
         )}
       </HStack>
     </VStack>
