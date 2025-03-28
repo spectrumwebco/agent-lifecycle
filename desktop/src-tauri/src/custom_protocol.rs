@@ -155,7 +155,6 @@ impl ProHandler {
 
 impl CustomProtocol {
     pub fn init() -> Self {
-        tauri_plugin_deep_link::prepare(APP_IDENTIFIER);
         Self {}
     }
 
@@ -211,7 +210,7 @@ impl CustomProtocol {
     pub fn setup(&self, app: AppHandle) {
         let app_handle = app.clone();
 
-        let result = tauri_plugin_deep_link::register(APP_URL_SCHEME, move |url_scheme, _source_app, _args| {
+        let result = tauri_plugin_deep_link::register(app_handle.clone(), APP_URL_SCHEME, move |url_scheme| {
             tauri::async_runtime::block_on(async {
                 info!("App opened with URL: {:?}", url_scheme.to_string());
 

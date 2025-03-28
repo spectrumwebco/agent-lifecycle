@@ -167,6 +167,7 @@ impl<'a> UpdateHelper<'a> {
             return;
         }
 
+        #[cfg(not(debug_assertions))]
         loop {
             // check if we have updated the app recently
             // if so, show changelog in app

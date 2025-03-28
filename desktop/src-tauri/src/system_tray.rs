@@ -22,7 +22,7 @@ pub static SYSTEM_TRAY_ICON_BYTES: &'static [u8] = include_bytes!("../icons/icon
 pub static SYSTEM_TRAY_ICON_BYTES: &'static [u8] = include_bytes!("../icons/icon_system_tray.png");
 
 pub trait ToSystemTraySubmenu {
-    fn to_submenu(&self, app_handle: &AppHandle) -> anyhow::Result<Submenu>;
+    fn to_submenu(&self, app_handle: &AppHandle) -> anyhow::Result<Submenu<tauri::Wry>>;
 }
 
 pub struct SystemTray {}
@@ -39,7 +39,7 @@ impl SystemTray {
 }
 
 impl SystemTray {
-    pub async fn init(&self, app_handle: &AppHandle) -> anyhow::Result<Menu> {
+    pub async fn init(&self, app_handle: &AppHandle) -> anyhow::Result<Menu<tauri::Wry>> {
         let mut menu = MenuBuilder::new(app_handle);
         let show_dashboard = MenuItem::with_id(
             app_handle,
