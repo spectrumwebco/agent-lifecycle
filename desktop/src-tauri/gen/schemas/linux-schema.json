@@ -1978,9 +1978,24 @@
           "const": "core:app:allow-default-window-icon"
         },
         {
+          "description": "Enables the fetch_data_store_identifiers command without any pre-configured scope.",
+          "type": "string",
+          "const": "core:app:allow-fetch-data-store-identifiers"
+        },
+        {
+          "description": "Enables the identifier command without any pre-configured scope.",
+          "type": "string",
+          "const": "core:app:allow-identifier"
+        },
+        {
           "description": "Enables the name command without any pre-configured scope.",
           "type": "string",
           "const": "core:app:allow-name"
+        },
+        {
+          "description": "Enables the remove_data_store command without any pre-configured scope.",
+          "type": "string",
+          "const": "core:app:allow-remove-data-store"
         },
         {
           "description": "Enables the set_app_theme command without any pre-configured scope.",
@@ -2013,9 +2028,24 @@
           "const": "core:app:deny-default-window-icon"
         },
         {
+          "description": "Denies the fetch_data_store_identifiers command without any pre-configured scope.",
+          "type": "string",
+          "const": "core:app:deny-fetch-data-store-identifiers"
+        },
+        {
+          "description": "Denies the identifier command without any pre-configured scope.",
+          "type": "string",
+          "const": "core:app:deny-identifier"
+        },
+        {
           "description": "Denies the name command without any pre-configured scope.",
           "type": "string",
           "const": "core:app:deny-name"
+        },
+        {
+          "description": "Denies the remove_data_store command without any pre-configured scope.",
+          "type": "string",
+          "const": "core:app:deny-remove-data-store"
         },
         {
           "description": "Denies the set_app_theme command without any pre-configured scope.",
@@ -2613,6 +2643,11 @@
           "const": "core:webview:allow-reparent"
         },
         {
+          "description": "Enables the set_webview_background_color command without any pre-configured scope.",
+          "type": "string",
+          "const": "core:webview:allow-set-webview-background-color"
+        },
+        {
           "description": "Enables the set_webview_focus command without any pre-configured scope.",
           "type": "string",
           "const": "core:webview:allow-set-webview-focus"
@@ -2691,6 +2726,11 @@
           "description": "Denies the reparent command without any pre-configured scope.",
           "type": "string",
           "const": "core:webview:deny-reparent"
+        },
+        {
+          "description": "Denies the set_webview_background_color command without any pre-configured scope.",
+          "type": "string",
+          "const": "core:webview:deny-set-webview-background-color"
         },
         {
           "description": "Denies the set_webview_focus command without any pre-configured scope.",
@@ -2803,6 +2843,11 @@
           "const": "core:window:allow-internal-toggle-maximize"
         },
         {
+          "description": "Enables the is_always_on_top command without any pre-configured scope.",
+          "type": "string",
+          "const": "core:window:allow-is-always-on-top"
+        },
+        {
           "description": "Enables the is_closable command without any pre-configured scope.",
           "type": "string",
           "const": "core:window:allow-is-closable"
@@ -2908,6 +2953,21 @@
           "const": "core:window:allow-set-always-on-top"
         },
         {
+          "description": "Enables the set_background_color command without any pre-configured scope.",
+          "type": "string",
+          "const": "core:window:allow-set-background-color"
+        },
+        {
+          "description": "Enables the set_badge_count command without any pre-configured scope.",
+          "type": "string",
+          "const": "core:window:allow-set-badge-count"
+        },
+        {
+          "description": "Enables the set_badge_label command without any pre-configured scope.",
+          "type": "string",
+          "const": "core:window:allow-set-badge-label"
+        },
+        {
           "description": "Enables the set_closable command without any pre-configured scope.",
           "type": "string",
           "const": "core:window:allow-set-closable"
@@ -2991,6 +3051,11 @@
           "description": "Enables the set_minimizable command without any pre-configured scope.",
           "type": "string",
           "const": "core:window:allow-set-minimizable"
+        },
+        {
+          "description": "Enables the set_overlay_icon command without any pre-configured scope.",
+          "type": "string",
+          "const": "core:window:allow-set-overlay-icon"
         },
         {
           "description": "Enables the set_position command without any pre-configured scope.",
@@ -3148,6 +3213,11 @@
           "const": "core:window:deny-internal-toggle-maximize"
         },
         {
+          "description": "Denies the is_always_on_top command without any pre-configured scope.",
+          "type": "string",
+          "const": "core:window:deny-is-always-on-top"
+        },
+        {
           "description": "Denies the is_closable command without any pre-configured scope.",
           "type": "string",
           "const": "core:window:deny-is-closable"
@@ -3253,6 +3323,21 @@
           "const": "core:window:deny-set-always-on-top"
         },
         {
+          "description": "Denies the set_background_color command without any pre-configured scope.",
+          "type": "string",
+          "const": "core:window:deny-set-background-color"
+        },
+        {
+          "description": "Denies the set_badge_count command without any pre-configured scope.",
+          "type": "string",
+          "const": "core:window:deny-set-badge-count"
+        },
+        {
+          "description": "Denies the set_badge_label command without any pre-configured scope.",
+          "type": "string",
+          "const": "core:window:deny-set-badge-label"
+        },
+        {
           "description": "Denies the set_closable command without any pre-configured scope.",
           "type": "string",
           "const": "core:window:deny-set-closable"
@@ -3336,6 +3421,11 @@
           "description": "Denies the set_minimizable command without any pre-configured scope.",
           "type": "string",
           "const": "core:window:deny-set-minimizable"
+        },
+        {
+          "description": "Denies the set_overlay_icon command without any pre-configured scope.",
+          "type": "string",
+          "const": "core:window:deny-set-overlay-icon"
         },
         {
           "description": "Denies the set_position command without any pre-configured scope.",
