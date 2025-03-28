@@ -15,8 +15,8 @@ import {
   VStack,
   useColorModeValue,
 } from "@chakra-ui/react"
-import { ManagementV1DevPodWorkspaceTemplate } from "@loft-enterprise/client/gen/models/managementV1DevPodWorkspaceTemplate"
-import { StorageV1AppParameter } from "@loft-enterprise/client/gen/models/storageV1AppParameter"
+import { ManagementV1DevPodWorkspaceTemplate } from "../api/v1/management_v1_typesDevPodWorkspaceTemplate"
+import { StorageV1AppParameter } from "../api/v1/storage_v1_typesAppParameter"
 import { ReactNode, useEffect, useMemo } from "react"
 import { ChangeHandler, Controller, useFormContext } from "react-hook-form"
 import { FieldName, TFormValues } from "./types"

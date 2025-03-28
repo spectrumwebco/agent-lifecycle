@@ -80,5 +80,11 @@ func (c *SetupLoftPlatformAccessCmd) Run(_ *cobra.Command, args []string) error 
 		logger.Warnf("unable to authenticate vcluster cli: %w", err)
 	}
 
+	err = loftconfig.AuthKClusterCliToPlatform(loftConfig, logger)
+	if err != nil {
+		// log error but don't return to allow other CLIs to install as well
+		logger.Warnf("unable to authenticate kcluster cli: %w", err)
+	}
+
 	return nil
 }

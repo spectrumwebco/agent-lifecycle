@@ -6,14 +6,14 @@ use crate::AppState;
 use log::{error, info, warn};
 use serde::{Deserialize, Serialize};
 use std::env;
-use std::path::Path;
+// use std::path::Path;
 use tauri::{AppHandle, Manager, State};
 use thiserror::Error;
 use url::Url;
 
 // Should match the one from "tauri.config.json" and "Info.plist"
-const APP_IDENTIFIER: &str = "sh.loft.kled";
-const APP_URL_SCHEME: &str = "kled";
+const APP_IDENTIFIER: &str = "sh.loft.devpod";
+const APP_URL_SCHEME: &str = "devpod";
 
 pub struct CustomProtocol;
 
@@ -246,12 +246,7 @@ impl CustomProtocol {
             match result {
                 Ok(..) => {}
                 Err(error) => {
-                    let mut is_flatpak = false;
-
-                    match env::var("FLATPAK_ID") {
-                        Ok(_) => is_flatpak = true,
-                        Err(_) => is_flatpak = false,
-                    }
+                    let is_flatpak = env::var("FLATPAK_ID").is_ok();
 
                     if !is_flatpak {
                         let msg = "Either update-desktop-database or xdg-mime are missing. Please make sure they are available on your system";
@@ -308,7 +303,7 @@ mod tests {
 
         #[test]
         fn should_parse() {
-            let url_str = "kled://open?workspace=workspace";
+            let url_str = "devpod://open?workspace=workspace";
             let request = UrlParser::parse(&url_str).unwrap();
 
             assert_eq!(request.host, "open".to_string());
@@ -371,7 +366,7 @@ mod tests {
 
         #[test]
         fn should_parse() {
-            let url_str = "kled://open?source=some-source";
+            let url_str = "devpod://open?source=some-source";
             let request = UrlParser::parse(&url_str).unwrap();
             let got: OpenWorkspaceMsg = CustomProtocol::parse(&request).unwrap();
 
@@ -390,7 +385,7 @@ mod tests {
         #[test]
         fn should_parse_full() {
             let url_str =
-                "kled://import?workspace-id=workspace&workspace-uid=uid&kled-pro-host=kled.pro&other=other&project=foo";
+                "devpod://import?workspace-id=workspace&workspace-uid=uid&devpod-pro-host=devpod.pro&other=other&project=foo";
             let request = UrlParser::parse(&url_str).unwrap();
 
             let got: ImportWorkspaceMsg = CustomProtocol::parse(&request).unwrap();
@@ -421,7 +416,7 @@ mod tests {
 
         #[test]
         fn should_parse_full() {
-            let url_str = "kled://pro/setup?host=foo&access_key=bar";
+            let url_str = "devpod://pro/setup?host=foo&access_key=bar";
             let request = UrlParser::parse(&url_str).unwrap();
 
             let got: SetupProMsg = CustomProtocol::parse(&request).unwrap();
@@ -432,7 +427,7 @@ mod tests {
 
         #[test]
         fn should_parse_host() {
-            let url_str = "kled://pro/setup?host=localhost%3A8080";
+            let url_str = "devpod://pro/setup?host=localhost%3A8080";
             let request = UrlParser::parse(&url_str).unwrap();
 
             let got: SetupProMsg = CustomProtocol::parse(&request).unwrap();

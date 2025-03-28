@@ -30,11 +30,11 @@ import {
   DEVPOD_FLAG_WORKSPACE_UID,
 } from "../constants"
 import { TStreamEventListenerFn } from "../types"
-import { ManagementV1DevPodWorkspaceInstance } from "@loft-enterprise/client/gen/models/managementV1DevPodWorkspaceInstance"
-import { ManagementV1Project } from "@loft-enterprise/client/gen/models/managementV1Project"
-import { ManagementV1Self } from "@loft-enterprise/client/gen/models/managementV1Self"
-import { ManagementV1ProjectTemplates } from "@loft-enterprise/client/gen/models/managementV1ProjectTemplates"
-import { ManagementV1ProjectClusters } from "@loft-enterprise/client/gen/models/managementV1ProjectClusters"
+import { ManagementV1DevPodWorkspaceInstance } from "../api/v1/devpodworkspaceinstance_types"
+import { ManagementV1Project } from "../api/v1/management_v1_typesProject"
+import { ManagementV1Self } from "../api/v1/management_v1_typesSelf"
+import { ManagementV1ProjectTemplates } from "../api/v1/management_v1_typesProjectTemplates"
+import { ManagementV1ProjectClusters } from "../api/v1/management_v1_typesProjectClusters"
 
 export class ProCommands {
   static DEBUG = false

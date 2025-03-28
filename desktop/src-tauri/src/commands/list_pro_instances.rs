@@ -3,7 +3,7 @@ use crate::resource_watcher::ProInstance;
 
 use super::{
     config::{CommandConfig, DevpodCommandConfig, DevpodCommandError},
-    constants::{DEVPOD_BINARY_NAME, DEVPOD_COMMAND_LIST, DEVPOD_COMMAND_PRO, FLAG_OUTPUT_JSON},
+    constants::{KLED_BINARY_NAME, KLED_COMMAND_LIST, KLED_COMMAND_PRO, FLAG_OUTPUT_JSON},
 };
 
 pub struct ListProInstancesCommand {}
@@ -19,8 +19,8 @@ impl ListProInstancesCommand {
 impl DevpodCommandConfig<Vec<ProInstance>> for ListProInstancesCommand {
     fn config(&self) -> CommandConfig {
         CommandConfig {
-            binary_name: DEVPOD_BINARY_NAME,
-            args: vec![DEVPOD_COMMAND_PRO, DEVPOD_COMMAND_LIST, FLAG_OUTPUT_JSON],
+            binary_name: KLED_BINARY_NAME,
+            args: vec![KLED_COMMAND_PRO, KLED_COMMAND_LIST, FLAG_OUTPUT_JSON],
         }
     }
 

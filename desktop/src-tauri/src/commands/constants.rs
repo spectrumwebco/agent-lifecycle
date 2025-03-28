@@ -1,5 +1,5 @@
 // Binaries
-pub const KLED_BINARY_NAME: &str = "kled-cli";
+pub const KLED_BINARY_NAME: &str = "devpod-cli";
 
 // Commands
 pub(super) const KLED_COMMAND_LIST: &str = "list";
@@ -16,4 +16,4 @@ pub(super) const FLAG_DEBUG: &str = "--debug";
 pub(super) const FLAG_IGNORE_NOT_FOUND: &str = "--ignore-not-found";
 
 // Env vars
-pub(super) const KLED_UI_ENV_VAR: &str = "KLED_UI";
+pub(super) const KLED_UI_ENV_VAR: &str = "DEVPOD_UI";

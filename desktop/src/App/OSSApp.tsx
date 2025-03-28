@@ -229,7 +229,7 @@ function TitleBar({ showTitle = true }: TTitleBarProps) {
           data-tauri-drag-region // keep!
           fontWeight="bold"
           marginTop="2">
-          DevPod
+          Kled.io
         </Text>
       )}
     </Box>

@@ -21,6 +21,7 @@ mod providers;
 mod resource_watcher;
 mod server;
 mod settings;
+mod spacetime_server;
 mod system_tray;
 mod ui_messages;
 mod ui_ready;
@@ -140,6 +141,13 @@ fn main() -> anyhow::Result<()> {
 
             let app_handle = app.handle().clone();
             tauri::async_runtime::spawn(async move {
+                if let Err(err) = spacetime_server::setup(&app_handle).await {
+                    error!("Failed to start SpacetimeDB server: {}", err);
+                }
+            });
+
+            let app_handle = app.handle().clone();
+            tauri::async_runtime::spawn(async move {
                 ui_messages::UiMessageHelper::new(app_handle, app_name, window_helper)
                     .listen(rx)
                     .await;
@@ -183,6 +191,7 @@ fn main() -> anyhow::Result<()> {
 
     app.run(move |app_handle, event| {
         let exit_requested_tx = tx.clone();
+        #[cfg(target_os = "macos")]
         let reopen_tx = tx.clone();
 
         #[cfg(target_os = "macos")]
@@ -221,7 +230,7 @@ fn main() -> anyhow::Result<()> {
                 // Otherwise, we stay alive in the system tray.
                 api.prevent_exit();
             }
-            tauri::RunEvent::WindowEvent { event, label, .. } => {
+            tauri::RunEvent::WindowEvent { event, .. } => {
                 if let tauri::WindowEvent::Destroyed = event {
                     providers::check_dangling_provider(app_handle);
                     #[cfg(target_os = "macos")]

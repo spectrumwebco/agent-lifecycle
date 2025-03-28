@@ -496,7 +496,7 @@ function CustomProviderInput({ field, isInvalid, onAccept }: TCustomProviderInpu
     <InputGroup>
       <Input
         spellCheck={false}
-        placeholder="loft-sh/kled-provider-terraform"
+        placeholder="loft-sh/devpod-provider-terraform"
         type="text"
         value={field.value}
         onBlur={field.onBlur}
@@ -564,7 +564,7 @@ function mapCommunityProviderInfo(
 }
 
 function stripDevpodPrefix(rawCommunityProvider: string): string {
-  return rawCommunityProvider.replace("kled-provider-", "")
+  return rawCommunityProvider.replace("devpod-provider-", "")
 }
 
 function sortCommunityProviderInfo(a: TCommunityProviderInfo, b: TCommunityProviderInfo): number {

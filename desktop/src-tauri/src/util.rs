@@ -1,4 +1,4 @@
-use log::{debug, error, info};
+use log::{debug, error};
 use std::time::{Duration, Instant};
 
 // Exit code for the window to signal that the application was quit by the user through the system tray
@@ -18,7 +18,7 @@ where
 }
 
 /// Kills all child processes of a pid on windows, does nothing on all the other OSs.
-pub fn kill_child_processes(parent_pid: u32) {
+pub fn kill_child_processes(_parent_pid: u32) {
     #[cfg(windows)]
     {
         use windows::Win32::Foundation::*;

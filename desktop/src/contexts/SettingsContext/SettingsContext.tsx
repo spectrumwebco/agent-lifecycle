@@ -30,7 +30,7 @@ const initialSettings: TSettings = {
   experimental_zed: true,
   experimental_codium: true,
   experimental_rstudio: true,
-  experimental_devPodPro: false,
+  experimental_kledPro: false,
 }
 function getSettingKeys(): readonly TSetting[] {
   return getKeys(initialSettings)

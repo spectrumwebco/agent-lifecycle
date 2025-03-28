@@ -1,0 +1,13 @@
+[package]
+name = "kled-spacetime-server"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "kled_spacetime_server"
+crate-type = ["cdylib"]
+
+[dependencies]
+spacetimedb = "0.8.2"
+serde = { version = "1.0", features = ["derive"] }
+rand = "0.8.5"

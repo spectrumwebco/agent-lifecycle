@@ -198,7 +198,7 @@ export function WorkspaceSourceInput({
             {...inputCommonProps}
             borderTopRightRadius={0}
             borderBottomRightRadius={0}
-            placeholder="github.com/loft-sh/kled-example-go"
+            placeholder="github.com/spectrumwebco/kled-beta-example-go"
           />
           <Popover isLazy onOpen={handlePopoverOpened}>
             <PopoverTrigger>

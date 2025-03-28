@@ -3,7 +3,7 @@ use tauri::AppHandle;
 use super::{
     config::{CommandConfig, DevpodCommandConfig, DevpodCommandError},
     constants::{
-        DEVPOD_BINARY_NAME, DEVPOD_COMMAND_DELETE, DEVPOD_COMMAND_PRO, FLAG_IGNORE_NOT_FOUND,
+        KLED_BINARY_NAME, KLED_COMMAND_DELETE, KLED_COMMAND_PRO, FLAG_IGNORE_NOT_FOUND,
     },
 };
 
@@ -18,10 +18,10 @@ impl DeleteProInstanceCommand {
 impl DevpodCommandConfig<()> for DeleteProInstanceCommand {
     fn config(&self) -> CommandConfig {
         CommandConfig {
-            binary_name: DEVPOD_BINARY_NAME,
+            binary_name: KLED_BINARY_NAME,
             args: vec![
-                DEVPOD_COMMAND_PRO,
-                DEVPOD_COMMAND_DELETE,
+                KLED_COMMAND_PRO,
+                KLED_COMMAND_DELETE,
                 &self.pro_id,
                 FLAG_IGNORE_NOT_FOUND,
             ],

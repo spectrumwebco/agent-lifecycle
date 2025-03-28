@@ -4,9 +4,9 @@ use tauri::AppHandle;
 use tauri_plugin_shell::{process::Command, ShellExt};
 use thiserror::Error;
 
-use crate::commands::constants::DEVPOD_BINARY_NAME;
+use crate::commands::constants::KLED_BINARY_NAME;
 
-use super::constants::DEVPOD_UI_ENV_VAR;
+use super::constants::KLED_UI_ENV_VAR;
 
 pub struct CommandConfig<'a> {
     pub(crate) binary_name: &'static str,
@@ -49,7 +49,7 @@ impl serde::Serialize for DevpodCommandError {
 pub trait DevpodCommandConfig<T> {
     fn config(&self) -> CommandConfig {
         CommandConfig {
-            binary_name: DEVPOD_BINARY_NAME,
+            binary_name: KLED_BINARY_NAME,
             args: vec![],
         }
     }
@@ -58,7 +58,7 @@ pub trait DevpodCommandConfig<T> {
     fn new_command(&self, app_handle: &AppHandle) -> Result<Command, DevpodCommandError> {
         let config = self.config();
         let env_vars: HashMap<String, String> =
-            HashMap::from([(DEVPOD_UI_ENV_VAR.into(), "true".into())]);
+            HashMap::from([(KLED_UI_ENV_VAR.into(), "true".into())]);
 
         let cmd = app_handle
             .shell()

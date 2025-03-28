@@ -4,7 +4,7 @@ use crate::resource_watcher::Workspace;
 
 use super::{
     config::{CommandConfig, DevpodCommandConfig, DevpodCommandError},
-    constants::{DEVPOD_BINARY_NAME, DEVPOD_COMMAND_LIST, FLAG_OUTPUT_JSON},
+    constants::{KLED_BINARY_NAME, KLED_COMMAND_LIST, FLAG_OUTPUT_JSON},
 };
 
 pub struct ListWorkspacesCommand {}
@@ -20,8 +20,8 @@ impl ListWorkspacesCommand {
 impl DevpodCommandConfig<Vec<Workspace>> for ListWorkspacesCommand {
     fn config(&self) -> CommandConfig {
         CommandConfig {
-            binary_name: DEVPOD_BINARY_NAME,
-            args: vec![DEVPOD_COMMAND_LIST, FLAG_OUTPUT_JSON],
+            binary_name: KLED_BINARY_NAME,
+            args: vec![KLED_COMMAND_LIST, FLAG_OUTPUT_JSON],
         }
     }
 

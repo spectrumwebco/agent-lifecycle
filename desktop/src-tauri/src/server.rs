@@ -1,10 +1,10 @@
-use crate::{ui_messages, util, AppHandle, AppState};
+use crate::{spacetime_server, ui_messages, util, AppHandle, AppState};
 use axum::{
     body::Body,
     extract::{
         connect_info::ConnectInfo,
         ws::{Message, WebSocket, WebSocketUpgrade},
-        Path, Request, State as AxumState,
+        Path, Query, Request, State as AxumState,
     },
     http::{HeaderMap, StatusCode},
     response::{IntoResponse, Response},
@@ -12,8 +12,9 @@ use axum::{
     Json, Router,
 };
 use http::Method;
-use log::{info, warn};
+use log::{error, info, warn};
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use std::net::SocketAddr;
 use tauri::Manager;
 use tower_http::cors::{Any, CorsLayer};
@@ -40,6 +41,13 @@ pub async fn setup(app_handle: &AppHandle) -> anyhow::Result<()> {
         .route("/daemon/:pro_id/status", get(daemon_status_handler))
         .route("/daemon/:pro_id/restart", get(daemon_restart_handler))
         .route("/daemon-proxy/:pro_id/*path", any(daemon_proxy_handler))
+        .route("/auth/slack", get(slack_auth_handler))
+        .route("/auth/slack/callback", get(slack_auth_callback_handler))
+        .route("/auth/status", get(auth_status_handler))
+        .route("/api/keys", post(generate_api_key_handler))
+        .route("/api/keys", get(list_api_keys_handler))
+        .route("/api/keys/:id", delete(delete_api_key_handler))
+        .route("/spacetime/status", get(spacetime_status_handler))
         .with_state(state)
         .layer(cors);
 
@@ -200,4 +208,301 @@ async fn handle_socket(mut socket: WebSocket, who: SocketAddr, app_handle: AppHa
             return;
         }
     }
+}
+
+
+#[derive(Debug, Serialize, Deserialize)]
+struct SlackAuthResponse {
+    ok: bool,
+    access_token: Option<String>,
+    error: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct AuthStatus {
+    authenticated: bool,
+    provider: Option<String>,
+    user_info: Option<UserInfo>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct UserInfo {
+    id: String,
+    name: String,
+    email: Option<String>,
+    avatar: Option<String>,
+}
+
+async fn slack_auth_handler() -> impl IntoResponse {
+    let client_id = std::env::var("SLACK_CLIENT_ID")
+        .unwrap_or_else(|_| {
+            warn!("SLACK_CLIENT_ID environment variable not set");
+            "your_slack_client_id".to_string()
+        });
+    let redirect_uri = "http://localhost:25842/auth/slack/callback";
+    let scope = "identity.basic,identity.email,identity.avatar";
+    
+    let auth_url = format!(
+        "https://slack.com/oauth/v2/authorize?client_id={}&redirect_uri={}&scope={}",
+        client_id, redirect_uri, scope
+    );
+    
+    info!("Redirecting to Slack OAuth URL: {}", auth_url);
+    
+    Response::builder()
+        .status(StatusCode::FOUND)
+        .header("Location", auth_url)
+        .body(Body::empty())
+        .unwrap()
+}
+
+async fn slack_auth_callback_handler(
+    Query(params): Query<HashMap<String, String>>,
+    AxumState(server): AxumState<ServerState>,
+) -> impl IntoResponse {
+    let code = match params.get("code") {
+        Some(code) => code,
+        None => {
+            error!("No authorization code provided in Slack callback");
+            return Response::builder()
+                .status(StatusCode::BAD_REQUEST)
+                .body(Body::from("No authorization code provided"))
+                .unwrap();
+        }
+    };
+    
+    info!("Received Slack authorization code: {}", code);
+    
+    let client_id = std::env::var("SLACK_CLIENT_ID")
+        .unwrap_or_else(|_| {
+            warn!("SLACK_CLIENT_ID environment variable not set");
+            "your_slack_client_id".to_string()
+        });
+    let client_secret = std::env::var("SLACK_CLIENT_SECRET")
+        .unwrap_or_else(|_| {
+            warn!("SLACK_CLIENT_SECRET environment variable not set");
+            "your_slack_client_secret".to_string()
+        });
+    let redirect_uri = "http://localhost:25842/auth/slack/callback";
+    
+    let token_request_url = format!(
+        "https://slack.com/api/oauth.v2.access?code={}&client_id={}&client_secret={}&redirect_uri={}",
+        code, client_id, client_secret, redirect_uri
+    );
+    
+    let client = reqwest::Client::new();
+    let response = match client.post(&token_request_url).send().await {
+        Ok(resp) => resp,
+        Err(e) => {
+            error!("Failed to exchange code for token: {}", e);
+            return Response::builder()
+                .status(StatusCode::INTERNAL_SERVER_ERROR)
+                .body(Body::from("Failed to exchange code for access token"))
+                .unwrap();
+        }
+    };
+    
+    let slack_response: SlackAuthResponse = match response.json().await {
+        Ok(json) => json,
+        Err(e) => {
+            error!("Failed to parse Slack response: {}", e);
+            return Response::builder()
+                .status(StatusCode::INTERNAL_SERVER_ERROR)
+                .body(Body::from("Failed to parse Slack response"))
+                .unwrap();
+        }
+    };
+    
+    if !slack_response.ok {
+        error!("Slack error: {:?}", slack_response.error);
+        return Response::builder()
+            .status(StatusCode::UNAUTHORIZED)
+            .body(Body::from(format!("Slack error: {:?}", slack_response.error)))
+            .unwrap();
+    }
+    
+    let access_token = match &slack_response.access_token {
+        Some(token) => token,
+        None => {
+            error!("No access token in Slack response");
+            return Response::builder()
+                .status(StatusCode::INTERNAL_SERVER_ERROR)
+                .body(Body::from("No access token in Slack response"))
+                .unwrap();
+        }
+    };
+    
+    match get_slack_user_info(access_token).await {
+        Ok(user_info) => {
+            info!("Retrieved user info for: {}", user_info.name);
+            
+            // let state = server.app_handle.state::<AppState>();
+        },
+        Err(e) => {
+            error!("Failed to get user info: {}", e);
+        }
+    }
+    
+    Response::builder()
+        .status(StatusCode::FOUND)
+        .header("Location", "/#/auth-success")
+        .body(Body::empty())
+        .unwrap()
+}
+
+async fn get_slack_user_info(access_token: &str) -> Result<UserInfo, reqwest::Error> {
+    let client = reqwest::Client::new();
+    let response = client
+        .get("https://slack.com/api/users.identity")
+        .header("Authorization", format!("Bearer {}", access_token))
+        .send()
+        .await?;
+    
+    let json = response.json::<serde_json::Value>().await?;
+    
+    if let Some(user) = json.get("user") {
+        let id = user.get("id").and_then(|v| v.as_str()).unwrap_or("").to_string();
+        let name = user.get("name").and_then(|v| v.as_str()).unwrap_or("").to_string();
+        let email = user.get("email").and_then(|v| v.as_str()).map(|s| s.to_string());
+        let avatar = user.get("image_192").and_then(|v| v.as_str()).map(|s| s.to_string());
+        
+        return Ok(UserInfo {
+            id,
+            name,
+            email,
+            avatar,
+        });
+    }
+    
+    Err(reqwest::Error::from(std::io::Error::new(
+        std::io::ErrorKind::Other, 
+        "Could not parse user info from Slack response"
+    )))
+}
+
+async fn auth_status_handler(
+    AxumState(server): AxumState<ServerState>,
+) -> impl IntoResponse {
+    let state = server.app_handle.state::<AppState>();
+    
+    let status = AuthStatus {
+        authenticated: true,
+        provider: Some("slack".to_string()),
+        user_info: Some(UserInfo {
+            id: "U12345678".to_string(),
+            name: "Test User".to_string(),
+            email: Some("test@example.com".to_string()),
+            avatar: Some("https://secure.gravatar.com/avatar/test".to_string()),
+        }),
+    };
+    
+    info!("Auth status requested, returning mock data");
+    Json(status)
+}
+
+
+#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
+struct GenerateApiKeyRequest {
+    name: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct ApiKeyResponse {
+    id: String,
+    name: String,
+    key: String,
+    created_at: u64,
+    user_id: String,
+    user_email: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct ApiKeyListResponse {
+    keys: Vec<ApiKeyResponse>,
+}
+
+async fn generate_api_key_handler(
+    AxumState(server): AxumState<ServerState>,
+    Json(payload): Json<GenerateApiKeyRequest>,
+) -> impl IntoResponse {
+    let state = server.app_handle.state::<AppState>();
+    
+    let user_id = "U12345678".to_string();
+    let user_email = "test@example.com".to_string();
+    let workspace_id = "W12345678".to_string();
+    
+    let api_key = format!("kled_{}", uuid::Uuid::new_v4().to_string().replace("-", ""));
+    let id = uuid::Uuid::new_v4().to_string();
+    
+    
+    info!("Generated API key: {} for user: {}", payload.name, user_id);
+    
+    let api_key_response = ApiKeyResponse {
+        id,
+        name: payload.name,
+        key: api_key,
+        created_at: std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_secs(),
+        user_id,
+        user_email,
+    };
+    
+    Json(api_key_response)
+}
+
+async fn list_api_keys_handler(
+    AxumState(server): AxumState<ServerState>,
+) -> impl IntoResponse {
+    
+    let keys = vec![
+        ApiKeyResponse {
+            id: uuid::Uuid::new_v4().to_string(),
+            name: "Test API Key".to_string(),
+            key: "kled_12345678901234567890".to_string(),
+            created_at: std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_secs(),
+            user_id: "U12345678".to_string(),
+            user_email: "test@example.com".to_string(),
+        }
+    ];
+    
+    Json(ApiKeyListResponse { keys })
+}
+
+async fn delete_api_key_handler(
+    Path(id): Path<String>,
+    AxumState(server): AxumState<ServerState>,
+) -> impl IntoResponse {
+    
+    info!("Deleted API key: {}", id);
+    
+    StatusCode::OK
+}
+
+struct SpacetimeStatus {
+    running: bool,
+    version: String,
+    connected_users: u32,
+}
+
+async fn spacetime_status_handler(
+    AxumState(server): AxumState<ServerState>,
+) -> impl IntoResponse {
+    let spacetime_running = match spacetime_server::setup(&server.app_handle).await {
+        Ok(_) => true,
+        Err(_) => false,
+    };
+    
+    let status = SpacetimeStatus {
+        running: spacetime_running,
+        version: "0.1.0".to_string(),
+        connected_users: 0,
+    };
+    
+    Json(status)
 }

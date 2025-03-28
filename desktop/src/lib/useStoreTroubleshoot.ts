@@ -1,5 +1,5 @@
 import { client } from "@/client"
-import { TActionObj } from "@/contexts/DevPodContext/action"
+import { TActionObj } from "@/contexts/KledContext/action"
 import { TWorkspace } from "@/types"
 import { useToast } from "@chakra-ui/react"
 import { useMutation } from "@tanstack/react-query"
@@ -68,7 +68,7 @@ export function useStoreTroubleshoot() {
 
       const out = await zip.generateAsync({ type: "uint8array" })
 
-      await client.writeFile([targetFolder, "kled_troubleshoot.zip"], out)
+      await client.writeFile([targetFolder, "devpod_troubleshoot.zip"], out)
 
       client.open(targetFolder)
     },

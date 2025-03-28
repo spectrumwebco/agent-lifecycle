@@ -112,10 +112,10 @@ export function useInstallCLI() {
   const helpText = useMemo(() => {
     return (
       <>
-        Adds the Kled CLI to your <Code>$PATH</Code>.{" "}
+        Adds the DevPod CLI to your <Code>$PATH</Code>.{" "}
         {isWindows ? (
           <>
-            It will be placed in <Code>%APP_DATA%\sh.loft.kled\bin</Code>
+            It will be placed in <Code>%APP_DATA%\sh.loft.devpod\bin</Code>
           </>
         ) : (
           <>

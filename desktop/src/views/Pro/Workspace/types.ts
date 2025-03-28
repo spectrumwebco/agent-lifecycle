@@ -1,6 +1,6 @@
 import { ProWorkspaceInstance } from "@/contexts"
 import { TWorkspaceResult } from "@/contexts/DevPodContext/workspaces/useWorkspace"
-import { ManagementV1DevPodWorkspaceTemplate } from "@loft-enterprise/client/gen/models/managementV1DevPodWorkspaceTemplate"
+import { ManagementV1DevPodWorkspaceTemplate } from "../api/v1/management_v1_typesDevPodWorkspaceTemplate"
 
 export type TTabProps = Readonly<{
   host: string

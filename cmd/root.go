@@ -11,6 +11,7 @@ import (
 	"github.com/loft-sh/devpod/cmd/flags"
 	"github.com/loft-sh/devpod/cmd/helper"
 	"github.com/loft-sh/devpod/cmd/ide"
+	"github.com/loft-sh/devpod/cmd/kcluster"
 	"github.com/loft-sh/devpod/cmd/machine"
 	"github.com/loft-sh/devpod/cmd/pro"
 	"github.com/loft-sh/devpod/cmd/provider"
@@ -123,6 +124,7 @@ func BuildRoot() *cobra.Command {
 	rootCmd.AddCommand(machine.NewMachineCmd(globalFlags))
 	rootCmd.AddCommand(context.NewContextCmd(globalFlags))
 	rootCmd.AddCommand(pro.NewProCmd(globalFlags, log2.Default))
+	rootCmd.AddCommand(kcluster.NewKClusterCmd(globalFlags))
 	rootCmd.AddCommand(NewUpCmd(globalFlags))
 	rootCmd.AddCommand(NewDeleteCmd(globalFlags))
 	rootCmd.AddCommand(NewSSHCmd(globalFlags))

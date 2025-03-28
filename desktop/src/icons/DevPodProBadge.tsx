@@ -1,7 +1,7 @@
 import { Icon, IconProps, useColorMode } from "@chakra-ui/react"
 import { defaultProps } from "./defaultProps"
 
-export const DevPodProBadge = (props: IconProps) => {
+export const KledProBadge = (props: IconProps) => {
   const { colorMode } = useColorMode()
 
   return (

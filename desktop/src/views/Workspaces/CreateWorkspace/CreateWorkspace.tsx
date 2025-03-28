@@ -321,7 +321,7 @@ export function CreateWorkspace() {
                   <FormErrorMessage>{defaultIDEError.message ?? "Error"}</FormErrorMessage>
                 ) : (
                   <FormHelperText>
-                    Kled will open this workspace with the selected IDE by default. You can still
+                    DevPod will open this workspace with the selected IDE by default. You can still
                     change your default IDE later.
                   </FormHelperText>
                 )}
@@ -380,7 +380,7 @@ export function CreateWorkspace() {
                   <FormErrorMessage>{prebuildRepositoryError.message ?? "Error"}</FormErrorMessage>
                 ) : (
                   <FormHelperText>
-                    Kled will use this repository to find prebuilds for the given workspace.
+                    DevPod will use this repository to find prebuilds for the given workspace.
                   </FormHelperText>
                 )}
               </FormControl>
@@ -399,7 +399,7 @@ export function CreateWorkspace() {
                   <FormErrorMessage>{devcontainerPathError.message ?? "Error"}</FormErrorMessage>
                 ) : (
                   <FormHelperText>
-                    Kled will use this path to create the dev container for this workspace. If not
+                    DevPod will use this path to create the dev container for this workspace. If not
                     specified it&apos;ll use <Code>.devcontainer.json</Code> or{" "}
                     <Code>.devcontainer/devcontainer.json</Code>. <br />
                     Example: <Code>.devcontainer/service/devcontainer.json</Code>
@@ -456,7 +456,7 @@ function ProviderInput({ options, field, onAddProviderClicked }: TProviderInputP
       return (
         provider?.state?.singleMachine &&
         workspace.provider?.name === provider.config?.name &&
-        workspace.machine?.machineId?.startsWith("kled-shared-")
+        workspace.machine?.machineId?.startsWith("devpod-shared-")
       )
     })?.id
   }, [provider, workspaces])

@@ -1,4 +1,11 @@
-import { UseToastOptions } from "@chakra-ui/react"
+type UseToastOptions = {
+  status?: 'info' | 'warning' | 'success' | 'error';
+  title?: string;
+  description?: string;
+  duration?: number;
+  isClosable?: boolean;
+  position?: string;
+}
 import { app, event, path } from "@tauri-apps/api"
 import { invoke } from "@tauri-apps/api/core"
 import { Theme as TauriTheme, getCurrentWindow } from "@tauri-apps/api/window"
@@ -14,12 +21,13 @@ import * as updater from "@tauri-apps/plugin-updater"
 import { TSettings } from "../contexts"
 import { Release } from "../gen"
 import { Result, Return, hasCapability, isError, noop } from "../lib"
-import { TCommunityContributions, TProInstance, TUnsubscribeFn } from "../types"
+import { TCommunityContributions, TProInstance, TUnsubscribeFn, TUserInfo, TAuthStatus } from "../types"
 import { Command as KledCommand } from "./command"
 import { ContextClient } from "./context"
 import { IDEsClient } from "./ides"
 import { ProClient } from "./pro"
 import { DaemonClient } from "./pro/client"
+import { KledApiClient } from "./api/apiClient"
 import { ProvidersClient } from "./providers"
 import { TAURI_SERVER_URL } from "./tauriClient"
 import { WorkspacesClient } from "./workspaces"
@@ -46,7 +54,7 @@ type TChannels = {
         type: "ImportWorkspace"
         workspace_id: string
         workspace_uid: string
-        kled_pro_host: string
+        devpod_pro_host: string
         project: string
         options: Record<string, string> | null
       }>
@@ -88,6 +96,7 @@ class Client {
   public readonly ides = new IDEsClient()
   public readonly context = new ContextClient()
   public readonly pro = new ProClient("")
+  public readonly api = new KledApiClient("")
 
   public setSetting<TSettingName extends keyof TClientSettings>(
     name: TSettingName,
@@ -99,6 +108,7 @@ class Client {
       this.providers.setDebug(debug)
       this.ides.setDebug(debug)
       this.pro.setDebug(debug)
+      this.api.setDebug(debug)
     }
     if (name === "additionalCliFlags") {
       this.workspaces.setAdditionalFlags(value as string)
@@ -235,7 +245,7 @@ class Client {
     try {
       let p = await this.getDir(dir)
       if (dir === "AppLog") {
-        p = await path.join(p, "Kled.log")
+        p = await path.join(p, "DevPod.log")
       }
 
       shell.open(p)
@@ -309,17 +319,18 @@ class Client {
   public async isCLIInstalled(): Promise<Result<boolean>> {
     try {
       // we're in a flatpak, we need to check in other paths.
-      if (import.meta.env.TAURI_IS_FLATPAK === "true") {
+      const isFlatpak = false; // For now, assume we're not in flatpak
+      if (isFlatpak) {
         const home_dir = await this.getEnv("HOME")
         // this will throw if doesn't exist
         const exists = await invoke<boolean>("file_exists", {
-          filepath: home_dir + "/.local/bin/kled",
+          filepath: home_dir + "/.local/bin/devpod",
         })
 
         return Return.Value(exists)
       }
 
-      const result = await Command.create("run-path-kled-cli", ["version"]).execute()
+      const result = await Command.create("run-path-devpod-cli", ["version"]).execute()
       if (result.code !== 0) {
         return Return.Value(false)
       }
@@ -412,7 +423,74 @@ class Client {
       return new ProClient(proInstance.host!)
     }
   }
+
+  public async initiateSlackAuth(): Promise<void> {
+    this.open(`${TAURI_SERVER_URL}/auth/slack`)
+  }
+
+  public async getAuthStatus(): Promise<Result<TAuthStatus>> {
+    try {
+      const res = await fetch(`${TAURI_SERVER_URL}/auth/status`)
+      if (!res.ok) {
+        return Return.Failed(`Failed to fetch auth status: ${res.statusText}`)
+      }
+      const authStatus = await res.json() as TAuthStatus
+
+      return Return.Value(authStatus)
+    } catch (e) {
+      if (isError(e)) {
+        return Return.Failed(e.message)
+      }
+
+      const errMsg = "Unable to fetch authentication status"
+      if (typeof e === "string") {
+        return Return.Failed(`${errMsg}: ${e}`)
+      }
+
+      return Return.Failed(errMsg)
+    }
+  }
+
+  public async getSpacetimeStatus(): Promise<Result<{ running: boolean; version: string; connectedUsers: number }>> {
+    try {
+      const res = await fetch(`${TAURI_SERVER_URL}/spacetime/status`)
+      if (!res.ok) {
+        return Return.Failed(`Failed to fetch SpacetimeDB status: ${res.statusText}`)
+      }
+      const status = await res.json()
+
+      return Return.Value({
+        running: status.running,
+        version: status.version,
+        connectedUsers: status.connected_users
+      })
+    } catch (e) {
+      if (isError(e)) {
+        return Return.Failed(e.message)
+      }
+
+      const errMsg = "Unable to fetch SpacetimeDB status"
+      if (typeof e === "string") {
+        return Return.Failed(`${errMsg}: ${e}`)
+      }
+
+      return Return.Failed(errMsg)
+    }
+  }
 }
 
-// Singleton client
-export const client = new Client()
+import { getCurrentPlatform } from '../utils/platform';
+
+const baseClient = new Client();
+
+const platform = getCurrentPlatform();
+
+export const client = (() => {
+  if (platform === 'ios' || platform === 'android') {
+    return require('./mobile/client').client;
+  } else if (platform === 'web') {
+    return require('./web/client').client;
+  } else {
+    return baseClient;
+  }
+})();

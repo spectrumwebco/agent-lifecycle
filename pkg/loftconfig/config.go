@@ -35,3 +35,19 @@ func AuthVClusterCliToPlatform(config *client.Config, logger log.Logger) error {
 
 	return nil
 }
+
+func AuthKClusterCliToPlatform(config *client.Config, logger log.Logger) error {
+	if _, err := exec.LookPath("kcluster"); err != nil {
+		logger.Debugf("'kcluster' command is not available")
+		return nil
+	}
+
+	cmd := exec.Command("kcluster", "login", "--access-key", config.AccessKey, config.Host)
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		logger.Debugf("Failed executing `kcluster login` : %w, output: %s", err, out)
+		return fmt.Errorf("error executing 'kcluster login' command: %w", err)
+	}
+
+	return nil
+}

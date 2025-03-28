@@ -9,23 +9,23 @@ import {
   useColorModeValue,
   useToken,
 } from "@chakra-ui/react"
-import { ManagementV1DevPodEnvironmentTemplate } from "@loft-enterprise/client/gen/models/managementV1DevPodEnvironmentTemplate"
+import { ManagementV1DevPodEnvironmentTemplate } from "../api/v1/management_v1_typesDevPodEnvironmentTemplate"
 import { useEffect, useMemo, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { FieldName } from "./types"
 
-type TDevContainerInputProps = Readonly<{
+type TKledContainerInputProps = Readonly<{
   environmentTemplates: readonly ManagementV1DevPodEnvironmentTemplate[]
   resetPreset?: VoidFunction
 }>
-export function DevContainerInput({
+export function KledContainerInput({
   resetPreset,
   environmentTemplates: templates,
 }: TDevContainerInputProps) {
   const errorBorderColor = useToken("colors", "red.500")
   const { register, watch, resetField } = useFormContext()
-  const devContainerType = watch(FieldName.DEVCONTAINER_TYPE, "path")
-  const envTemplateValue = watch(FieldName.DEVCONTAINER_JSON)
+  const kledContainerType = watch(FieldName.KLEDCONTAINER_TYPE, "path")
+  const envTemplateValue = watch(FieldName.KLEDCONTAINER_JSON)
   const bg = useColorModeValue("white", "background.darkest")
   const { colorMode } = useColorMode()
 
@@ -62,8 +62,8 @@ export function DevContainerInput({
   )
 
   const { input } = useMemo(() => {
-    if (devContainerType === "path") {
-      return { input: <Input {...inputProps} placeholder="path/to/devcontainer.json" /> }
+    if (kledContainerType === "path") {
+      return { input: <Input {...inputProps} placeholder="path/to/kledcontainer.json" /> }
     }
 
     return {
@@ -82,7 +82,7 @@ export function DevContainerInput({
         </Select>
       ),
     }
-  }, [devContainerType, inputProps, templates])
+  }, [kledContainerType, inputProps, templates])
 
   return (
     <Box display={"flex"} flexDirection={"row"} w={"full"} gap={"4"}>
@@ -90,11 +90,11 @@ export function DevContainerInput({
         <InputGroup bg={bg} w={"full"}>
           <InputLeftAddon padding="0" bg={colorMode == "dark" ? "gray.800" : undefined}>
             <Select
-              {...register(FieldName.DEVCONTAINER_TYPE, {
+              {...register(FieldName.KLEDCONTAINER_TYPE, {
                 onChange: () => {
                   resetPreset?.()
                   resetField(FieldName.ENV_TEMPLATE_VERSION, { defaultValue: "latest" })
-                  resetField(FieldName.DEVCONTAINER_JSON)
+                  resetField(FieldName.KLEDCONTAINER_JSON)
                 },
               })}
               _invalid={{
@@ -151,9 +151,9 @@ export function DevContainerInput({
 function determineEnvironmentTemplate(
   templates: readonly ManagementV1DevPodEnvironmentTemplate[],
   envTemplateValue: string | undefined,
-  devContainerType: "path" | "external" | undefined
+  kledContainerType: "path" | "external" | undefined
 ): ManagementV1DevPodEnvironmentTemplate | undefined {
-  if (devContainerType === "path" || !envTemplateValue) {
+  if (kledContainerType === "path" || !envTemplateValue) {
     return undefined
   }
 
