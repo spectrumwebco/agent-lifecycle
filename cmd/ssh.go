@@ -278,7 +278,7 @@ func startWait(
 					return errors.Wrap(err, "start workspace")
 				}
 			} else {
-				return fmt.Errorf("Kled workspace is stopped")
+				return fmt.Errorf("kled workspace is stopped")
 			}
 		} else if instanceStatus == client2.StatusNotFound {
 			if create {
@@ -288,7 +288,7 @@ func startWait(
 					return err
 				}
 			} else {
-				return fmt.Errorf("Kled workspace wasn't found")
+				return fmt.Errorf("kled workspace wasn't found")
 			}
 		}
 
