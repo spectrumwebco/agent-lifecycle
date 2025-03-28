@@ -1,4 +1,4 @@
-import { Box, Code, Container, Link, Text, VStack, useColorModeValue } from "@chakra-ui/react"
+import { Box, Code, Container, Link, Text, VStack } from "@chakra-ui/react"
 import { useEffect, useMemo } from "react"
 import { Link as RouterLink, useMatch, useRouteError } from "react-router-dom"
 import {
@@ -8,15 +8,18 @@ import {
   WorkspaceStoreProvider,
   useChangeSettings,
 } from "../contexts"
+import { usePlatform } from "../contexts/PlatformContext"
 import { Routes } from "../routes"
 import { OSSApp } from "./OSSApp"
 import { ProApp } from "./ProApp"
+import { MobileApp } from "./MobileApp"
 import { usePreserveLocation } from "./usePreserveLocation"
 import { ErrorBoundary } from "react-error-boundary"
 import { ErrorMessageBox } from "@/components"
 
 export function App() {
   const routeMatchPro = useMatch(`${Routes.PRO}/*`)
+  const { isMobile } = usePlatform()
   usePreserveLocation()
   usePartyParrot()
 
@@ -33,7 +36,9 @@ export function App() {
           error={error || new Error("Something went wrong. Please restart the application")}
         />
       )}>
-      {routeMatchPro == null ? (
+      {isMobile ? (
+        <MobileApp />
+      ) : routeMatchPro == null ? (
         <WorkspaceStoreProvider store={store!}>
           <KledProvider>
             <ProInstancesProvider>
@@ -50,7 +55,7 @@ export function App() {
 
 export function ErrorPage() {
   const error = useRouteError()
-  const contentBackgroundColor = useColorModeValue("white", "background.darkest")
+  const contentBackgroundColor = "white" // Simplified for now, will be updated with proper theming
 
   return (
     <Box height="100vh" width="100vw" backgroundColor={contentBackgroundColor}>
@@ -58,7 +63,7 @@ export function ErrorPage() {
         <VStack>
           <Text>Whoops, something went wrong or this page doesn&apos;t exist.</Text>
           <Box paddingBottom="6">
-            <Link as={RouterLink} to={Routes.ROOT}>
+            <Link href={Routes.ROOT}>
               Go back to home
             </Link>
           </Box>

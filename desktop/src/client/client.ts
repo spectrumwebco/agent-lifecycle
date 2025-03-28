@@ -479,5 +479,18 @@ class Client {
   }
 }
 
-// Singleton client
-export const client = new Client()
+import { getCurrentPlatform } from '../utils/platform';
+
+const baseClient = new Client();
+
+const platform = getCurrentPlatform();
+
+export const client = (() => {
+  if (platform === 'ios' || platform === 'android') {
+    return require('./mobile/client').client;
+  } else if (platform === 'web') {
+    return require('./web/client').client;
+  } else {
+    return baseClient;
+  }
+})();
