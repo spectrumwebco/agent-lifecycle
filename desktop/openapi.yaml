@@ -1,0 +1,219 @@
+openapi: 3.0.0
+info:
+  title: Kled API
+  description: API for the Kled desktop application with Slack authentication and API key management
+  version: 1.0.0
+servers:
+  - url: http://localhost:25842
+    description: Local development server
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    ApiKey:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the API key
+        name:
+          type: string
+          description: Human-readable name for the API key
+        key:
+          type: string
+          description: The actual API key value
+        created_at:
+          type: integer
+          description: UNIX timestamp when the key was created
+        user_id:
+          type: string
+          description: Slack user ID associated with this key
+        user_email:
+          type: string
+          description: Slack user email associated with this key
+        workspace_id:
+          type: string
+          description: Slack workspace ID associated with this key
+        last_used:
+          type: integer
+          description: UNIX timestamp when the key was last used
+        usage_count:
+          type: integer
+          description: Number of times the key has been used
+    ApiKeyUsage:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the usage record
+        api_key_id:
+          type: string
+          description: Reference to the API key
+        timestamp:
+          type: integer
+          description: UNIX timestamp when the key was used
+        endpoint:
+          type: string
+          description: Which endpoint was accessed
+        ip_address:
+          type: string
+          description: IP address of the request
+        user_agent:
+          type: string
+          description: User agent of the request
+        status_code:
+          type: integer
+          description: Response status code
+    UserInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          description: User ID from authentication provider
+        name:
+          type: string
+          description: User's display name
+        email:
+          type: string
+          description: User's email address
+        avatar:
+          type: string
+          description: URL to user's avatar image
+    AuthStatus:
+      type: object
+      properties:
+        authenticated:
+          type: boolean
+          description: Whether the user is authenticated
+        provider:
+          type: string
+          description: Authentication provider (e.g., "slack")
+        user_info:
+          $ref: '#/components/schemas/UserInfo'
+          description: User information if authenticated
+paths:
+  /auth/slack:
+    get:
+      summary: Initiate Slack authentication
+      description: Redirects the user to Slack for OAuth authentication
+      responses:
+        302:
+          description: Redirect to Slack OAuth
+  /auth/slack/callback:
+    get:
+      summary: Slack OAuth callback
+      description: Processes the response from Slack OAuth
+      parameters:
+        - name: code
+          in: query
+          schema:
+            type: string
+          description: OAuth authorization code
+      responses:
+        302:
+          description: Redirect to application on successful authentication
+        400:
+          description: Bad request - missing code parameter
+        401:
+          description: Unauthorized - invalid code or Slack error
+        500:
+          description: Server error during authentication
+  /auth/status:
+    get:
+      summary: Get authentication status
+      description: Returns the current authentication status
+      responses:
+        200:
+          description: Authentication status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthStatus'
+  /api/keys:
+    post:
+      summary: Generate a new API key
+      description: Creates a new API key for the authenticated user
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Human-readable name for the API key
+      responses:
+        200:
+          description: API key created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKey'
+        401:
+          description: Unauthorized - user not authenticated
+    get:
+      summary: List API keys
+      description: Returns a list of API keys for the authenticated user
+      security:
+        - apiKey: []
+      responses:
+        200:
+          description: List of API keys
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  keys:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ApiKey'
+        401:
+          description: Unauthorized - user not authenticated
+  /api/keys/{id}:
+    delete:
+      summary: Delete an API key
+      description: Deletes an API key by ID
+      security:
+        - apiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: API key ID
+      responses:
+        200:
+          description: API key deleted successfully
+        401:
+          description: Unauthorized - user not authenticated
+        404:
+          description: API key not found
+  /spacetime/status:
+    get:
+      summary: Get SpacetimeDB server status
+      description: Returns the status of the SpacetimeDB server
+      responses:
+        200:
+          description: SpacetimeDB server status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  running:
+                    type: boolean
+                    description: Whether the SpacetimeDB server is running
+                  version:
+                    type: string
+                    description: SpacetimeDB server version
+                  connected_users:
+                    type: integer
+                    description: Number of connected users
