@@ -153,6 +153,7 @@ pub async fn check_updates(app_handle: AppHandle) -> Result<bool, UpdateError> {
 
 #[derive(Clone, Debug)]
 pub struct UpdateHelper<'a> {
+    #[allow(dead_code)]
     app_handle: &'a AppHandle,
 }
 
@@ -251,6 +252,7 @@ impl<'a> UpdateHelper<'a> {
         }
     }
 
+    #[allow(dead_code)]
     pub async fn update_app_releases(&self, new_version: &str) -> Result<Release, UpdateError> {
         let releases = self
             .fetch_releases()
@@ -335,6 +337,7 @@ impl<'a> UpdateHelper<'a> {
         Ok(releases)
     }
 
+    #[allow(dead_code)]
     async fn notify_update_available(&self, release: &Release) -> anyhow::Result<()> {
         if let Ok(mut target) = self.app_handle.path().app_cache_dir() {
             target.push(format!("update_{}", release.tag_name.clone()));
