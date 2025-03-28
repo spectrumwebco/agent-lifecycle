@@ -52,6 +52,7 @@ pub struct AppState {
     ui_messages: Sender<UiMessage>,
     releases: Arc<Mutex<updates::Releases>>,
     pending_update: Arc<Mutex<Option<updates::Release>>>,
+    #[allow(dead_code)]
     update_installed: Arc<Mutex<bool>>,
     resources_handles: Arc<Mutex<Vec<tauri::async_runtime::JoinHandle<()>>>>,
 }
@@ -102,6 +103,7 @@ fn main() -> anyhow::Result<()> {
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_notification::init())
+        .plugin(tauri_plugin_deep_link::init())
         .plugin(tauri_plugin_updater::Builder::new().build())
         .setup(move |app| {
             info!("Setup application");

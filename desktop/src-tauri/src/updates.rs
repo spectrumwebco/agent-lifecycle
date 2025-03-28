@@ -1,4 +1,4 @@
-use crate::{settings::Settings, AppHandle, AppState};
+use crate::{AppHandle, AppState};
 use anyhow::Context;
 use chrono::{DateTime, Utc};
 use lazy_static::lazy_static;
@@ -14,6 +14,7 @@ use thiserror::Error;
 use tokio::fs::File;
 use ts_rs::TS;
 
+#[allow(dead_code)]
 const UPDATE_POLL_INTERVAL: std::time::Duration = std::time::Duration::from_secs(60 * 10);
 const RELEASES_URL: &str = "https://update-server.devpod.sh/releases";
 const FALLBACK_RELEASES_URL: &str = "https://api.github.com/repos/loft-sh/devpod/releases";
@@ -21,6 +22,7 @@ const FALLBACK_RELEASES_URL: &str = "https://api.github.com/repos/loft-sh/devpod
 #[derive(Error, Debug)]
 pub enum UpdateError {
     #[error("unable to get latest release {0}")]
+    #[allow(dead_code)]
     NoReleaseFound(String),
     #[error("failed to check for updates {0}")]
     CheckUpdate(#[from] tauri_plugin_updater::Error),

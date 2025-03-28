@@ -8,6 +8,7 @@ use serde::{Deserialize, Serialize};
 use std::env;
 // use std::path::Path;
 use tauri::{AppHandle, Manager, State};
+use tauri_plugin_deep_link::DeepLinkExt;
 use thiserror::Error;
 use url::Url;
 
@@ -208,74 +209,72 @@ impl CustomProtocol {
     }
 
     pub fn setup(&self, app: AppHandle) {
-        let app_handle = app.clone();
+        let deep_link = app.deep_link();
+        
+        if let Err(error) = deep_link.register(APP_URL_SCHEME) {
+            #[cfg(target_os = "linux")]
+            {
+                let is_flatpak = env::var("FLATPAK_ID").is_ok();
 
-        let result = tauri_plugin_deep_link::register(app_handle.clone(), APP_URL_SCHEME, move |url_scheme| {
-            tauri::async_runtime::block_on(async {
-                info!("App opened with URL: {:?}", url_scheme.to_string());
+                if !is_flatpak {
+                    let msg = "Either update-desktop-database or xdg-mime are missing. Please make sure they are available on your system";
+                    log::warn!("Custom protocol setup failed; {}: {}", msg, error);
 
-                let request = UrlParser::parse(&url_scheme.to_string());
-                let app_state = app_handle.state::<AppState>();
-                if let Err(err) = request {
-                    warn!("Failed to broadcast custom protocol message: {:?}", err);
-                    return;
-                }
-                let request = request.unwrap();
-
-                match request.host.as_str() {
-                    "open" => {
-                        let msg = CustomProtocol::parse(&request);
-                        OpenHandler::handle(msg, app_state).await
-                    }
-                    "import" => {
-                        let msg = CustomProtocol::parse(&request);
-                        ImportHandler::handle(msg, app_state).await
-                    }
-                    "pro" => {
-                        let msg = CustomProtocol::parse(&request);
-                        ProHandler::handle(msg, app_state).await
-                    }
-                    _ => {}
-                }
-            })
-        });
-
-        #[cfg(target_os = "linux")]
-        {
-            match result {
-                Ok(..) => {}
-                Err(error) => {
-                    let is_flatpak = env::var("FLATPAK_ID").is_ok();
-
-                    if !is_flatpak {
-                        let msg = "Either update-desktop-database or xdg-mime are missing. Please make sure they are available on your system";
-                        log::warn!("Custom protocol setup failed; {}: {}", msg, error);
-
-                        tauri::async_runtime::block_on(async {
-                            let app_state = app.state::<AppState>();
-                            let show_toast_msg = ShowToastMsg::new(
-                                "Custom protocol handling needs to be configured".to_string(),
-                                msg.to_string(),
-                                ToastStatus::Warning,
+                    tauri::async_runtime::block_on(async {
+                        let app_state = app.state::<AppState>();
+                        let show_toast_msg = ShowToastMsg::new(
+                            "Custom protocol handling needs to be configured".to_string(),
+                            msg.to_string(),
+                            ToastStatus::Warning,
+                        );
+                        if let Err(err) = app_state
+                            .ui_messages
+                            .send(UiMessage::ShowToast(show_toast_msg))
+                            .await
+                        {
+                            log::error!(
+                                "Failed to broadcast show toast message: {:?}, {}",
+                                err.0,
+                                err
                             );
-                            if let Err(err) = app_state
-                                .ui_messages
-                                .send(UiMessage::ShowToast(show_toast_msg))
-                                .await
-                            {
-                                log::error!(
-                                    "Failed to broadcast show toast message: {:?}, {}",
-                                    err.0,
-                                    err
-                                );
-                            };
-                        })
-                    }
+                        };
+                    })
                 }
-            };
+            }
         }
+        
+        let app_handle = app.clone();
+        deep_link.on_open_url(move |event| {
+            for url_scheme in event.urls() {
+                tauri::async_runtime::block_on(async {
+                    info!("App opened with URL: {:?}", url_scheme.to_string());
 
-        let _ = result;
+                    let request = UrlParser::parse(&url_scheme.to_string());
+                    let app_state = app_handle.state::<AppState>();
+                    if let Err(err) = request {
+                        warn!("Failed to broadcast custom protocol message: {:?}", err);
+                        return;
+                    }
+                    let request = request.unwrap();
+
+                    match request.host.as_str() {
+                        "open" => {
+                            let msg = CustomProtocol::parse(&request);
+                            OpenHandler::handle(msg, app_state).await
+                        }
+                        "import" => {
+                            let msg = CustomProtocol::parse(&request);
+                            ImportHandler::handle(msg, app_state).await
+                        }
+                        "pro" => {
+                            let msg = CustomProtocol::parse(&request);
+                            ProHandler::handle(msg, app_state).await
+                        }
+                        _ => {}
+                    }
+                });
+            }
+        });
     }
 
     fn parse<'a, Msg>(request: &'a Request) -> Result<Msg, ParseError>
