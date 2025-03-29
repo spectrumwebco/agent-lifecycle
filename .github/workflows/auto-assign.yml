@@ -1,0 +1,30 @@
+name: Auto Assign
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto-assign Devin
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const issue_number = context.issue.number;
+            
+            try {
+              await github.rest.issues.addAssignees({
+                owner,
+                repo,
+                issue_number,
+                assignees: ['devin-ai-integration']
+              });
+              console.log('Successfully assigned Devin to PR #' + issue_number);
+            } catch (error) {
+              console.error('Error assigning Devin to PR:', error);
+            }
