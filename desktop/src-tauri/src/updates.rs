@@ -2,7 +2,7 @@ use crate::{AppHandle, AppState};
 use anyhow::Context;
 use chrono::{DateTime, Utc};
 use lazy_static::lazy_static;
-use log::{debug, error, info};
+use log::{debug, error, info, warn};
 use regex::Regex;
 use reqwest::{Client, Method};
 use serde::{Deserialize, Serialize};
@@ -171,7 +171,8 @@ impl<'a> UpdateHelper<'a> {
         }
 
         #[cfg(not(debug_assertions))]
-        loop {
+        {
+            loop {
             // check if we have updated the app recently
             // if so, show changelog in app
 
@@ -249,6 +250,7 @@ impl<'a> UpdateHelper<'a> {
                 }
             }
             tokio::time::sleep(UPDATE_POLL_INTERVAL).await;
+            }
         }
     }
 
