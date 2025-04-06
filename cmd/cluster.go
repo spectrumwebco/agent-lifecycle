@@ -11,9 +11,15 @@ func NewClusterCmd(globalFlags *flags.GlobalFlags) *cobra.Command {
 		Use:     "cluster",
 		Aliases: []string{"c", "k"},
 		Short:   "Manage Kubernetes clusters",
-		Long:    `Commands for creating and managing Kubernetes clusters`,
+		Long: `Commands for creating and managing Kubernetes clusters.
+
+These are fully functional clusters running inside a namespace of another Kubernetes cluster.`,
 	}
 
+	clusterCmd.AddCommand(kcluster.NewCreateCmd(globalFlags))
+	clusterCmd.AddCommand(kcluster.NewListCmd(globalFlags))
+	clusterCmd.AddCommand(kcluster.NewDeleteCmd(globalFlags))
+	
 	clusterCmd.AddCommand(kcluster.NewKClusterCmd(globalFlags))
 	
 	return clusterCmd
