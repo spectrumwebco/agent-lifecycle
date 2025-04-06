@@ -32,7 +32,14 @@ var globalFlags *flags.GlobalFlags
 func NewRootCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:           "kled",
-		Short:         "Kled",
+		Short:         "Kled - Workspace and Kubernetes Development Environment",
+		Long: `Kled is a unified tool for managing development environments.
+
+It provides commands for:
+- Workspace management (formerly kled)
+- Kubernetes cluster management (formerly kcluster)
+- Application space management (formerly kledspace)
+- Policy management (formerly kpolicy)`,
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		PersistentPreRunE: func(cobraCmd *cobra.Command, args []string) error {
@@ -124,11 +131,19 @@ func BuildRoot() *cobra.Command {
 	rootCmd.AddCommand(machine.NewMachineCmd(globalFlags))
 	rootCmd.AddCommand(context.NewContextCmd(globalFlags))
 	rootCmd.AddCommand(pro.NewProCmd(globalFlags, log2.Default))
+	rootCmd.AddCommand(NewVersionCmd())
+	rootCmd.AddCommand(NewUpgradeCmd())
+	rootCmd.AddCommand(NewPingCmd(globalFlags))
+	
+	rootCmd.AddCommand(NewWorkspaceCmd(globalFlags))
+	rootCmd.AddCommand(NewClusterCmd(globalFlags))
+	rootCmd.AddCommand(NewSpaceCmd(globalFlags))
+	rootCmd.AddCommand(NewPolicyCmd(globalFlags))
+	
 	rootCmd.AddCommand(kcluster.NewKClusterCmd(globalFlags))
 	rootCmd.AddCommand(NewUpCmd(globalFlags))
 	rootCmd.AddCommand(NewDeleteCmd(globalFlags))
 	rootCmd.AddCommand(NewSSHCmd(globalFlags))
-	rootCmd.AddCommand(NewVersionCmd())
 	rootCmd.AddCommand(NewStopCmd(globalFlags))
 	rootCmd.AddCommand(NewListCmd(globalFlags))
 	rootCmd.AddCommand(NewStatusCmd(globalFlags))
@@ -137,8 +152,7 @@ func BuildRoot() *cobra.Command {
 	rootCmd.AddCommand(NewExportCmd(globalFlags))
 	rootCmd.AddCommand(NewImportCmd(globalFlags))
 	rootCmd.AddCommand(NewLogsCmd(globalFlags))
-	rootCmd.AddCommand(NewUpgradeCmd())
 	rootCmd.AddCommand(NewTroubleshootCmd(globalFlags))
-	rootCmd.AddCommand(NewPingCmd(globalFlags))
+	
 	return rootCmd
 }

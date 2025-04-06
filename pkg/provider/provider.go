@@ -113,7 +113,6 @@ type ProviderAgentConfig struct {
 	Dockerless ProviderDockerlessOptions `json:"dockerless,omitempty"`
 
 	// Driver is the driver to use for deploying the devcontainer. Currently supports
-	// docker (default) or kubernetes (experimental)
 	Driver string `json:"driver,omitempty"`
 
 	// Docker holds docker specific configuration
@@ -124,6 +123,8 @@ type ProviderAgentConfig struct {
 
 	// Kubernetes holds kubernetes specific configuration
 	Kubernetes ProviderKubernetesDriverConfig `json:"kubernetes,omitempty"`
+	
+	Kata ProviderKataDriverConfig `json:"kata,omitempty"`
 }
 
 type ProviderDockerlessOptions struct {
@@ -147,10 +148,15 @@ func (a ProviderAgentConfig) IsDockerDriver() bool {
 	return a.Driver == "" || a.Driver == DockerDriver
 }
 
+func (a ProviderAgentConfig) IsKataDriver() bool {
+	return a.Driver == KataDriver
+}
+
 const (
 	DockerDriver     = "docker"
 	KubernetesDriver = "kubernetes"
 	CustomDriver     = "custom"
+	KataDriver       = "kata"
 )
 
 type ProviderCustomDriverConfig struct {
