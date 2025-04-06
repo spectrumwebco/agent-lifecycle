@@ -1,0 +1,32 @@
+name: kata
+version: v0.0.1
+icon: https://katacontainers.io/assets/kata-logo.svg
+home: https://github.com/spectrumwebco/kled
+description: |-
+  Kled on Kata Containers
+optionGroups:
+  - options:
+      - KATA_PATH
+      - CONTAINERD_PATH
+      - INACTIVITY_TIMEOUT
+    name: "Advanced Options"
+options:
+  INACTIVITY_TIMEOUT:
+    description: "If defined, will automatically stop the container after the inactivity period. Examples: 10m, 1h"
+  KATA_PATH:
+    description: The path where to find the kata-runtime binary.
+    default: kata-runtime
+  CONTAINERD_PATH:
+    description: The path where to find the containerd binary.
+    default: containerd
+agent:
+  containerInactivityTimeout: ${INACTIVITY_TIMEOUT}
+  local: true
+  driver: kata
+  kata:
+    path: ${KATA_PATH}
+    containerdPath: ${CONTAINERD_PATH}
+    install: false
+exec:
+  command: |-
+    "${DEVPOD}" helper sh -c "${COMMAND}"

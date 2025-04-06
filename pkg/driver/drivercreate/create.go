@@ -6,6 +6,7 @@ import (
 	"github.com/loft-sh/devpod/pkg/driver"
 	"github.com/loft-sh/devpod/pkg/driver/custom"
 	"github.com/loft-sh/devpod/pkg/driver/docker"
+	"github.com/loft-sh/devpod/pkg/driver/kata"
 	"github.com/loft-sh/devpod/pkg/driver/kubernetes"
 	provider2 "github.com/loft-sh/devpod/pkg/provider"
 	"github.com/loft-sh/log"
@@ -19,8 +20,10 @@ func NewDriver(workspaceInfo *provider2.AgentWorkspaceInfo, log log.Logger) (dri
 		return custom.NewCustomDriver(workspaceInfo, log), nil
 	} else if driver == provider2.KubernetesDriver {
 		return kubernetes.NewKubernetesDriver(workspaceInfo, log)
+	} else if driver == provider2.KataDriver {
+		return kata.NewKataDriver(workspaceInfo, log)
 	}
 
-	return nil, fmt.Errorf("unrecognized driver '%s', possible values are %s, %s or %s",
-		driver, provider2.DockerDriver, provider2.CustomDriver, provider2.KubernetesDriver)
+	return nil, fmt.Errorf("unrecognized driver '%s', possible values are %s, %s, %s or %s",
+		driver, provider2.DockerDriver, provider2.CustomDriver, provider2.KubernetesDriver, provider2.KataDriver)
 }
