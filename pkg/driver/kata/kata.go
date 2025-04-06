@@ -2,10 +2,12 @@ package kata
 
 import (
 	"bufio"
+	"bytes"
 	"context"
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"os/user"
 	"regexp"
 	"runtime"
@@ -392,27 +394,16 @@ func (d *kataDriver) EnsurePath(mount *driver.Mount) *driver.Mount {
 	return mount
 }
 
-func (d *kataDriver) GetDevContainerLogs(ctx context.Context, workspaceId string) (io.ReadCloser, error) {
+func (d *kataDriver) GetDevContainerLogs(ctx context.Context, workspaceId string, stdout io.Writer, stderr io.Writer) error {
 	container, err := d.FindDevContainer(ctx, workspaceId)
 	if err != nil {
-		return nil, err
+		return err
 	} else if container == nil {
-		return nil, fmt.Errorf("container not found")
+		return fmt.Errorf("container not found")
 	}
 
 	args := []string{"logs", container.ID}
-	cmd := exec.CommandContext(ctx, d.ContainerdCommand, args...)
-	stdout, err := cmd.StdoutPipe()
-	if err != nil {
-		return nil, err
-	}
-
-	err = cmd.Start()
-	if err != nil {
-		return nil, err
-	}
-
-	return stdout, nil
+	return d.runContainerdCommand(ctx, args, nil, stdout, stderr)
 }
 
 func (d *kataDriver) runContainerdCommand(ctx context.Context, args []string, stdin io.Reader, stdout io.Writer, stderr io.Writer) error {

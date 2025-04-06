@@ -1,5 +1,9 @@
 package provider
 
+import (
+	"github.com/loft-sh/devpod/pkg/types"
+)
+
 type ProviderKataDriverConfig struct {
 	Path string `json:"path,omitempty"`
 
