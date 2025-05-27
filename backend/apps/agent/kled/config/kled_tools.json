@@ -1,0 +1,204 @@
+{
+  "tools": [
+    {
+      "name": "edit_replace",
+      "description": "Replace content in files",
+      "module": "apps.python_agent.kled.tools.edit_replace",
+      "class": "EditReplaceTool",
+      "parameters": {
+        "file_path": {
+          "type": "string",
+          "description": "Path to the file to edit"
+        },
+        "pattern": {
+          "type": "string",
+          "description": "Pattern to replace"
+        },
+        "replacement": {
+          "type": "string",
+          "description": "Replacement text"
+        }
+      }
+    },
+    {
+      "name": "edit_insert",
+      "description": "Insert content into files",
+      "module": "apps.python_agent.kled.tools.edit_insert",
+      "class": "EditInsertTool",
+      "parameters": {
+        "file_path": {
+          "type": "string",
+          "description": "Path to the file to edit"
+        },
+        "line_number": {
+          "type": "integer",
+          "description": "Line number to insert at"
+        },
+        "content": {
+          "type": "string",
+          "description": "Content to insert"
+        }
+      }
+    },
+    {
+      "name": "edit_delete",
+      "description": "Delete content from files",
+      "module": "apps.python_agent.kled.tools.edit_delete",
+      "class": "EditDeleteTool",
+      "parameters": {
+        "file_path": {
+          "type": "string",
+          "description": "Path to the file to edit"
+        },
+        "start_line": {
+          "type": "integer",
+          "description": "Start line to delete from"
+        },
+        "end_line": {
+          "type": "integer",
+          "description": "End line to delete to"
+        }
+      }
+    },
+    {
+      "name": "file_search",
+      "description": "Search for files in a directory",
+      "module": "apps.python_agent.kled.tools.file_search",
+      "class": "FileSearchTool",
+      "parameters": {
+        "directory": {
+          "type": "string",
+          "description": "Directory to search in"
+        },
+        "pattern": {
+          "type": "string",
+          "description": "Pattern to search for"
+        },
+        "recursive": {
+          "type": "boolean",
+          "description": "Whether to search recursively"
+        }
+      }
+    },
+    {
+      "name": "content_search",
+      "description": "Search for content in files",
+      "module": "apps.python_agent.kled.tools.content_search",
+      "class": "ContentSearchTool",
+      "parameters": {
+        "directory": {
+          "type": "string",
+          "description": "Directory to search in"
+        },
+        "pattern": {
+          "type": "string",
+          "description": "Pattern to search for"
+        },
+        "file_pattern": {
+          "type": "string",
+          "description": "Pattern to filter files"
+        }
+      }
+    },
+    {
+      "name": "git_tool",
+      "description": "Perform Git operations",
+      "module": "apps.python_agent.kled.tools.git_tool",
+      "class": "GitTool",
+      "parameters": {
+        "repo_path": {
+          "type": "string",
+          "description": "Path to the Git repository"
+        },
+        "operation": {
+          "type": "string",
+          "description": "Git operation to perform"
+        },
+        "args": {
+          "type": "object",
+          "description": "Arguments for the Git operation"
+        }
+      }
+    },
+    {
+      "name": "code_analyzer",
+      "description": "Analyze code for quality and issues",
+      "module": "apps.python_agent.kled.tools.code_analyzer",
+      "class": "CodeAnalyzerTool",
+      "parameters": {
+        "file_path": {
+          "type": "string",
+          "description": "Path to the file to analyze"
+        },
+        "analysis_type": {
+          "type": "string",
+          "description": "Type of analysis to perform"
+        },
+        "options": {
+          "type": "object",
+          "description": "Options for the analysis"
+        }
+      }
+    },
+    {
+      "name": "test_runner",
+      "description": "Run tests for a project",
+      "module": "apps.python_agent.kled.tools.test_runner",
+      "class": "TestRunnerTool",
+      "parameters": {
+        "project_path": {
+          "type": "string",
+          "description": "Path to the project"
+        },
+        "test_path": {
+          "type": "string",
+          "description": "Path to the tests"
+        },
+        "test_type": {
+          "type": "string",
+          "description": "Type of tests to run"
+        }
+      }
+    },
+    {
+      "name": "dependency_manager",
+      "description": "Manage project dependencies",
+      "module": "apps.python_agent.kled.tools.dependency_manager",
+      "class": "DependencyManagerTool",
+      "parameters": {
+        "project_path": {
+          "type": "string",
+          "description": "Path to the project"
+        },
+        "operation": {
+          "type": "string",
+          "description": "Operation to perform"
+        },
+        "dependency": {
+          "type": "string",
+          "description": "Dependency to manage"
+        }
+      }
+    },
+    {
+      "name": "neovim_tool",
+      "description": "Interact with Neovim editor",
+      "module": "apps.python_agent.kled.tools.neovim_tool",
+      "class": "NeovimTool",
+      "parameters": {
+        "file_path": {
+          "type": "string",
+          "description": "Path to the file to edit"
+        },
+        "command": {
+          "type": "string",
+          "description": "Neovim command to execute"
+        },
+        "args": {
+          "type": "object",
+          "description": "Arguments for the command"
+        }
+      }
+    }
+  ]
+}

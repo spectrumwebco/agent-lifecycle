@@ -1,0 +1,32 @@
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "agent-lifecycle-extensions"
+version = "0.1.0"
+requires-python = ">=3.8"
+dependencies = [
+]
+classifiers = [
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent", # Assuming the Rust code is portable
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+# Maturin configuration
+[tool.maturin]
+# This defines a "package" where the Rust extension(s) will live in site-packages.
+
+# Path to the Rust crate's Cargo.toml that we want to build as an extension module.
+# This specific crate (command_executor_rust) will produce a module named 'command_executor'
+# (based on its lib.name in its Cargo.toml) inside the 'agent_lifecycle_rust' package.
+manifest-path = "command_executor_rust/Cargo.toml"
+
+# Optional: if you want to explicitly name the Python module if it differs from lib.name
+# For our case, lib.name in command_executor_rust/Cargo.toml is "command_executor",
+# so this is not strictly necessary but can be explicit.
+module-name = "agent_lifecycle_rust"

@@ -1,0 +1,209 @@
+{
+  "tools": [
+    {
+      "name": "crypto_analyzer",
+      "description": "Analyzes cryptographic implementations for vulnerabilities and weaknesses",
+      "module": "apps.python_agent.veigar.tools.crypto",
+      "class": "CryptoAnalyzer",
+      "parameters": {
+        "code": {
+          "type": "string",
+          "description": "Code to analyze"
+        },
+        "language": {
+          "type": "string",
+          "description": "Programming language of the code",
+          "enum": ["python", "go", "javascript", "typescript", "java", "c", "cpp"]
+        }
+      }
+    },
+    {
+      "name": "vulnerability_scanner",
+      "description": "Scans code for security vulnerabilities",
+      "module": "apps.python_agent.veigar.tools.pwn",
+      "class": "VulnerabilityScanner",
+      "parameters": {
+        "repository": {
+          "type": "string",
+          "description": "Repository name"
+        },
+        "branch": {
+          "type": "string",
+          "description": "Branch name"
+        },
+        "files": {
+          "type": "array",
+          "description": "List of files to scan",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "File path"
+              },
+              "content": {
+                "type": "string",
+                "description": "File content"
+              }
+            }
+          }
+        },
+        "scan_depth": {
+          "type": "string",
+          "description": "Depth of the scan",
+          "enum": ["basic", "standard", "deep"],
+          "default": "standard"
+        }
+      }
+    },
+    {
+      "name": "exploit_generator",
+      "description": "Generates proof-of-concept exploits for identified vulnerabilities",
+      "module": "apps.python_agent.veigar.tools.pwn",
+      "class": "ExploitGenerator",
+      "parameters": {
+        "vulnerability": {
+          "type": "object",
+          "description": "Vulnerability to generate an exploit for"
+        }
+      }
+    },
+    {
+      "name": "binary_analyzer",
+      "description": "Analyzes binary files for security vulnerabilities and weaknesses",
+      "module": "apps.python_agent.veigar.tools.rev",
+      "class": "BinaryAnalyzer",
+      "parameters": {
+        "binary_data": {
+          "type": "bytes",
+          "description": "Binary data to analyze"
+        },
+        "file_path": {
+          "type": "string",
+          "description": "Path to the binary file"
+        },
+        "binary_type": {
+          "type": "string",
+          "description": "Type of binary (elf, pe, macho)",
+          "enum": ["auto", "elf", "pe", "macho"],
+          "default": "auto"
+        }
+      }
+    },
+    {
+      "name": "decompiler",
+      "description": "Decompiles binary files to higher-level representations",
+      "module": "apps.python_agent.veigar.tools.rev",
+      "class": "DecompilerTool",
+      "parameters": {
+        "binary_path": {
+          "type": "string",
+          "description": "Path to the binary file"
+        },
+        "output_format": {
+          "type": "string",
+          "description": "Desired output format",
+          "enum": ["c", "pseudocode"],
+          "default": "c"
+        }
+      }
+    },
+    {
+      "name": "web_vulnerability_scanner",
+      "description": "Scans web applications for security vulnerabilities",
+      "module": "apps.python_agent.veigar.tools.web",
+      "class": "WebVulnerabilityScanner",
+      "parameters": {
+        "files": {
+          "type": "array",
+          "description": "List of files to scan",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "File path"
+              },
+              "content": {
+                "type": "string",
+                "description": "File content"
+              }
+            }
+          }
+        },
+        "scan_depth": {
+          "type": "string",
+          "description": "Depth of the scan",
+          "enum": ["basic", "standard", "deep"],
+          "default": "standard"
+        }
+      }
+    },
+    {
+      "name": "forensics_analyzer",
+      "description": "Analyzes files and data for digital forensics investigations",
+      "module": "apps.python_agent.veigar.tools.forensics",
+      "class": "ForensicsAnalyzer",
+      "parameters": {
+        "file_path": {
+          "type": "string",
+          "description": "Path to the file to analyze"
+        },
+        "analysis_type": {
+          "type": "string",
+          "description": "Type of analysis to perform",
+          "enum": ["general", "network", "memory", "disk"],
+          "default": "general"
+        }
+      }
+    },
+    {
+      "name": "security_logger",
+      "description": "Specialized logger for security events and findings",
+      "module": "apps.python_agent.veigar.tools.common",
+      "class": "SecurityLogger",
+      "parameters": {
+        "event_type": {
+          "type": "string",
+          "description": "Type of security event"
+        },
+        "details": {
+          "type": "object",
+          "description": "Details of the event"
+        },
+        "severity": {
+          "type": "string",
+          "description": "Severity level",
+          "enum": ["info", "warning", "error", "critical"],
+          "default": "info"
+        }
+      }
+    },
+    {
+      "name": "report_generator",
+      "description": "Generates security reports from scan and analysis results",
+      "module": "apps.python_agent.veigar.tools.common",
+      "class": "ReportGenerator",
+      "parameters": {
+        "pr_data": {
+          "type": "object",
+          "description": "Pull request data"
+        },
+        "vulnerabilities": {
+          "type": "array",
+          "description": "List of detected vulnerabilities"
+        },
+        "compliance_results": {
+          "type": "object",
+          "description": "Compliance check results",
+          "default": {}
+        },
+        "static_analysis_results": {
+          "type": "object",
+          "description": "Static analysis results",
+          "default": {}
+        }
+      }
+    }
+  ]
+}

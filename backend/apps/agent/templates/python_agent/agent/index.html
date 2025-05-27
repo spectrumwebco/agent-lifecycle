@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+{% block title %}Python Agent{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Python Agent</h1>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Run Agent</h2>
+        </div>
+        <div class="card-body">
+            <form id="agent-form">
+                <div class="mb-3">
+                    <label for="problem-input" class="form-label">Problem Statement</label>
+                    <textarea class="form-control" id="problem-input" rows="5" placeholder="Enter problem statement..."></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="repo-input" class="form-label">Repository URL or Path</label>
+                    <input type="text" class="form-control" id="repo-input" placeholder="Enter repository URL or path...">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="model-select" class="form-label">Model</label>
+                    <select class="form-select" id="model-select">
+                        <option value="gpt-4">GPT-4</option>
+                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                        <option value="llama-4">Llama 4</option>
+                        <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Run Agent</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="card mb-4 d-none" id="agent-output">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h2>Agent Output</h2>
+            <button class="btn btn-danger btn-sm" id="stop-agent">Stop Agent</button>
+        </div>
+        <div class="card-body">
+            <div class="agent-log" id="agent-log"></div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const agentForm = document.getElementById('agent-form');
+        const agentOutput = document.getElementById('agent-output');
+        const agentLog = document.getElementById('agent-log');
+        const stopAgentBtn = document.getElementById('stop-agent');
+        
+        let socket = null;
+        let threadId = null;
+        
+        agentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const problemInput = document.getElementById('problem-input').value;
+            const repoInput = document.getElementById('repo-input').value;
+            const modelSelect = document.getElementById('model-select').value;
+            
+            if (!problemInput) {
+                alert('Please enter a problem statement');
+                return;
+            }
+            
+            // Clear previous output
+            agentLog.innerHTML = '';
+            agentOutput.classList.remove('d-none');
+            
+            // Run the agent
+            fetch('/python_agent/agent/run/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    run_config: {
+                        problem_statement: {
+                            type: 'text',
+                            input: problemInput
+                        },
+                        environment: {
+                            repo_path: repoInput
+                        },
+                        agent: {
+                            model: {
+                                model_name: modelSelect
+                            }
+                        }
+                    }
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    threadId = data.thread_id;
+                    connectWebSocket(data.session_id);
+                } else {
+                    appendToLog('Error: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                appendToLog('Error: ' + error.message, 'error');
+            });
+        });
+        
+        stopAgentBtn.addEventListener('click', function() {
+            if (threadId) {
+                fetch('/python_agent/agent/stop/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        thread_id: threadId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        appendToLog('Agent stopped', 'info');
+                    } else {
+                        appendToLog('Error stopping agent: ' + data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    appendToLog('Error: ' + error.message, 'error');
+                });
+            }
+        });
+        
+        function connectWebSocket(sessionId) {
+            // Close existing socket if any
+            if (socket) {
+                socket.close();
+            }
+            
+            // Connect to WebSocket
+            socket = new WebSocket(`ws://${window.location.host}/ws/python_agent/${threadId}/`);
+            
+            socket.onopen = function(e) {
+                appendToLog('Connected to agent', 'info');
+            };
+            
+            socket.onmessage = function(e) {
+                const data = JSON.parse(e.data);
+                
+                if (data.type === 'log') {
+                    appendToLog(data.message, 'log');
+                } else if (data.type === 'agent') {
+                    appendToLog(data.message, 'agent');
+                } else if (data.type === 'banner') {
+                    appendToLog(data.message, 'banner');
+                } else if (data.type === 'finish') {
+                    appendToLog('Agent finished', 'info');
+                    socket.close();
+                }
+            };
+            
+            socket.onclose = function(e) {
+                appendToLog('Disconnected from agent', 'info');
+            };
+            
+            socket.onerror = function(e) {
+                appendToLog('WebSocket error', 'error');
+            };
+        }
+        
+        function appendToLog(message, type) {
+            const logEntry = document.createElement('div');
+            logEntry.classList.add('log-entry', type);
+            logEntry.textContent = message;
+            agentLog.appendChild(logEntry);
+            agentLog.scrollTop = agentLog.scrollHeight;
+        }
+        
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+<style>
+    .agent-log {
+        height: 400px;
+        overflow-y: auto;
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-radius: 5px;
+        font-family: monospace;
+    }
+    
+    .log-entry {
+        margin-bottom: 5px;
+        white-space: pre-wrap;
+    }
+    
+    .log-entry.log {
+        color: #212529;
+    }
+    
+    .log-entry.agent {
+        color: #0d6efd;
+        font-weight: bold;
+    }
+    
+    .log-entry.banner {
+        color: #198754;
+        font-weight: bold;
+        border-left: 3px solid #198754;
+        padding-left: 5px;
+    }
+    
+    .log-entry.error {
+        color: #dc3545;
+        font-weight: bold;
+    }
+    
+    .log-entry.info {
+        color: #6c757d;
+        font-style: italic;
+    }
+</style>
+{% endblock %}
+{% endblock %}

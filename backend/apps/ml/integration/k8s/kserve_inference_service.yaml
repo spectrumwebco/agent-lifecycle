@@ -1,0 +1,21 @@
+apiVersion: "serving.kserve.io/v1beta1"
+kind: "InferenceService"
+metadata:
+  name: "{model_name}"
+  namespace: "{namespace}"
+  annotations:
+    serving.kserve.io/deploymentMode: "ModelMesh"
+spec:
+  predictor:
+    model:
+      modelFormat:
+        name: "pytorch"
+      storageUri: "{storage_uri}"
+      resources:
+        limits:
+          cpu: "2"
+          memory: "4Gi"
+          nvidia.com/gpu: "1"
+        requests:
+          cpu: "1"
+          memory: "2Gi"

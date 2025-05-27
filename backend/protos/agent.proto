@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package agent;
+
+option go_package = "github.com/spectrumwebco/agent_runtime/internal/server/proto";
+
+service AgentService {
+  // Execute a task using the agent runtime
+  rpc ExecuteTask(ExecuteTaskRequest) returns (ExecuteTaskResponse);
+  
+  // Get the status of a task
+  rpc GetTaskStatus(GetTaskStatusRequest) returns (GetTaskStatusResponse);
+  
+  // Cancel a running task
+  rpc CancelTask(CancelTaskRequest) returns (CancelTaskResponse);
+}
+
+message ExecuteTaskRequest {
+  string prompt = 1;
+  map<string, string> context = 2;
+  repeated string tools = 3;
+}
+
+message ExecuteTaskResponse {
+  string task_id = 1;
+  string status = 2;
+  string message = 3;
+}
+
+message GetTaskStatusRequest {
+  string task_id = 1;
+}
+
+message GetTaskStatusResponse {
+  string task_id = 1;
+  string status = 2;
+  string result = 3;
+  repeated string events = 4;
+}
+
+message CancelTaskRequest {
+  string task_id = 1;
+}
+
+message CancelTaskResponse {
+  string task_id = 1;
+  string status = 2;
+  string message = 3;
+}

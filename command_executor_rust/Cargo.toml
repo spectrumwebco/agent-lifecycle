@@ -1,0 +1,19 @@
+[package]
+name = "agent_lifecycle_rust"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "agent_lifecycle_rust"  # This name is used for the .so/.pyd file and by maturin
+crate-type = ["cdylib"]      # Critical for Python extension
+
+[dependencies]
+pyo3 = { version = "0.25.0", features = ["extension-module", "macros"] }
+pyo3-async-runtimes = { version = "0.25.0", features = ["tokio-runtime"] }
+shlex = "1.1.0"
+tokio = { version = "1", features = ["full"] } # "full" includes rt, process, io-util, time, macros
+log = "0.4"
+pyo3-log = "0.12.4"
+
+# Optional: for more structured error handling within Rust if needed
+thiserror = "1.0"

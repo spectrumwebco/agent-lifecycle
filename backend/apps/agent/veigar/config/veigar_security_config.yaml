@@ -1,0 +1,167 @@
+
+agent:
+  name: "veigar"
+  description: "Cybersecurity agent for PR vulnerability scanning"
+  model:
+    model_name: "gemini-2.5-pro"
+    temperature: 0.0
+    top_p: 1.0
+    per_instance_cost_limit: 3.0
+  prompt:
+    file: "prompt.txt"
+
+security:
+  static_analysis:
+    enabled: true
+    tools:
+      - name: "semgrep"
+        enabled: true
+        languages: ["python", "go", "javascript", "typescript", "java", "c", "cpp"]
+      - name: "bandit"
+        enabled: true
+        languages: ["python"]
+      - name: "gosec"
+        enabled: true
+        languages: ["go"]
+      - name: "eslint"
+        enabled: true
+        languages: ["javascript", "typescript"]
+      - name: "sonarqube"
+        enabled: true
+        languages: ["python", "go", "javascript", "typescript", "java", "c", "cpp"]
+  
+  vulnerability_scanning:
+    enabled: true
+    scanners:
+      - name: "snyk"
+        enabled: true
+        scan_types: ["dependency", "container", "iac"]
+      - name: "trivy"
+        enabled: true
+        scan_types: ["dependency", "container", "filesystem"]
+      - name: "owasp_zap"
+        enabled: true
+        scan_types: ["api", "web"]
+      - name: "dependency_check"
+        enabled: true
+        scan_types: ["dependency"]
+      - name: "grype"
+        enabled: true
+        scan_types: ["dependency", "container"]
+  
+  compliance_checking:
+    enabled: true
+    frameworks:
+      - name: "e8"
+        enabled: true
+        description: "Defense for Australia E8 requirements"
+      - name: "nist"
+        enabled: true
+        description: "NIST Cybersecurity Framework"
+      - name: "owasp"
+        enabled: true
+        description: "OWASP Top 10"
+      - name: "iso27001"
+        enabled: false
+        description: "ISO 27001"
+      - name: "pci"
+        enabled: false
+        description: "PCI DSS"
+      - name: "hipaa"
+        enabled: false
+        description: "HIPAA"
+      - name: "gdpr"
+        enabled: false
+        description: "GDPR"
+      - name: "soc2"
+        enabled: false
+        description: "SOC 2"
+
+  severity_thresholds:
+    block_merge: ["critical", "high"]
+    warn: ["medium"]
+    info: ["low"]
+
+repositories:
+  security_tools:
+    - name: "awesome-rtc-hacking"
+      url: "https://github.com/EnableSecurity/awesome-rtc-hacking"
+      category: "rtc-security"
+    - name: "awesome-pentest"
+      url: "https://github.com/enaqx/awesome-pentest"
+      category: "penetration-testing"
+    - name: "osx-and-ios-security-awesome"
+      url: "https://github.com/ashishb/osx-and-ios-security-awesome"
+      category: "os-security"
+    - name: "awesome-osint"
+      url: "https://github.com/jivoi/awesome-osint"
+      category: "osint"
+    - name: "awesome-industrial-control-system-security"
+      url: "https://github.com/hslatman/awesome-industrial-control-system-security"
+      category: "ics-security"
+    - name: "awesome-incident-response"
+      url: "https://github.com/meirwah/awesome-incident-response"
+      category: "incident-response"
+    - name: "awesome-devsecops"
+      url: "https://github.com/devsecops/awesome-devsecops"
+      category: "devsecops"
+    - name: "awesome-ctf"
+      url: "https://github.com/apsdehal/awesome-ctf"
+      category: "ctf"
+    - name: "Awesome-Asset-Discovery"
+      url: "https://github.com/redhuntlabs/Awesome-Asset-Discovery"
+      category: "asset-discovery"
+    - name: "capsulecorp-pentest"
+      url: "https://github.com/r3dy/capsulecorp-pentest"
+      category: "penetration-testing"
+    - name: "awesome-shell"
+      url: "https://github.com/alebcay/awesome-shell"
+      category: "shell"
+    - name: "payloads"
+      url: "https://github.com/foospidy/payloads"
+      category: "payloads"
+    - name: "awesome-ml-for-cybersecurity"
+      url: "https://github.com/jivoi/awesome-ml-for-cybersecurity"
+      category: "ml-security"
+    - name: "linux-kernel-exploitation"
+      url: "https://github.com/xairy/linux-kernel-exploitation"
+      category: "kernel-exploitation"
+    - name: "awesome-iocs"
+      url: "https://github.com/sroberts/awesome-iocs"
+      category: "iocs"
+    - name: "CyberChef"
+      url: "https://gchq.github.io/CyberChef/"
+      category: "tools"
+    - name: "CTF-tool"
+      url: "https://github.com/SandySekharan/CTF-tool"
+      category: "ctf"
+    - name: "awesome-adversarial-machine-learning"
+      url: "https://github.com/yenchenlin/awesome-adversarial-machine-learning"
+      category: "ml-security"
+    - name: "Awesome-AI-Security"
+      url: "https://github.com/DeepSpaceHarbor/Awesome-AI-Security"
+      category: "ai-security"
+    - name: "awesome-rl-for-cybersecurity"
+      url: "https://github.com/Limmen/awesome-rl-for-cybersecurity"
+      category: "ml-security"
+    - name: "awesome-threat-intelligence"
+      url: "https://github.com/hslatman/awesome-threat-intelligence"
+      category: "threat-intelligence"
+    - name: "static-analysis"
+      url: "https://github.com/analysis-tools-dev/static-analysis"
+      category: "static-analysis"
+    - name: "awesome-serverless-security"
+      url: "https://github.com/puresec/awesome-serverless-security/"
+      category: "serverless-security"
+    - name: "awesome-security"
+      url: "https://github.com/sbilly/awesome-security"
+      category: "security"
+    - name: "Awesome-Red-Teaming"
+      url: "https://github.com/yeyintminthuhtut/Awesome-Red-Teaming"
+      category: "red-teaming"
+    - name: "awesome-hacker-search-engines"
+      url: "https://github.com/edoardottt/awesome-hacker-search-engines"
+      category: "search-engines"
+    - name: "plash"
+      url: "https://github.com/ihucos/plash/"
+      category: "container-security"

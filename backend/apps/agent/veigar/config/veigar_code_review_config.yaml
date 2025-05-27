@@ -1,0 +1,67 @@
+
+agent:
+  name: "veigar_code_reviewer"
+  description: "Code review agent for PR quality and best practices"
+  model:
+    model_name: "gemini-2.5-pro"
+    temperature: 0.0
+    top_p: 1.0
+    per_instance_cost_limit: 3.0
+  prompt:
+    file: "prompt.txt"
+
+review:
+  review_depth: "deep"
+  tools:
+    - name: "pylint"
+      enabled: true
+      languages: ["python"]
+    - name: "eslint"
+      enabled: true
+      languages: ["javascript", "typescript"]
+    - name: "golint"
+      enabled: true
+      languages: ["go"]
+    - name: "checkstyle"
+      enabled: true
+      languages: ["java"]
+    - name: "rubocop"
+      enabled: true
+      languages: ["ruby"]
+  
+  code_quality:
+    enabled: true
+    checks:
+      - name: "complexity"
+        enabled: true
+        threshold: 10
+      - name: "duplication"
+        enabled: true
+        threshold: 5
+      - name: "naming"
+        enabled: true
+      - name: "formatting"
+        enabled: true
+      - name: "documentation"
+        enabled: true
+  
+  best_practices:
+    enabled: true
+    frameworks:
+      - name: "python_pep8"
+        enabled: true
+        description: "Python PEP 8 Style Guide"
+      - name: "javascript_standard"
+        enabled: true
+        description: "JavaScript Standard Style"
+      - name: "go_effective"
+        enabled: true
+        description: "Effective Go"
+      - name: "clean_code"
+        enabled: true
+        description: "Clean Code principles"
+  
+  severity_thresholds:
+    block_merge: ["critical", "high"]
+    warn: ["medium"]
+    info: ["low"]

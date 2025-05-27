@@ -1,0 +1,160 @@
+syntax = "proto3";
+
+package agent;
+
+option go_package = "github.com/spectrumwebco/agent_runtime/pkg/djangobridge";
+
+// AgentService provides the interface for Django to interact with the Go runtime
+service AgentService {
+  // HealthCheck checks the health of the service
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse) {}
+  
+  // ExecuteTask executes a task in the Go runtime
+  rpc ExecuteTask(ExecuteTaskRequest) returns (ExecuteTaskResponse) {}
+  
+  // ExecuteAgentTask executes a task using a specific agent in the multi-agent system
+  rpc ExecuteAgentTask(ExecuteAgentTaskRequest) returns (ExecuteAgentTaskResponse) {}
+  
+  // GetState gets a value from the shared state
+  rpc GetState(GetStateRequest) returns (GetStateResponse) {}
+  
+  // SetState sets a value in the shared state
+  rpc SetState(SetStateRequest) returns (SetStateResponse) {}
+  
+  // DeleteState deletes a value from the shared state
+  rpc DeleteState(DeleteStateRequest) returns (DeleteStateResponse) {}
+  
+  // PublishEvent publishes an event
+  rpc PublishEvent(PublishEventRequest) returns (PublishEventResponse) {}
+  
+  // SubscribeToEvents subscribes to events of the specified types
+  rpc SubscribeToEvents(SubscribeToEventsRequest) returns (stream EventMessage) {}
+}
+
+// HealthCheckRequest is the request for the HealthCheck method
+message HealthCheckRequest {
+  string session_id = 1;
+}
+
+// HealthCheckResponse is the response for the HealthCheck method
+message HealthCheckResponse {
+  enum Status {
+    UNKNOWN = 0;
+    SERVING = 1;
+    NOT_SERVING = 2;
+  }
+  Status status = 1;
+}
+
+// ExecuteTaskRequest is the request for the ExecuteTask method
+message ExecuteTaskRequest {
+  string session_id = 1;
+  string task_id = 2;
+  string task_type = 3;
+  string description = 4;
+  string input = 5;
+  string agent_id = 6;
+  int32 timeout = 7;
+  string metadata = 8;
+}
+
+// ExecuteTaskResponse is the response for the ExecuteTask method
+message ExecuteTaskResponse {
+  string task_id = 1;
+  string agent_id = 2;
+  string status = 3;
+  string output = 4;
+  string error = 5;
+  int64 execution_time = 6;
+  string metadata = 7;
+}
+
+// ExecuteAgentTaskRequest is the request for the ExecuteAgentTask method
+message ExecuteAgentTaskRequest {
+  string session_id = 1;
+  string task_id = 2;
+  string agent_id = 3;
+  string task_type = 4;
+  string description = 5;
+  string input = 6;
+  int32 timeout = 7;
+  string metadata = 8;
+}
+
+// ExecuteAgentTaskResponse is the response for the ExecuteAgentTask method
+message ExecuteAgentTaskResponse {
+  string task_id = 1;
+  string agent_id = 2;
+  string status = 3;
+  string output = 4;
+  string error = 5;
+  int64 execution_time = 6;
+  string metadata = 7;
+}
+
+// GetStateRequest is the request for the GetState method
+message GetStateRequest {
+  string session_id = 1;
+  string key = 2;
+}
+
+// GetStateResponse is the response for the GetState method
+message GetStateResponse {
+  bool found = 1;
+  string value = 2;
+}
+
+// SetStateRequest is the request for the SetState method
+message SetStateRequest {
+  string session_id = 1;
+  string key = 2;
+  string value = 3;
+}
+
+// SetStateResponse is the response for the SetState method
+message SetStateResponse {
+  bool success = 1;
+}
+
+// DeleteStateRequest is the request for the DeleteState method
+message DeleteStateRequest {
+  string session_id = 1;
+  string key = 2;
+}
+
+// DeleteStateResponse is the response for the DeleteState method
+message DeleteStateResponse {
+  bool success = 1;
+}
+
+// PublishEventRequest is the request for the PublishEvent method
+message PublishEventRequest {
+  string session_id = 1;
+  string event_id = 2;
+  string event_type = 3;
+  string source = 4;
+  int64 timestamp = 5;
+  string data = 6;
+  string metadata = 7;
+}
+
+// PublishEventResponse is the response for the PublishEvent method
+message PublishEventResponse {
+  bool success = 1;
+}
+
+// SubscribeToEventsRequest is the request for the SubscribeToEvents method
+message SubscribeToEventsRequest {
+  string session_id = 1;
+  repeated string event_types = 2;
+}
+
+// EventMessage is the message for the SubscribeToEvents method
+message EventMessage {
+  string event_id = 1;
+  string event_type = 2;
+  string source = 3;
+  int64 timestamp = 4;
+  string data = 5;
+  string metadata = 6;
+}

@@ -1,0 +1,9 @@
+package config
+
+import (
+	"github.com/spectrumwebco/agent_runtime/pkg/djangogo/core"
+)
+
+func init() {
+	core.RegisterPackage("config", "ConfigPackage")
+}

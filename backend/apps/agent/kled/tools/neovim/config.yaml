@@ -1,0 +1,158 @@
+name: neovim
+description: Commands for working with Neovim as a parallel workflow environment with enhanced plugin support
+end_name: NEOVIM_END
+command_docs: |
+  
+  The Neovim tool allows you to execute commands in Neovim as a parallel workflow environment.
+  This enables you to run operations in Neovim simultaneously with operations in the main IDE.
+  
+  
+  ```
+  neovim [--file=path/to/file] [--background] [--plugin=plugin_name] command
+  ... multiline command content ...
+  NEOVIM_END
+  ```
+  
+  - `--file`: Optional path to a file to open before executing the command
+  - `--background`: Run the command in the background (parallel to IDE operations)
+  - `--plugin`: Specify a plugin to use (tmux, fzf, molten, markdown, coc)
+  - `command`: The Neovim command to execute (can be normal mode commands, ex commands, or key sequences)
+  
+  
+  1. Open a file and search for a pattern:
+  
+  ```
+  neovim --file=src/main.py
+  :/%s/oldPattern/newPattern/g
+  NEOVIM_END
+  ```
+  
+  2. Run a background task to analyze a file while continuing work in the IDE:
+  
+  ```
+  neovim --file=large_data.csv --background
+  :g/ERROR/y A
+  :w /tmp/errors.txt
+  NEOVIM_END
+  ```
+  
+  3. Execute a complex editing operation:
+  
+  ```
+  neovim --file=src/utils.py
+  gg
+  /def process_data
+  jjjjjj
+  i    # Add additional validation
+  if not isinstance(data, dict):
+      raise TypeError("Expected dict input")
+  <ESC>
+  :w
+  NEOVIM_END
+  ```
+  
+  4. Use tmux integration for terminal multiplexing:
+  
+  ```
+  neovim --plugin=tmux
+  :lua require('tmux').resize_direction('h', 10)
+  NEOVIM_END
+  ```
+  
+  5. Use fuzzy finder to search for files:
+  
+  ```
+  neovim --plugin=fzf
+  :lua require('fzf-lua').files()
+  NEOVIM_END
+  ```
+  
+  6. Use interactive notebook functionality:
+  
+  ```
+  neovim --file=analysis.py --plugin=molten
+  :MoltenInit
+  :MoltenEvaluateLine
+  NEOVIM_END
+  ```
+  
+  7. Preview markdown documentation:
+  
+  ```
+  neovim --file=README.md --plugin=markdown
+  :MarkdownPreview
+  NEOVIM_END
+  ```
+  
+  8. Use TypeScript language support:
+  
+  ```
+  neovim --file=src/component.tsx --plugin=coc
+  :CocCommand tsserver.goToDefinition
+  NEOVIM_END
+  ```
+
+plugins:
+  - name: tmux
+    description: Terminal multiplexing integration
+    url: https://github.com/aserowy/tmux.nvim
+    commands:
+      - name: resize_direction
+        description: Resize in a specific direction
+        usage: ":lua require('tmux').resize_direction('h', 10)"
+      - name: navigate
+        description: Navigate between panes
+        usage: ":lua require('tmux').navigate('h')"
+  
+  - name: fzf
+    description: Fuzzy finder with Lua implementation
+    url: https://github.com/ibhagwan/fzf-lua
+    commands:
+      - name: files
+        description: Find files
+        usage: ":lua require('fzf-lua').files()"
+      - name: grep
+        description: Grep in project
+        usage: ":lua require('fzf-lua').grep_project()"
+      - name: buffers
+        description: Find buffers
+        usage: ":lua require('fzf-lua').buffers()"
+  
+  - name: molten
+    description: Interactive notebook functionality
+    url: https://github.com/benlubas/molten-nvim
+    commands:
+      - name: init
+        description: Initialize Molten
+        usage: ":MoltenInit"
+      - name: evaluate_line
+        description: Evaluate current line
+        usage: ":MoltenEvaluateLine"
+      - name: evaluate_cell
+        description: Evaluate cell
+        usage: ":MoltenEvaluateCell"
+  
+  - name: markdown
+    description: Markdown preview functionality
+    url: https://github.com/iamcco/markdown-preview.nvim
+    commands:
+      - name: preview
+        description: Start preview
+        usage: ":MarkdownPreview"
+      - name: stop
+        description: Stop preview
+        usage: ":MarkdownPreviewStop"
+  
+  - name: coc
+    description: TypeScript language support
+    url: https://github.com/neoclide/coc-tsserver
+    commands:
+      - name: goto_definition
+        description: Go to definition
+        usage: ":CocCommand tsserver.goToDefinition"
+      - name: find_references
+        description: Find references
+        usage: ":CocCommand tsserver.findReferences"
+      - name: rename
+        description: Rename symbol
+        usage: ":CocCommand tsserver.rename"
